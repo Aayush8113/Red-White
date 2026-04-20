@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>My Tasks</h1>
+            <a href="/todos/add" class="btn btn-primary">Add New Task</a>
+        </header>
+
+        <main>
+            <% if (todos.length === 0) { %>
+                <p class="empty-state">No tasks yet. Get to work!</p>
+            <% } else { %>
+                <ul class="task-list">
+                    <% todos.forEach(todo => { %>
+                        <li class="task-card">
+                            <% if (todo.image) { %>
+                                <div class="task-img-wrapper">
+                                    <img src="<%= todo.image %>" alt="<%= todo.task %>" class="task-img">
+                                </div>
+                            <% } %>
+                            
+                            <div class="task-content">
+                                <h3><%= todo.task %> <span class="badge"><%= todo.status %></span></h3>
+                                <p><%= todo.description %></p>
+                            </div>
+
+                            <div class="task-actions">
+                                <a href="/todos/edit/<%= todo._id %>" class="btn btn-secondary">Edit</a>
+                                <form action="/todos/delete/<%= todo._id %>" method="POST" class="delete-form">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } %>
+        </main>
+    </div>
+</body>
+</html>
