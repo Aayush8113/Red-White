@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Inventory</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>Inventory Management</h1>
+            <a href="/products/add" class="btn btn-primary">Add Product</a>
+        </header>
+
+        <main>
+            <% if (products.length === 0) { %>
+                <div class="empty-state">
+                    <p>No products in inventory. Click 'Add Product' to begin.</p>
+                </div>
+            <% } else { %>
+                <div class="grid-layout">
+                    <% products.forEach(product => { %>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><%= product.name %></h3>
+                                <span class="price-tag">$<%= product.price %></span>
+                            </div>
+                            
+                            <div class="card-body">
+                                <p class="stock-info">Stock: <strong><%= product.stock %> units</strong></p>
+                                <p class="description"><%= product.description || 'No description provided.' %></p>
+                            </div>
+                            
+                            <div class="card-footer">
+                                <a href="/products/edit/<%= product.id %>" class="btn btn-secondary">Edit</a>
+                                <form action="/products/delete/<%= product.id %>" method="POST" class="inline-form">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Remove this product?');">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
+        </main>
+    </div>
+</body>
+</html>

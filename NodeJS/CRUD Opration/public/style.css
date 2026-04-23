@@ -1,0 +1,291 @@
+/* ========================================
+   🎨 NEO-BRUTALISM THEME
+   ======================================== */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+
+:root {
+    /* Bold, stark color palette */
+    --bg-color: #f4f0ea; /* Warm off-white paper texture */
+    --card-bg: #ffffff;
+    --primary: #c4b5fd; /* Soft energetic purple */
+    --primary-hover: #a78bfa;
+    --secondary: #fde047; /* Bright yellow */
+    --danger: #fca5a5; /* Punchy red/pink */
+    --text-main: #000000;
+    
+    /* The signature brutalist shadow */
+    --brutal-shadow: 6px 6px 0px #000000;
+    --brutal-shadow-hover: 10px 10px 0px #000000;
+    --brutal-shadow-active: 2px 2px 0px #000000;
+    
+    /* Thick borders */
+    --border-thick: 3px solid #000000;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Space Grotesk', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+    padding: 3rem 1rem;
+    
+    /* Subtle dot grid background for that "notebook" feel */
+    background-image: radial-gradient(#000000 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.form-container {
+    max-width: 600px;
+    background: var(--card-bg);
+    padding: 3rem;
+    border: var(--border-thick);
+    border-radius: 12px;
+    box-shadow: var(--brutal-shadow);
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    background: var(--card-bg);
+    padding: 1.5rem 2rem;
+    border: var(--border-thick);
+    border-radius: 12px;
+    box-shadow: var(--brutal-shadow);
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+}
+
+/* ========================================
+   📦 CARDS (THE PRODUCTS/TASKS)
+   ======================================== */
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background: var(--card-bg);
+    border: var(--border-thick);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--brutal-shadow);
+    transition: all 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: var(--brutal-shadow-hover);
+}
+
+.card-header {
+    padding: 1.5rem;
+    border-bottom: var(--border-thick);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: var(--secondary); /* Yellow header */
+    border-radius: 9px 9px 0 0;
+}
+
+.card-header h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.price-tag {
+    background: #ffffff;
+    color: var(--text-main);
+    padding: 0.4rem 0.8rem;
+    border: 2px solid #000;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 2px 2px 0px #000;
+}
+
+.card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+
+.stock-info {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    background: #e5e5e5;
+    border: 2px solid #000;
+}
+
+.description {
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.card-footer {
+    padding: 1.5rem;
+    border-top: var(--border-thick);
+    display: flex;
+    gap: 1rem;
+}
+
+/* ========================================
+   🎮 BUTTONS (THE FUN PART)
+   ======================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: inherit;
+    border: var(--border-thick);
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    text-transform: uppercase;
+    box-shadow: 4px 4px 0px #000000;
+    transition: all 0.1s ease;
+}
+
+/* The Snappy Click Effect */
+.btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px #000000;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #000;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+}
+
+.btn-secondary {
+    background: #ffffff;
+    color: #000;
+    flex: 1;
+}
+
+.btn-secondary:hover {
+    background: #e5e5e5;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: #000;
+}
+
+.btn-danger:hover {
+    background: #f87171;
+}
+
+.btn-text {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 4px;
+}
+
+.btn-text:active {
+    transform: translateY(2px);
+}
+
+.inline-form {
+    margin: 0;
+}
+
+/* ========================================
+   📝 FORMS & INPUTS
+   ======================================== */
+.form-group {
+    margin-bottom: 2rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+label {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 1rem;
+    border: var(--border-thick);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1.1rem;
+    background: #ffffff;
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+/* Focus state makes the shadow sharp and solid black */
+input:focus,
+textarea:focus {
+    outline: none;
+    transform: translate(-2px, -2px);
+    box-shadow: var(--brutal-shadow);
+    background: #fffbeb; /* slight yellow tint on focus */
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: var(--border-thick);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 5rem 2rem;
+    background: var(--card-bg);
+    border: var(--border-thick);
+    border-radius: 12px;
+    box-shadow: var(--brutal-shadow);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
