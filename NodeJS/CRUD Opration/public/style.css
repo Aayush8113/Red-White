@@ -1,24 +1,17 @@
-/* ========================================
-   🎨 NEO-BRUTALISM THEME
-   ======================================== */
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
 
 :root {
-    /* Bold, stark color palette */
-    --bg-color: #f4f0ea; /* Warm off-white paper texture */
+    --bg-color: #f4f0ea;
     --card-bg: #ffffff;
-    --primary: #c4b5fd; /* Soft energetic purple */
+    --primary: #c4b5fd;
     --primary-hover: #a78bfa;
-    --secondary: #fde047; /* Bright yellow */
-    --danger: #fca5a5; /* Punchy red/pink */
+    --secondary: #fde047;
+    --danger: #fca5a5;
     --text-main: #000000;
-    
-    /* The signature brutalist shadow */
+
     --brutal-shadow: 6px 6px 0px #000000;
     --brutal-shadow-hover: 10px 10px 0px #000000;
     --brutal-shadow-active: 2px 2px 0px #000000;
-    
-    /* Thick borders */
     --border-thick: 3px solid #000000;
 }
 
@@ -34,8 +27,6 @@ body {
     color: var(--text-main);
     line-height: 1.6;
     padding: 3rem 1rem;
-    
-    /* Subtle dot grid background for that "notebook" feel */
     background-image: radial-gradient(#000000 1px, transparent 1px);
     background-size: 20px 20px;
     background-position: 0 0, 10px 10px;
@@ -70,13 +61,9 @@ body {
 h1 {
     font-size: 2rem;
     font-weight: 700;
-    letter-spacing: -1px;
     text-transform: uppercase;
 }
 
-/* ========================================
-   📦 CARDS (THE PRODUCTS/TASKS)
-   ======================================== */
 .grid-layout {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -104,13 +91,15 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    background: var(--secondary); /* Yellow header */
+    background: var(--secondary);
     border-radius: 9px 9px 0 0;
 }
 
 .card-header h3 {
     font-size: 1.4rem;
     font-weight: 700;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .price-tag {
@@ -120,7 +109,6 @@ h1 {
     border: 2px solid #000;
     border-radius: 6px;
     font-weight: 700;
-    font-size: 1rem;
     box-shadow: 2px 2px 0px #000;
 }
 
@@ -142,6 +130,8 @@ h1 {
 .description {
     font-size: 1rem;
     font-weight: 400;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .card-footer {
@@ -151,9 +141,6 @@ h1 {
     gap: 1rem;
 }
 
-/* ========================================
-   🎮 BUTTONS (THE FUN PART)
-   ======================================== */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -171,7 +158,6 @@ h1 {
     transition: all 0.1s ease;
 }
 
-/* The Snappy Click Effect */
 .btn:active {
     transform: translate(4px, 4px);
     box-shadow: 0px 0px 0px #000000;
@@ -222,9 +208,6 @@ h1 {
     margin: 0;
 }
 
-/* ========================================
-   📝 FORMS & INPUTS
-   ======================================== */
 .form-group {
     margin-bottom: 2rem;
 }
@@ -256,17 +239,16 @@ textarea {
     font-family: inherit;
     font-size: 1.1rem;
     background: #ffffff;
-    box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1);
     transition: all 0.2s;
 }
 
-/* Focus state makes the shadow sharp and solid black */
 input:focus,
 textarea:focus {
     outline: none;
     transform: translate(-2px, -2px);
     box-shadow: var(--brutal-shadow);
-    background: #fffbeb; /* slight yellow tint on focus */
+    background: #fffbeb;
 }
 
 .form-actions {
