@@ -3,9 +3,12 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Star, ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCw } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useCart } from '../context/CartContext';
 
 const BookDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
@@ -23,6 +26,11 @@ const BookDetails = () => {
     };
     fetchBook();
   }, [id]);
+
+  const addToCartHandler = () => {
+    addToCart(book, qty);
+    navigate('/cart');
+  };
 
   if (loading) return <div className="pt-32 text-center">Loading...</div>;
   if (!book) return <div className="pt-32 text-center text-red-500">Book not found</div>;
@@ -105,6 +113,7 @@ const BookDetails = () => {
 
           <button 
             disabled={book.countInStock === 0}
+            onClick={addToCartHandler}
             className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-white/10 text-white font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-3 text-lg"
           >
             <ShoppingCart />

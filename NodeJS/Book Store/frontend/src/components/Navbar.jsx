@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { ShoppingCart, User, LogOut, BookOpen, Search } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const { cartItems } = useCart();
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 glass px-6 py-4 flex justify-between items-center">
@@ -27,7 +29,11 @@ const Navbar = () => {
         <Link to="/shop" className="hover:text-primary-400 transition-colors">Shop</Link>
         <Link to="/cart" className="relative hover:text-primary-400 transition-colors">
           <ShoppingCart />
-          <span className="absolute -top-2 -right-2 bg-primary-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">0</span>
+          {cartItems.length > 0 && (
+            <span className="absolute -top-2 -right-2 bg-primary-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center animate-pulse">
+              {cartItems.reduce((acc, item) => acc + item.qty, 0)}
+            </span>
+          )}
         </Link>
         {user ? (
           <div className="flex items-center gap-4">
