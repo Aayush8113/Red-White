@@ -6,6 +6,7 @@ import Signup from './pages/Signup';
 import Shop from './pages/Shop';
 import BookDetails from './pages/BookDetails';
 import Cart from './pages/Cart';
+import Profile from './pages/Profile';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 
@@ -24,7 +25,7 @@ function App() {
               <Route path="/shop" element={<Shop />} />
               <Route path="/book/:id" element={<BookDetails />} />
               <Route path="/cart" element={<Cart />} />
-              <Route path="/profile" element={<div className="pt-32 text-center text-4xl">Profile Page Coming Soon</div>} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </main>
           
