@@ -8,6 +8,7 @@ import BookDetails from './pages/BookDetails';
 import Cart from './pages/Cart';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
+import EditBook from './pages/EditBook';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 
@@ -28,6 +29,7 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/book/:id/edit" element={<EditBook />} />
             </Routes>
           </main>
           

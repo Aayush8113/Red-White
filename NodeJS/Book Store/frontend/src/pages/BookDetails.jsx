@@ -14,6 +14,9 @@ const BookDetails = () => {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState('');
+  const [submittingReview, setSubmittingReview] = useState(false);
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -32,6 +35,33 @@ const BookDetails = () => {
   const addToCartHandler = () => {
     addToCart(book, qty);
     navigate('/cart');
+  };
+
+  const submitReviewHandler = async (e) => {
+    e.preventDefault();
+    setSubmittingReview(true);
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      await axios.post(
+        `http://localhost:5000/api/books/${id}/reviews`,
+        { rating, comment },
+        config
+      );
+      alert('Review Submitted!');
+      setComment('');
+      // Refresh book data
+      const { data } = await axios.get(`http://localhost:5000/api/books/${id}`);
+      setBook(data);
+    } catch (err) {
+      alert(err.response?.data?.message || 'Review failed');
+    } finally {
+      setSubmittingReview(false);
+    }
   };
 
   if (loading) return <div className="pt-32 text-center">Loading...</div>;
@@ -134,10 +164,14 @@ const BookDetails = () => {
             <div className="glass p-8 rounded-3xl sticky top-32">
               <h3 className="text-xl font-bold mb-6">Write a Review</h3>
               {user ? (
-                <form className="space-y-4">
+                <form onSubmit={submitReviewHandler} className="space-y-4">
                   <div className="space-y-1">
                     <label className="text-sm text-white/40">Rating</label>
-                    <select className="w-full bg-white/5 border border-white/10 rounded-xl py-2 px-4 focus:outline-none focus:border-primary-500">
+                    <select 
+                      value={rating}
+                      onChange={(e) => setRating(e.target.value)}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl py-2 px-4 focus:outline-none focus:border-primary-500"
+                    >
                       <option value="5" className="bg-[#1e293b]">5 - Excellent</option>
                       <option value="4" className="bg-[#1e293b]">4 - Very Good</option>
                       <option value="3" className="bg-[#1e293b]">3 - Good</option>
@@ -149,12 +183,19 @@ const BookDetails = () => {
                     <label className="text-sm text-white/40">Comment</label>
                     <textarea 
                       rows="4"
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
                       className="w-full bg-white/5 border border-white/10 rounded-xl py-2 px-4 focus:outline-none focus:border-primary-500"
                       placeholder="Share your thoughts..."
+                      required
                     ></textarea>
                   </div>
-                  <button className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-xl transition-all">
-                    Submit Review
+                  <button 
+                    type="submit"
+                    disabled={submittingReview}
+                    className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
+                  >
+                    {submittingReview ? <Loader2 className="animate-spin" size={18} /> : 'Submit Review'}
                   </button>
                 </form>
               ) : (
