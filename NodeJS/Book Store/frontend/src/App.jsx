@@ -6,11 +6,13 @@ import Signup from './pages/Signup';
 import Shop from './pages/Shop';
 import BookDetails from './pages/BookDetails';
 import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <CartProvider>
+        <Router>
         <div className="min-h-screen bg-[#0f172a] text-white selection:bg-primary-500/30">
           <Navbar />
           <main>
@@ -30,6 +32,7 @@ function App() {
           </footer>
         </div>
       </Router>
+      </CartProvider>
     </AuthProvider>
   );
 }
