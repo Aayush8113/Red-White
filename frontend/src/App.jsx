@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Shop from './pages/Shop';
+import BookDetails from './pages/BookDetails';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/shop" element={<Shop />} />
+              <Route path="/book/:id" element={<BookDetails />} />
               <Route path="/cart" element={<div className="pt-32 text-center text-4xl">Cart Page Coming Soon</div>} />
               <Route path="/profile" element={<div className="pt-32 text-center text-4xl">Profile Page Coming Soon</div>} />
             </Routes>
