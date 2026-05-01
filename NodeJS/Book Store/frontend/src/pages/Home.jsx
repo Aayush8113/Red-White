@@ -1,8 +1,23 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Star } from 'lucide-react';
+import { ArrowRight, Star, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 const Home = () => {
+  const [featuredBooks, setFeaturedBooks] = useState([]);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const { data } = await axios.get('http://localhost:5000/api/books');
+        setFeaturedBooks(data.books.slice(0, 4));
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchBooks();
+  }, []);
   return (
     <div className="pt-24 pb-12 px-6 max-w-7xl mx-auto">
       {/* Hero Section */}
@@ -58,20 +73,32 @@ const Home = () => {
         </motion.div>
       </section>
 
-      {/* Featured Books Placeholder */}
+      {/* Featured Books */}
       <section className="mt-24">
         <h2 className="text-3xl font-bold mb-8">Featured Books</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="glass p-4 rounded-2xl group hover:border-primary-500/50 transition-all">
-              <div className="aspect-[3/4] bg-white/5 rounded-xl mb-4 overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-white/5 to-white/10" />
-              </div>
-              <div className="h-4 w-2/3 bg-white/10 rounded mb-2" />
-              <div className="h-4 w-1/2 bg-white/10 rounded mb-4" />
+          {featuredBooks.map((book) => (
+            <div key={book._id} className="glass p-4 rounded-2xl group hover:border-primary-500/50 transition-all">
+              <Link to={`/book/${book._id}`}>
+                <div className="aspect-[3/4] rounded-xl mb-4 overflow-hidden">
+                  <img 
+                    src={book.image} 
+                    alt={book.title} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                  />
+                </div>
+              </Link>
+              <p className="text-xs text-white/40 mb-1">{book.author}</p>
+              <Link to={`/book/${book._id}`}>
+                <h3 className="font-bold text-lg mb-4 line-clamp-1 group-hover:text-primary-400 transition-colors">
+                  {book.title}
+                </h3>
+              </Link>
               <div className="flex justify-between items-center">
-                <div className="h-6 w-16 bg-primary-500/20 rounded" />
-                <div className="h-8 w-8 bg-white/10 rounded-full" />
+                <span className="text-xl font-bold text-primary-400">${book.price}</span>
+                <Link to={`/book/${book._id}`} className="bg-white/5 hover:bg-primary-600 p-2 rounded-xl transition-all">
+                  <ShoppingCart size={18} />
+                </Link>
               </div>
             </div>
           ))}
