@@ -41,6 +41,11 @@ const Navbar = () => {
               <User size={20} />
               <span className="hidden sm:inline">{user.name}</span>
             </Link>
+            {user.isAdmin && (
+              <Link to="/admin/dashboard" className="text-xs bg-primary-500/10 text-primary-400 px-2 py-1 rounded-full font-bold uppercase tracking-widest hover:bg-primary-500/20 transition-all">
+                Admin
+              </Link>
+            )}
             <button onClick={logout} className="p-2 hover:text-red-400 transition-colors">
               <LogOut size={20} />
             </button>
