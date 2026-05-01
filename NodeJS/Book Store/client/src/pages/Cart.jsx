@@ -26,7 +26,6 @@ const Cart = () => {
         </div>
       ) : (
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Items List */}
           <div className="flex-1 space-y-4">
             {cartItems.map((item) => (
               <div key={item.book} className="glass p-4 rounded-2xl flex items-center gap-6">
@@ -66,7 +65,6 @@ const Cart = () => {
             </Link>
           </div>
 
-          {/* Summary */}
           <div className="w-full lg:w-96">
             <div className="glass p-6 rounded-3xl sticky top-32">
               <h2 className="text-xl font-bold mb-6">Order Summary</h2>

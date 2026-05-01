@@ -74,7 +74,6 @@ const BookDetails = () => {
       </Link>
 
       <div className="flex flex-col lg:flex-row gap-12">
-        {/* Left: Image */}
         <motion.div 
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -85,7 +84,6 @@ const BookDetails = () => {
           </div>
         </motion.div>
 
-        {/* Right: Info */}
         <motion.div 
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -154,12 +152,10 @@ const BookDetails = () => {
         </motion.div>
       </div>
 
-      {/* Reviews Section */}
       <section className="mt-24">
         <h2 className="text-3xl font-bold mb-8">Customer Reviews</h2>
         
         <div className="flex flex-col lg:flex-row gap-12">
-          {/* Write a Review */}
           <div className="w-full lg:w-1/3">
             <div className="glass p-8 rounded-3xl sticky top-32">
               <h3 className="text-xl font-bold mb-6">Write a Review</h3>
@@ -204,7 +200,6 @@ const BookDetails = () => {
             </div>
           </div>
 
-          {/* Reviews List */}
           <div className="flex-1 space-y-6">
             {book.reviews.length === 0 ? (
               <p className="text-white/40 italic">No reviews yet. Be the first to review!</p>

@@ -74,7 +74,6 @@ const Profile = () => {
   return (
     <div className="pt-32 pb-12 px-6 max-w-7xl mx-auto">
       <div className="flex flex-col lg:flex-row gap-12">
-        {/* Profile Info */}
         <div className="w-full lg:w-1/3">
           <div className="glass p-8 rounded-3xl">
             <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
@@ -136,7 +135,6 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Orders */}
         <div className="flex-1">
           <div className="glass p-8 rounded-3xl h-full">
             <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">

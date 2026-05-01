@@ -20,7 +20,6 @@ const Home = () => {
   }, []);
   return (
     <div className="pt-24 pb-12 px-6 max-w-7xl mx-auto">
-      {/* Hero Section */}
       <section className="flex flex-col md:flex-row items-center gap-12 py-12">
         <motion.div 
           initial={{ opacity: 0, x: -50 }}
@@ -73,7 +72,6 @@ const Home = () => {
         </motion.div>
       </section>
 
-      {/* Featured Books */}
       <section className="mt-24">
         <h2 className="text-3xl font-bold mb-8">Featured Books</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
