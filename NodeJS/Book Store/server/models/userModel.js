@@ -7,6 +7,12 @@ const userSchema = mongoose.Schema(
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         isAdmin: { type: Boolean, required: true, default: false },
+        wishlist: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Book',
+            },
+        ],
     },
     { timestamps: true }
 );

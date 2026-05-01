@@ -87,4 +87,41 @@ const updateUserProfile = async (req, res) => {
     }
 };
 
-module.exports = { authUser, registerUser, getUserProfile, updateUserProfile };
+const getWishlist = async (req, res) => {
+    const user = await User.findById(req.user._id).populate('wishlist');
+    if (user) {
+        res.json(user.wishlist);
+    } else {
+        res.status(404).json({ message: 'User not found' });
+    }
+};
+
+const addToWishlist = async (req, res) => {
+    const { bookId } = req.body;
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+        if (user.wishlist.includes(bookId)) {
+            res.status(400).json({ message: 'Book already in wishlist' });
+            return;
+        }
+        user.wishlist.push(bookId);
+        await user.save();
+        res.status(201).json({ message: 'Added to wishlist' });
+    } else {
+        res.status(404).json({ message: 'User not found' });
+    }
+};
+
+const removeFromWishlist = async (req, res) => {
+    const user = await User.findById(req.user._id);
+    if (user) {
+        user.wishlist = user.wishlist.filter((id) => id.toString() !== req.params.id);
+        await user.save();
+        res.json({ message: 'Removed from wishlist' });
+    } else {
+        res.status(404).json({ message: 'User not found' });
+    }
+};
+
+module.exports = { authUser, registerUser, getUserProfile, updateUserProfile, getWishlist, addToWishlist, removeFromWishlist };

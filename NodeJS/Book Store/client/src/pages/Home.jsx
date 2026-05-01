@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Star, ShoppingCart } from 'lucide-react';
+import { ArrowRight, Star, ShoppingCart, Sparkles, BookOpen, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -18,90 +18,148 @@ const Home = () => {
     };
     fetchBooks();
   }, []);
+
   return (
-    <div className="pt-24 pb-12 px-6 max-w-7xl mx-auto">
-      <section className="flex flex-col md:flex-row items-center gap-12 py-12">
-        <motion.div 
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="flex-1"
-        >
-          <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-            Discover Your Next <br />
-            <span className="text-gradient">Favorite Story</span>
-          </h1>
-          <p className="mt-6 text-white/60 text-lg max-w-xl">
-            Explore our curated collection of books from world-class authors. 
-            From timeless classics to modern bestsellers, find the perfect read for every mood.
-          </p>
-          <div className="mt-10 flex gap-4">
-            <Link to="/shop" className="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl flex items-center gap-2 transition-all font-semibold">
-              Browse Catalog <ArrowRight size={20} />
-            </Link>
-            <Link to="/login" className="glass hover:bg-white/10 text-white px-8 py-4 rounded-xl transition-all font-semibold">
-              Join Community
-            </Link>
-          </div>
-        </motion.div>
+    <div className="relative">
+      {/* Background Blobs */}
+      <div className="absolute top-0 -left-24 w-96 h-96 bg-primary-500/20 rounded-full blur-[128px] -z-10" />
+      <div className="absolute top-1/4 -right-24 w-96 h-96 bg-purple-500/20 rounded-full blur-[128px] -z-10" />
 
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="flex-1 relative"
-        >
-          <div className="w-full aspect-[4/5] bg-gradient-to-br from-primary-500/20 to-purple-500/20 rounded-3xl relative overflow-hidden glass">
-             <div className="absolute inset-0 flex items-center justify-center">
-                <img 
-                  src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=600" 
-                  alt="Featured Book" 
-                  className="w-2/3 shadow-2xl rounded-lg transform -rotate-6 hover:rotate-0 transition-transform duration-500"
-                />
-             </div>
-          </div>
-          {/* Floating Card */}
-          <div className="absolute -bottom-6 -left-6 glass p-4 rounded-2xl shadow-2xl flex items-center gap-4 animate-bounce-slow">
-            <div className="bg-yellow-500/20 p-2 rounded-lg">
-              <Star className="text-yellow-500 fill-yellow-500" size={24} />
+      <div className="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+        {/* Hero Section */}
+        <section className="flex flex-col lg:flex-row items-center gap-16 lg:py-20">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="flex-1 text-center lg:text-left"
+          >
+            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full mb-8 animate-pulse">
+              <Sparkles className="text-yellow-400" size={16} />
+              <span className="text-sm font-medium text-white/80">Premium Literary Experience</span>
             </div>
-            <div>
-              <p className="font-bold">4.9/5 Rating</p>
-              <p className="text-sm text-white/40">From 2k+ readers</p>
-            </div>
-          </div>
-        </motion.div>
-      </section>
+            
+            <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-[0.9]">
+              Elevate Your <br />
+              <span className="text-gradient">Reading Journey</span>
+            </h1>
+            
+            <p className="mt-8 text-white/60 text-lg md:text-xl max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+              Step into a sanctuary of stories. From rare manuscripts to modern masterpieces, 
+              curate your personal library with our handpicked collection of world-class literature.
+            </p>
 
-      <section className="mt-24">
-        <h2 className="text-3xl font-bold mb-8">Featured Books</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {featuredBooks.map((book) => (
-            <div key={book._id} className="glass p-4 rounded-2xl group hover:border-primary-500/50 transition-all">
-              <Link to={`/book/${book._id}`}>
-                <div className="aspect-[3/4] rounded-xl mb-4 overflow-hidden">
-                  <img 
-                    src={book.image} 
-                    alt={book.title} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                  />
-                </div>
+            <div className="mt-12 flex flex-col sm:flex-row gap-6 justify-center lg:justify-start">
+              <Link to="/shop" className="btn-primary">
+                Explore Collection <ArrowRight size={20} />
               </Link>
-              <p className="text-xs text-white/40 mb-1">{book.author}</p>
-              <Link to={`/book/${book._id}`}>
-                <h3 className="font-bold text-lg mb-4 line-clamp-1 group-hover:text-primary-400 transition-colors">
-                  {book.title}
-                </h3>
+              <Link to="/signup" className="btn-glass">
+                Join our Society
               </Link>
-              <div className="flex justify-between items-center">
-                <span className="text-xl font-bold text-primary-400">${book.price}</span>
-                <Link to={`/book/${book._id}`} className="bg-white/5 hover:bg-primary-600 p-2 rounded-xl transition-all">
-                  <ShoppingCart size={18} />
-                </Link>
+            </div>
+
+            <div className="mt-12 flex items-center justify-center lg:justify-start gap-8 opacity-40 grayscale">
+              <div className="flex items-center gap-2">
+                <ShieldCheck size={20} />
+                <span className="text-sm font-semibold uppercase tracking-widest">Secure Payments</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <BookOpen size={20} />
+                <span className="text-sm font-semibold uppercase tracking-widest">20k+ Titles</span>
               </div>
             </div>
-          ))}
-        </div>
-      </section>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="flex-1 relative w-full max-w-lg lg:max-w-none"
+          >
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-br from-sky-500/30 to-purple-500/30 blur-3xl group-hover:opacity-60 transition-opacity duration-500" />
+              <div className="relative glass-card aspect-[4/5] overflow-hidden">
+                 <div className="absolute inset-0 flex items-center justify-center p-12">
+                    <img 
+                      src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=600" 
+                      alt="Featured Book" 
+                      className="w-full h-full object-contain book-cover-shadow animate-float"
+                    />
+                 </div>
+              </div>
+              
+              {/* Floating Stat Card */}
+              <motion.div 
+                animate={{ y: [0, -10, 0] }}
+                transition={{ repeat: Infinity, duration: 4 }}
+                className="absolute -bottom-8 -right-8 glass p-6 rounded-3xl shadow-2xl flex items-center gap-4 border border-white/20"
+              >
+                <div className="bg-yellow-500/20 p-3 rounded-2xl">
+                  <Star className="text-yellow-500 fill-yellow-500" size={32} />
+                </div>
+                <div>
+                  <p className="text-2xl font-black">4.9/5</p>
+                  <p className="text-sm text-white/40 font-medium">Reader Rating</p>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* Featured Section */}
+        <section className="mt-40">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-black">Curated for You</h2>
+              <p className="text-white/40 mt-4 text-lg">Handpicked bestsellers that define generations.</p>
+            </div>
+            <Link to="/shop" className="text-primary-400 font-bold hover:text-primary-300 transition-colors flex items-center gap-2 group">
+              View All Books <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            {featuredBooks.map((book, index) => (
+              <motion.div 
+                key={book._id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="glass-card group p-5"
+              >
+                <Link to={`/book/${book._id}`}>
+                  <div className="aspect-[3/4] rounded-2xl mb-6 overflow-hidden relative">
+                    <img 
+                      src={book.image} 
+                      alt={book.title} 
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <span className="bg-white text-black px-4 py-2 rounded-full font-bold text-sm shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                        Quick View
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+                <div className="space-y-1 mb-6">
+                  <p className="text-xs font-bold tracking-widest text-white/30 uppercase">{book.author}</p>
+                  <Link to={`/book/${book._id}`}>
+                    <h3 className="font-bold text-xl line-clamp-1 group-hover:text-primary-400 transition-colors">
+                      {book.title}
+                    </h3>
+                  </Link>
+                </div>
+                <div className="flex justify-between items-center pt-4 border-t border-white/5">
+                  <span className="text-2xl font-black text-white/90">${book.price}</span>
+                  <Link to={`/book/${book._id}`} className="bg-white/5 hover:bg-primary-500 p-3 rounded-2xl transition-all hover:shadow-lg hover:shadow-primary-500/20 active:scale-90">
+                    <ShoppingCart size={20} />
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   );
 };

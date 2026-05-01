@@ -64,6 +64,24 @@ const BookDetails = () => {
     }
   };
 
+  const addToWishlistHandler = async () => {
+    if (!user) {
+      alert('Please login to add to wishlist');
+      return;
+    }
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      await axios.post('http://localhost:5000/api/users/wishlist', { bookId: id }, config);
+      alert('Added to wishlist!');
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to add to wishlist');
+    }
+  };
+
   if (loading) return <div className="pt-32 text-center">Loading...</div>;
   if (!book) return <div className="pt-32 text-center text-red-500">Book not found</div>;
 
@@ -141,14 +159,23 @@ const BookDetails = () => {
             </div>
           </div>
 
-          <button 
-            disabled={book.countInStock === 0}
-            onClick={addToCartHandler}
-            className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-white/10 text-white font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-3 text-lg"
-          >
-            <ShoppingCart />
-            {book.countInStock > 0 ? 'Add to Cart' : 'Out of Stock'}
-          </button>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <button 
+              disabled={book.countInStock === 0}
+              onClick={addToCartHandler}
+              className="flex-1 btn-primary w-full"
+            >
+              <ShoppingCart size={22} />
+              {book.countInStock > 0 ? 'Add to Cart' : 'Out of Stock'}
+            </button>
+            
+            <button 
+              onClick={addToWishlistHandler}
+              className="btn-glass p-4 rounded-2xl aspect-square flex items-center justify-center text-white/40 hover:text-red-400 group"
+            >
+              <Heart size={24} className="group-hover:fill-current transition-colors" />
+            </button>
+          </div>
         </motion.div>
       </div>
 
