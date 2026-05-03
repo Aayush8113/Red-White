@@ -19,6 +19,11 @@ const Navbar = () => {
       <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
         {user ? (
           <>
+            {/* Admin Link specifically for Administrators */}
+            {user.role === 'Administrator' && (
+              <Link to="/admin" style={{ color: '#ffc107', textDecoration: 'none', fontWeight: 'bold', marginRight: '10px' }}>Admin Panel</Link>
+            )}
+            
             <Link to="/dashboard" style={{ color: '#fff', textDecoration: 'none' }}>Dashboard</Link>
             <Link to="/create" style={{ color: '#fff', textDecoration: 'none', border: '1px solid #fff', padding: '5px 10px', borderRadius: '4px' }}>
               + Create Post
