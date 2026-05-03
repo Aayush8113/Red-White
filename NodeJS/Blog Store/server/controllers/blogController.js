@@ -29,4 +29,30 @@ const createBlog = async (req, res) => {
   }
 };
 
-module.exports = { getBlogs, createBlog };
+const toggleLike = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog not found' });
+    }
+
+    const userId = req.user.id;
+    const hasLiked = blog.likes.includes(userId);
+
+    if (hasLiked) {
+
+      blog.likes = blog.likes.filter((id) => id.toString() !== userId);
+    } else {
+    
+      blog.likes.push(userId);
+    }
+
+    await blog.save();
+    res.status(200).json({ likes: blog.likes });
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+};
+
+module.exports = { getBlogs, createBlog, updateBlog, deleteBlog, toggleLike };
