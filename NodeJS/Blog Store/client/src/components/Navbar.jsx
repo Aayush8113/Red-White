@@ -12,19 +12,22 @@ const Navbar = () => {
   };
 
   return (
-    <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 30px', backgroundColor: '#333', color: '#fff' }}>
+    <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 30px', backgroundColor: '#333', color: '#fff', alignItems: 'center' }}>
       <div style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
         <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>BlogApp</Link>
       </div>
-      <div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
         {user ? (
           <>
-            <span style={{ marginRight: '15px' }}>Hello, {user.name}</span>
-            <button onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</button>
+            <Link to="/create" style={{ color: '#fff', textDecoration: 'none', border: '1px solid #fff', padding: '5px 10px', borderRadius: '4px' }}>
+              + Create Post
+            </Link>
+            <span>Hello, {user.name}</span>
+            <button onClick={handleLogout} style={{ cursor: 'pointer', padding: '5px 10px' }}>Logout</button>
           </>
         ) : (
           <>
-            <Link to="/login" style={{ color: '#fff', textDecoration: 'none', marginRight: '15px' }}>Login</Link>
+            <Link to="/login" style={{ color: '#fff', textDecoration: 'none' }}>Login</Link>
             <Link to="/register" style={{ color: '#fff', textDecoration: 'none' }}>Register</Link>
           </>
         )}
