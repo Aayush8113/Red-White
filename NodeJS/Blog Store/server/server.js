@@ -12,10 +12,12 @@ const app = express();
 app.use(cors()); 
 app.use(express.json()); 
 
+// Mount APIs
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/blogs', require('./routes/blogRoutes'));
 app.use('/api/comments', require('./routes/commentRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
 
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
