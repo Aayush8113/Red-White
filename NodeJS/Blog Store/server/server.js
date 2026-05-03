@@ -12,7 +12,6 @@ const app = express();
 app.use(cors()); 
 app.use(express.json()); 
 
-// Mount APIs
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/blogs', require('./routes/blogRoutes'));
 app.use('/api/comments', require('./routes/commentRoutes'));
