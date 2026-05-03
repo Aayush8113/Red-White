@@ -32,20 +32,26 @@ const createBlog = async (req, res) => {
 const toggleLike = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
-
-    if (!blog) {
-      return res.status(404).json({ message: 'Blog not found' });
-    }
+    if (!blog) return res.status(404).json({ message: 'Blog not found' });
 
     const userId = req.user.id;
     const hasLiked = blog.likes.includes(userId);
 
     if (hasLiked) {
-
       blog.likes = blog.likes.filter((id) => id.toString() !== userId);
     } else {
-    
       blog.likes.push(userId);
+      
+  
+      if (blog.author.toString() !== userId) {
+        await Notification.create({
+          recipient: blog.author,
+          sender: userId,
+          blogId: blog._id,
+          type: 'like',
+          message: 'liked your post'
+        });
+      }
     }
 
     await blog.save();
