@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@import "daisyui" preflights;
 @layer base {
   :root {
     --primary: 14, 165, 233;
