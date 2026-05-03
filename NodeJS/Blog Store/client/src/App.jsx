@@ -8,7 +8,8 @@ import BlogDetail from './pages/BlogDetail';
 import Dashboard from './pages/Dashboard'; 
 import EditBlog from './pages/EditBlog';     
 import AdminDashboard from './pages/AdminDashboard'; 
-import Profile from './pages/Profile';
+import Profile from './pages/Profile'; 
+import Notifications from './pages/Notifications';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/edit/:id" element={<EditBlog />} />
           <Route path="/admin" element={<AdminDashboard />} /> 
           <Route path="/profile" element={<Profile />} /> 
+          <Route path="/notifications" element={<Notifications />} />
         </Routes>
       </div>
     </Router>
