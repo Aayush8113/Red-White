@@ -1,12 +1,11 @@
 import { createContext, useState, useEffect } from 'react';
-import { login as loginService, register as registerService, logout as logoutService } from '../api/authService';
+import { login as loginService, register as registerService, logout as logoutService, updateProfile as updateProfileService } from '../api/authService';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Check if user is already logged in when the app loads
   useEffect(() => {
     const storedUser = localStorage.getItem('userInfo');
     if (storedUser) {
@@ -29,8 +28,13 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const updateProfile = async (userData) => {
+    const data = await updateProfileService(userData);
+    setUser((prevUser) => ({ ...prevUser, ...data }));
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );
