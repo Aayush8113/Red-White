@@ -7,7 +7,9 @@ import CreateBlog from './pages/CreateBlog';
 import BlogDetail from './pages/BlogDetail';
 import Dashboard from './pages/Dashboard'; 
 import EditBlog from './pages/EditBlog';     
-import AdminDashboard from './pages/AdminDashboard';
+import AdminDashboard from './pages/AdminDashboard'; 
+import Profile from './pages/Profile';
+
 function App() {
   return (
     <Router>
@@ -21,7 +23,8 @@ function App() {
           <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="/dashboard" element={<Dashboard />} /> 
           <Route path="/edit/:id" element={<EditBlog />} />
-          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin" element={<AdminDashboard />} /> 
+          <Route path="/profile" element={<Profile />} /> 
         </Routes>
       </div>
     </Router>
