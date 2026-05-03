@@ -31,3 +31,17 @@ export const likeBlog = async (id) => {
   const response = await API.put(`/blogs/${id}/like`);
   return response.data;
 };
+
+
+export const uploadImage = async (file) => {
+  const formData = new FormData();
+  formData.append('image', file);
+  
+
+  const response = await API.post('/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
