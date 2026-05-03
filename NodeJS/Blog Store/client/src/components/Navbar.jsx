@@ -19,7 +19,6 @@ const Navbar = () => {
       <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
         {user ? (
           <>
-            {/* Admin Link specifically for Administrators */}
             {user.role === 'Administrator' && (
               <Link to="/admin" style={{ color: '#ffc107', textDecoration: 'none', fontWeight: 'bold', marginRight: '10px' }}>Admin Panel</Link>
             )}
@@ -28,8 +27,10 @@ const Navbar = () => {
             <Link to="/create" style={{ color: '#fff', textDecoration: 'none', border: '1px solid #fff', padding: '5px 10px', borderRadius: '4px' }}>
               + Create Post
             </Link>
-            <span style={{ marginLeft: '10px', color: '#aaa' }}>| {user.name}</span>
-            <button onClick={handleLogout} style={{ cursor: 'pointer', padding: '5px 10px', backgroundColor: 'transparent', color: '#fff', border: '1px solid #fff', borderRadius: '4px' }}>Logout</button>
+
+            <Link to="/profile" style={{ marginLeft: '10px', color: '#aaa', textDecoration: 'none' }}>| {user.name}</Link>
+            
+            <button onClick={handleLogout} style={{ cursor: 'pointer', padding: '5px 10px', backgroundColor: 'transparent', color: '#fff', border: '1px solid #fff', borderRadius: '4px', marginLeft: '10px' }}>Logout</button>
           </>
         ) : (
           <>
