@@ -17,6 +17,7 @@ app.use('/api/blogs', require('./routes/blogRoutes'));
 app.use('/api/comments', require('./routes/commentRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/notifications', require('./routes/notificationRoutes'));
 
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
