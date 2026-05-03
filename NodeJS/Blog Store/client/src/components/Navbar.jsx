@@ -13,8 +13,7 @@ const Navbar = () => {
       const getUnreadCount = async () => {
         try {
           const data = await fetchNotifications();
-          const unread = data.filter(n => !n.isRead).length;
-          setUnreadCount(unread);
+          setUnreadCount(data.filter(n => !n.isRead).length);
         } catch (err) {}
       };
       getUnreadCount();
@@ -27,42 +26,55 @@ const Navbar = () => {
   };
 
   return (
-    <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 30px', backgroundColor: '#333', color: '#fff', alignItems: 'center' }}>
-      <div style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
-        <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>BlogApp</Link>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-        {user ? (
-          <>
-            {user.role === 'Administrator' && (
-              <Link to="/admin" style={{ color: '#ffc107', textDecoration: 'none', fontWeight: 'bold', marginRight: '10px' }}>Admin Panel</Link>
-            )}
-            
-            <Link to="/dashboard" style={{ color: '#fff', textDecoration: 'none' }}>Dashboard</Link>
-            <Link to="/create" style={{ color: '#fff', textDecoration: 'none', border: '1px solid #fff', padding: '5px 10px', borderRadius: '4px' }}>
-              + Create Post
-            </Link>
+    <nav className="bg-slate-900 text-white shadow-md sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16 items-center">
+          
+          <div className="flex-shrink-0 font-bold text-2xl tracking-tight">
+            <Link to="/" className="hover:text-blue-400 transition-colors">BlogApp</Link>
+          </div>
+          
+          <div className="flex items-center space-x-4">
+            {user ? (
+              <>
+                {user.role === 'Administrator' && (
+                  <Link to="/admin" className="text-amber-400 font-semibold hover:text-amber-300">Admin Panel</Link>
+                )}
+                
+                <Link to="/dashboard" className="hover:text-blue-300 transition-colors">Dashboard</Link>
+                <Link to="/create" className="border border-white/30 hover:border-white px-3 py-1.5 rounded-md transition-all bg-white/5 hover:bg-white/10">
+                  + Create Post
+                </Link>
 
-            {/* NEW: Notifications Link */}
-            <Link to="/notifications" style={{ position: 'relative', color: '#fff', textDecoration: 'none', marginLeft: '10px' }}>
-              🔔
-              {unreadCount > 0 && (
-                <span style={{ position: 'absolute', top: '-8px', right: '-12px', backgroundColor: 'red', color: 'white', borderRadius: '50%', padding: '2px 6px', fontSize: '0.7rem', fontWeight: 'bold' }}>
-                  {unreadCount}
-                </span>
-              )}
-            </Link>
-            
-            <Link to="/profile" style={{ marginLeft: '15px', color: '#aaa', textDecoration: 'none' }}>| {user.name}</Link>
-            
-            <button onClick={handleLogout} style={{ cursor: 'pointer', padding: '5px 10px', backgroundColor: 'transparent', color: '#fff', border: '1px solid #fff', borderRadius: '4px', marginLeft: '10px' }}>Logout</button>
-          </>
-        ) : (
-          <>
-            <Link to="/login" style={{ color: '#fff', textDecoration: 'none' }}>Login</Link>
-            <Link to="/register" style={{ color: '#fff', textDecoration: 'none', backgroundColor: '#007bff', padding: '5px 10px', borderRadius: '4px' }}>Register</Link>
-          </>
-        )}
+                <Link to="/notifications" className="relative hover:text-blue-300 transition-colors ml-2">
+                  <span className="text-xl">🔔</span>
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs font-bold ring-2 ring-slate-900">
+                      {unreadCount}
+                    </span>
+                  )}
+                </Link>
+                
+                <div className="h-6 w-px bg-slate-700 mx-2"></div>
+                
+                <Link to="/profile" className="text-slate-300 hover:text-white transition-colors">
+                  {user.name}
+                </Link>
+                
+                <button onClick={handleLogout} className="text-sm bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded-md transition-colors shadow-sm ml-2">
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="hover:text-blue-300 transition-colors">Login</Link>
+                <Link to="/register" className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md font-medium transition-colors shadow-sm">
+                  Register
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
       </div>
     </nav>
   );
