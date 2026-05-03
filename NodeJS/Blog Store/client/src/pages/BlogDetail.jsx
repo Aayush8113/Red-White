@@ -62,7 +62,6 @@ const BlogDetail = () => {
           By {blog.author?.name || 'Unknown'} | {new Date(blog.createdAt).toLocaleDateString()} | Category: {blog.category}
         </p>
 
-        {/* --- DISPLAY COVER IMAGE --- */}
         {blog.coverImage && (
           <img 
             src={`http://localhost:5000${blog.coverImage}`} 
@@ -85,7 +84,6 @@ const BlogDetail = () => {
         </div>
       </div>
 
-      {/* Comments Section */}
       <div style={{ marginTop: '30px', backgroundColor: '#fff', padding: '30px', borderRadius: '8px', boxShadow: '0 0 10px rgba(0,0,0,0.05)' }}>
         <h3 style={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginBottom: '20px' }}>Comments ({comments.length})</h3>
         
