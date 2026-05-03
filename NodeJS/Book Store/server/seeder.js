@@ -1,3 +1,4 @@
+const path = require('path');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const users = require('./data/users');
@@ -7,7 +8,7 @@ const Book = require('./models/bookModel');
 const Order = require('./models/orderModel');
 const connectDB = require('./config/db');
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 connectDB();
 
