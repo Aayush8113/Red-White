@@ -57,10 +57,14 @@ const Home = () => {
             className="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none bg-white min-w-[150px]"
           >
             <option value="">All Categories</option>
-            <option value="Technology">Technology</option>
-            <option value="Lifestyle">Lifestyle</option>
-            <option value="Education">Education</option>
-            <option value="Health">Health</option>
+            <option value="Coding">Coding</option>
+            <option value="AI">AI</option>
+            <option value="Psychology">Psychology</option>
+            <option value="Gaming">Gaming</option>
+            <option value="Food">Food</option>
+            <option value="History">History</option>
+            <option value="Historical Places">Historical Places</option>
+            <option value="Ghost">Ghost Stories</option>
           </select>
         </div>
       </div>
@@ -84,7 +88,7 @@ const Home = () => {
             <article key={blog._id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 overflow-hidden flex flex-col">
               {blog.coverImage ? (
                 <img 
-                  src={`http://localhost:5000${blog.coverImage}`} 
+                  src={`http://localhost:5000/uploads/${blog.coverImage}`} 
                   alt={blog.title}
                   className="w-full h-48 object-cover"
                 />
