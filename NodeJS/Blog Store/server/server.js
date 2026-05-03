@@ -20,9 +20,9 @@ app.get('/', (req, res) => {
   res.send('Blog API is running...');
 });
 
-
-// app.use('/api/auth', require('./routes/authRoutes'));
-// app.use('/api/blogs', require('./routes/blogRoutes'));
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/blogs', require('./routes/blogRoutes'));
+app.use('/api/comments', require('./routes/commentRoutes')); // Add this line
 
 const PORT = process.env.PORT || 5000;
 
