@@ -44,16 +44,18 @@ const deleteBook = async (req, res) => {
 };
 
 const createBook = async (req, res) => {
+    const { title, price, description, image, author, category, countInStock } = req.body;
+    
     const book = new Book({
-        title: 'Sample title',
-        price: 0,
+        title,
+        price,
         user: req.user._id,
-        image: '/images/sample.jpg',
-        author: 'Sample author',
-        category: 'Sample category',
-        countInStock: 0,
+        image,
+        author,
+        category,
+        countInStock,
         numReviews: 0,
-        description: 'Sample description',
+        description,
     });
 
     const createdBook = await book.save();
