@@ -10,7 +10,7 @@ const {
 const { protect, admin } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.route('/').get(getBooks).post(protect, admin, createBook);
+router.route('/').get(getBooks).post(protect, createBook);
 router.route('/:id/reviews').post(protect, createBookReview);
 router
     .route('/:id')
