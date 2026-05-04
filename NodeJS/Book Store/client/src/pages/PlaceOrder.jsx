@@ -37,7 +37,13 @@ const PlaceOrder = () => {
       const { data } = await axios.post(
         'http://localhost:5000/api/orders',
         {
-          orderItems: cartItems,
+          orderItems: cartItems.map((item) => ({
+            name: item.title,
+            qty: item.qty,
+            image: item.image,
+            price: item.price,
+            book: item.book,
+          })),
           shippingAddress,
           paymentMethod,
           itemsPrice,
