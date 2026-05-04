@@ -3,7 +3,12 @@ import { Trash2, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 
+const Cart = () => {
+  const { cartItems, addToCart, removeFromCart } = useCart();
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const subtotal = cartItems.reduce((acc, item) => acc + item.qty * item.price, 0);
 
   const checkoutHandler = () => {
     if (user) {
