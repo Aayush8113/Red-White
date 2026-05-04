@@ -3,9 +3,14 @@ import { ShoppingCart, User, LogOut, BookOpen, Search, Heart, PlusCircle } from 
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
-const Navbar = () => {
-  const { user, logout } = useAuth();
-  const { cartItems } = useCart();
+  const [keyword, setKeyword] = useState('');
+  const navigate = useNavigate();
+
+  const searchHandler = (e) => {
+    if (e.key === 'Enter') {
+      navigate(`/shop?keyword=${keyword}`);
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 glass-card !rounded-none !border-t-0 !border-x-0 px-6 py-4 flex justify-between items-center backdrop-blur-2xl">
@@ -21,6 +26,9 @@ const Navbar = () => {
           <input
             type="text"
             placeholder="Search our collection..."
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            onKeyDown={searchHandler}
             className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-6 pl-12 focus:outline-none focus:border-primary-500/50 focus:bg-white/10 transition-all duration-300"
           />
           <Search className="absolute left-4 top-3.5 text-white/20 group-focus-within:text-primary-400 transition-colors" size={20} />
