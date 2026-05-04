@@ -101,15 +101,22 @@ const addToWishlist = async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (user) {
-        if (user.wishlist.includes(bookId)) {
+        const alreadyInWishlist = user.wishlist.find(
+            (id) => id.toString() === bookId.toString()
+        );
+
+        if (alreadyInWishlist) {
             res.status(400).json({ message: 'Book already in wishlist' });
             return;
         }
+        
         user.wishlist.push(bookId);
         await user.save();
         res.status(201).json({ message: 'Added to wishlist' });
+        return;
     } else {
         res.status(404).json({ message: 'User not found' });
+        return;
     }
 };
 
