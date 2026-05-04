@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "../node_modules/daisyui/daisyui.css";
+@import "daisyui/daisyui.css";
 
 @theme {
   --color-primary-50: #f0f9ff;
