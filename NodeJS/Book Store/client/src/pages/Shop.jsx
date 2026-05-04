@@ -26,8 +26,9 @@ const Shop = () => {
   }, [keyword]);
 
   const addToWishlist = async (id) => {
-    if (!user) {
-      alert('Please login to add to wishlist');
+    console.log('Current User State:', user);
+    if (!user || !user.token) {
+      alert('Your session has expired or is invalid. Please Logout and Login again.');
       return;
     }
     try {
