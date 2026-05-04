@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Star, ShoppingCart, Sparkles, BookOpen, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Star, ShoppingCart, Sparkles, BookOpen, ShieldCheck, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
   const [featuredBooks, setFeaturedBooks] = useState([]);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -18,6 +20,24 @@ const Home = () => {
     };
     fetchBooks();
   }, []);
+
+  const addToWishlist = async (id) => {
+    if (!user) {
+      alert('Please login to add to wishlist');
+      return;
+    }
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      await axios.post('http://localhost:5000/api/users/wishlist', { bookId: id }, config);
+      alert('Added to wishlist!');
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to add to wishlist');
+    }
+  };
 
   return (
     <div className="relative">
@@ -125,8 +145,17 @@ const Home = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="glass-card group p-5"
+                className="glass-card group p-5 relative"
               >
+                <div className="absolute top-8 right-8 z-10">
+                  <button 
+                    onClick={() => addToWishlist(book._id)}
+                    className="w-10 h-10 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center text-white/40 hover:text-red-500 hover:bg-white/10 transition-all active:scale-75"
+                  >
+                    <Heart size={18} />
+                  </button>
+                </div>
+
                 <Link to={`/book/${book._id}`}>
                   <div className="aspect-[3/4] rounded-2xl mb-6 overflow-hidden relative">
                     <img 
