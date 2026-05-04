@@ -4,13 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node node_modules/vite/bin/vite.js",
-    "build": "tsc && node node_modules/vite/bin/vite.js build",
-    "preview": "node node_modules/vite/bin/vite.js preview"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
     "autoprefixer": "^10.5.0",
-    "daisyui": "^5.5.19",
     "postcss": "^8.5.13",
     "tailwindcss": "^4.2.4",
     "typescript": "~6.0.2",
@@ -21,6 +20,7 @@
     "@vitejs/plugin-react": "^6.0.1",
     "axios": "^1.15.2",
     "clsx": "^2.1.1",
+    "daisyui": "^5.5.19",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.14.0",
     "react": "^19.2.5",
