@@ -11,6 +11,10 @@ import Wishlist from './pages/Wishlist';
 import Sell from './pages/Sell';
 import AdminDashboard from './pages/AdminDashboard';
 import EditBook from './pages/EditBook';
+import Shipping from './pages/Shipping';
+import Payment from './pages/Payment';
+import PlaceOrder from './pages/PlaceOrder';
+import Order from './pages/Order';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 
@@ -34,6 +38,10 @@ function App() {
               <Route path="/sell" element={<Sell />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/book/:id/edit" element={<EditBook />} />
+              <Route path="/shipping" element={<Shipping />} />
+              <Route path="/payment" element={<Payment />} />
+              <Route path="/placeorder" element={<PlaceOrder />} />
+              <Route path="/order/:id" element={<Order />} />
             </Routes>
           </main>
           
