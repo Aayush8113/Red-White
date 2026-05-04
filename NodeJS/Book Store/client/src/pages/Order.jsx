@@ -91,7 +91,7 @@ const Order = () => {
                   <img src={item.image} alt={item.name} className="w-16 h-20 object-cover rounded-lg shadow-lg" />
                   <div className="flex-1">
                     <Link to={`/book/${item.book}`} className="font-bold hover:text-primary-400 transition-colors">
-                      {item.title}
+                      {item.name}
                     </Link>
                   </div>
                   <div className="text-right">
