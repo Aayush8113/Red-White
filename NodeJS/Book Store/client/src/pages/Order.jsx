@@ -109,11 +109,11 @@ const Order = () => {
             <div className="space-y-4">
               <div className="flex justify-between text-white/60">
                 <span>Items</span>
-                <span>${order.itemsPrice.toFixed(2)}</span>
+                <span>${(order.itemsPrice || 0).toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-white/60">
                 <span>Shipping</span>
-                <span>${order.shippingPrice.toFixed(2)}</span>
+                <span>${(order.shippingPrice || 0).toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-white/60">
                 <span>Tax</span>
