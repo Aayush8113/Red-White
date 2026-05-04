@@ -88,7 +88,7 @@ const Order = () => {
             <div className="space-y-6">
               {order.orderItems.map((item, index) => (
                 <div key={index} className="flex items-center gap-6 border-b border-white/5 pb-6 last:border-0 last:pb-0">
-                  <img src={item.image} alt={item.title} className="w-16 h-20 object-cover rounded-lg shadow-lg" />
+                  <img src={item.image} alt={item.name} className="w-16 h-20 object-cover rounded-lg shadow-lg" />
                   <div className="flex-1">
                     <Link to={`/book/${item.book}`} className="font-bold hover:text-primary-400 transition-colors">
                       {item.title}
