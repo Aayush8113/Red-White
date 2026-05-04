@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, City, Flag, Send } from 'lucide-react';
+import { MapPin, Flag, Send } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import CheckoutSteps from '../components/CheckoutSteps';
 
