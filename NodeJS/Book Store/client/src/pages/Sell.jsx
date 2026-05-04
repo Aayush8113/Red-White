@@ -20,6 +20,11 @@ const Sell = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    console.log('Sell User State:', user);
+    if (!user || !user.token) {
+      alert('You must be logged in to sell a book. Please Logout and Login again.');
+      return;
+    }
     setLoading(true);
     try {
       const config = {
