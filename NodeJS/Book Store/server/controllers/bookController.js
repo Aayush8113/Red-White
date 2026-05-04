@@ -1,6 +1,7 @@
 const Book = require('../models/bookModel');
 
 const getBooks = async (req, res) => {
+    console.log('GET /api/books hit');
     const pageSize = 10;
     const page = Number(req.query.pageNumber) || 1;
 
