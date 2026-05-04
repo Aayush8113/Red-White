@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Upload, Plus, ArrowLeft, BookOpen, DollarSign, Tag, Info } from 'lucide-react';
+import { Upload, Plus, ArrowLeft, BookOpen, DollarSign, Tag, Info, User } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
