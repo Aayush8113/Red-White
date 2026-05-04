@@ -27,6 +27,7 @@ const protect = async (req, res, next) => {
     }
 
     if (!token) {
+        console.log('Blocked by protect middleware (No Token) - URL:', req.originalUrl);
         res.status(401).json({ message: 'Not authorized, no token' });
         return;
     }
