@@ -4,21 +4,27 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+  const [shippingAddress, setShippingAddress] = useState({});
+  const [paymentMethod, setPaymentMethod] = useState('PayPal');
 
   useEffect(() => {
     const cartData = localStorage.getItem('cartItems');
     if (cartData) {
       setCartItems(JSON.parse(cartData));
     }
+    const shippingData = localStorage.getItem('shippingAddress');
+    if (shippingData) {
+      setShippingAddress(JSON.parse(shippingData));
+    }
   }, []);
 
   const addToCart = (product, qty) => {
-    const existItem = cartItems.find((x) => x.book === product._id);
+    const existItem = cartItems.find((x) => x.book === product._id || x.book === product.book);
 
     let newItems;
     if (existItem) {
       newItems = cartItems.map((x) =>
-        x.book === existItem.book ? { ...x, qty } : x
+        (x.book === product._id || x.book === product.book) ? { ...x, qty } : x
       );
     } else {
       newItems = [...cartItems, {
@@ -41,13 +47,32 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('cartItems', JSON.stringify(newItems));
   };
 
+  const saveShippingAddress = (data) => {
+    setShippingAddress(data);
+    localStorage.setItem('shippingAddress', JSON.stringify(data));
+  };
+
+  const savePaymentMethod = (data) => {
+    setPaymentMethod(data);
+    localStorage.setItem('paymentMethod', JSON.stringify(data));
+  };
+
   const clearCart = () => {
     setCartItems([]);
     localStorage.removeItem('cartItems');
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ 
+      cartItems, 
+      shippingAddress, 
+      paymentMethod,
+      addToCart, 
+      removeFromCart, 
+      saveShippingAddress,
+      savePaymentMethod,
+      clearCart 
+    }}>
       {children}
     </CartContext.Provider>
   );
