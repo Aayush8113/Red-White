@@ -1,12 +1,15 @@
 import { createContext, useState, useContext, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+  const { user } = useAuth();
   const [cartItems, setCartItems] = useState([]);
   const [shippingAddress, setShippingAddress] = useState({});
   const [paymentMethod, setPaymentMethod] = useState('PayPal');
 
+  // Load from local storage
   useEffect(() => {
     const cartData = localStorage.getItem('cartItems');
     if (cartData) {
@@ -17,6 +20,14 @@ export const CartProvider = ({ children }) => {
       setShippingAddress(JSON.parse(shippingData));
     }
   }, []);
+
+  // Clear cart on logout
+  useEffect(() => {
+    if (!user) {
+      setCartItems([]);
+      localStorage.removeItem('cartItems');
+    }
+  }, [user]);
 
   const addToCart = (product, qty) => {
     const existItem = cartItems.find((x) => x.book === product._id || x.book === product.book);
