@@ -1,8 +1,12 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, User, LogOut, BookOpen, Search, Heart, PlusCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
+const Navbar = () => {
+  const { user, logout } = useAuth();
+  const { cartItems } = useCart();
   const [keyword, setKeyword] = useState('');
   const navigate = useNavigate();
 
