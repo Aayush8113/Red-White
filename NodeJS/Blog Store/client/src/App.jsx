@@ -18,7 +18,7 @@ import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <Toaster position="top-center" reverseOrder={false} />
       <Navbar /> 
       <div style={{ minHeight: '80vh', backgroundColor: '#fafafa' }}>
