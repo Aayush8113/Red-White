@@ -37,12 +37,13 @@ const Home = () => {
 
   const handleCategorySelect = (cat) => {
     setCategoryFilter(cat);
+    window.scrollTo({ top: 500, behavior: 'smooth' });
   };
 
   return (
     <div className="bg-slate-50 min-h-screen selection:bg-blue-100 selection:text-blue-900">
       {/* Hero Section */}
-      <section className="bg-slate-900 pt-48 pb-32 px-4 relative overflow-hidden">
+      <section className="bg-slate-900 pt-48 pb-40 px-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.05),transparent)]"></div>
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/4"></div>
         
@@ -64,8 +65,38 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Top Category Navigation */}
+      <div className="max-w-7xl mx-auto px-4 -mt-10 relative z-[30]">
+        <div className="bg-white/80 backdrop-blur-2xl p-4 rounded-[40px] shadow-2xl shadow-slate-200/50 border border-white/20 flex items-center gap-4 overflow-x-auto no-scrollbar">
+           <button 
+             onClick={() => setCategoryFilter('')}
+             className={`shrink-0 px-8 py-4 rounded-3xl font-black text-[10px] uppercase tracking-[0.3em] italic transition-all ${
+               categoryFilter === '' 
+                ? 'bg-slate-900 text-white shadow-xl' 
+                : 'bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-900'
+             }`}
+           >
+             All Streams
+           </button>
+           <div className="h-8 w-px bg-slate-100 shrink-0"></div>
+           {categories.map((cat) => (
+             <button 
+                key={cat}
+                onClick={() => handleCategorySelect(cat)}
+                className={`shrink-0 px-8 py-4 rounded-3xl font-black text-[10px] uppercase tracking-[0.3em] italic transition-all ${
+                  categoryFilter === cat 
+                   ? 'bg-blue-600 text-white shadow-xl shadow-blue-900/20' 
+                   : 'bg-slate-50 text-slate-400 hover:bg-blue-50 hover:text-blue-600'
+                }`}
+             >
+               {cat}
+             </button>
+           ))}
+        </div>
+      </div>
+
       {/* Main Content Grid */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-20 pb-40">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-20 pb-40">
         <div className="flex flex-col lg:flex-row gap-16">
           {/* Main Feed Area */}
           <div className="lg:w-2/3 space-y-16">
