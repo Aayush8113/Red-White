@@ -3,14 +3,21 @@ const Notification = require('../models/Notification');
 
 const getBlogs = async (req, res) => {
   try {
-    const { category, search } = req.query;
+    const { category, search, tag } = req.query;
     let filter = {};
     
     if (category) filter.category = category;
-    if (search) filter.title = { $regex: search, $options: 'i' }; 
+    if (tag) filter.tags = tag;
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { content: { $regex: search, $options: 'i' } },
+        { tags: { $regex: search, $options: 'i' } }
+      ];
+    }
     
     const blogs = await Blog.find(filter)
-      .populate('author', 'name email')
+      .populate('author', 'name email profilePicture')
       .sort({ createdAt: -1 });
       
     res.status(200).json(blogs);
@@ -21,7 +28,7 @@ const getBlogs = async (req, res) => {
 
 const getBlogById = async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id).populate('author', 'name email');
+    const blog = await Blog.findById(req.params.id).populate('author', 'name email profilePicture bio');
     if (!blog) {
       return res.status(404).json({ message: 'Blog not found' });
     }
@@ -33,13 +40,14 @@ const getBlogById = async (req, res) => {
 
 const createBlog = async (req, res) => {
   try {
-    const { title, content, category, coverImage } = req.body;
+    const { title, content, category, coverImage, tags } = req.body;
     
     const newBlog = await Blog.create({
       title,
       content,
       category,
       coverImage,
+      tags: tags || [],
       author: req.user._id
     });
     
