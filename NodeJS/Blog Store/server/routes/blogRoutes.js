@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getBlogs, createBlog, updateBlog, deleteBlog, toggleLike } = require('../controllers/blogController');
+const { getBlogs, getBlogById, createBlog, updateBlog, deleteBlog, toggleLike } = require('../controllers/blogController');
 const { protect } = require('../middleware/authMiddleware');
 
 router.route('/')
@@ -8,6 +8,7 @@ router.route('/')
   .post(protect, createBlog);
 
 router.route('/:id')
+  .get(getBlogById)
   .put(protect, updateBlog)
   .delete(protect, deleteBlog);
 
