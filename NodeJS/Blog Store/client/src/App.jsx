@@ -13,6 +13,7 @@ import Notifications from './pages/Notifications';
 import ForgotPassword from './pages/ForgotPassword';
 import VerifyOTP from './pages/VerifyOTP';
 import ResetPassword from './pages/ResetPassword';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/notifications" element={<Notifications />} />
         </Routes>
       </div>
+      <Footer />
     </Router>
   );
 }
