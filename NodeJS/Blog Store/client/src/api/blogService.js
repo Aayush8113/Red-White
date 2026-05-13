@@ -1,7 +1,9 @@
 import API from './axiosConfig';
 
-export const fetchBlogs = async (category = '') => {
-  const url = category ? `/blogs?category=${category}` : '/blogs';
+export const fetchBlogs = async (category = '', search = '') => {
+  let url = '/blogs?';
+  if (category) url += `category=${encodeURIComponent(category)}&`;
+  if (search) url += `search=${encodeURIComponent(search)}`;
   const response = await API.get(url);
   return response.data;
 };
