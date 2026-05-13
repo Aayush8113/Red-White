@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 
 const Sidebar = ({ categories, onSearch, onCategorySelect }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -10,65 +9,57 @@ const Sidebar = ({ categories, onSearch, onCategorySelect }) => {
   };
 
   return (
-    <aside className="space-y-10">
-      {/* Search Bar */}
-      <div className="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100">
-        <h3 className="text-lg font-black text-slate-900 mb-4 italic">Search Articles</h3>
+    <aside className="space-y-12 sticky top-32">
+      {/* Search Bar - Futuristic Style */}
+      <div className="bg-white p-8 rounded-[40px] shadow-2xl shadow-slate-200/50 border border-slate-100 group transition-all hover:shadow-blue-500/5">
+        <h3 className="text-xs font-black text-slate-400 mb-6 uppercase tracking-[0.4em] italic">Intelligence</h3>
         <form onSubmit={handleSearchSubmit} className="relative">
           <input 
             type="text" 
-            placeholder="Search keywords..." 
-            className="w-full pl-4 pr-12 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm"
+            placeholder="Search the archive..." 
+            className="w-full pl-6 pr-14 py-4 bg-slate-50 border border-slate-100 rounded-3xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm font-bold italic"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-blue-600 transition-colors">
+          <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-slate-900 text-white rounded-2xl flex items-center justify-center hover:bg-blue-600 transition-all shadow-lg active:scale-90">
             🔍
           </button>
         </form>
       </div>
 
-      {/* Categories */}
-      <div className="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100">
-        <h3 className="text-lg font-black text-slate-900 mb-4 italic">Categories</h3>
-        <div className="flex flex-col gap-2">
+      {/* Categories - Pill Style */}
+      <div className="bg-white p-8 rounded-[40px] shadow-2xl shadow-slate-200/50 border border-slate-100">
+        <h3 className="text-xs font-black text-slate-400 mb-6 uppercase tracking-[0.4em] italic">Taxonomy</h3>
+        <div className="flex flex-wrap gap-3">
           {categories.map((cat) => (
             <button 
               key={cat}
               onClick={() => onCategorySelect(cat)}
-              className="text-left px-4 py-3 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition-all font-bold text-slate-600 text-sm flex justify-between items-center group"
+              className="px-5 py-2.5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600 transition-all font-black text-[10px] uppercase tracking-widest text-slate-600 shadow-sm active:scale-95"
             >
               {cat}
-              <span className="text-slate-300 group-hover:translate-x-1 transition-transform">→</span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Newsletter */}
-      <div className="bg-slate-900 p-8 rounded-[32px] text-white shadow-2xl shadow-blue-900/20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl"></div>
-        <h3 className="text-xl font-black mb-2 italic">Stay Inspired</h3>
-        <p className="text-slate-400 text-sm mb-6">Get the latest stories and creative ideas delivered to your inbox weekly.</p>
-        <form className="space-y-3">
-          <input 
-            type="email" 
-            placeholder="your@email.com" 
-            className="w-full px-4 py-3 bg-white/10 border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm placeholder:text-slate-500"
-          />
-          <button className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl transition-all active:scale-95 text-sm shadow-lg">
-            Subscribe Now
-          </button>
-        </form>
+      {/* Popular Posts Placeholder / Featured */}
+      <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-8 rounded-[48px] text-white shadow-2xl shadow-blue-500/20 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-1000"></div>
+        <h3 className="text-[10px] font-black mb-4 uppercase tracking-[0.4em] opacity-60 italic">Featured Mission</h3>
+        <p className="text-xl font-black mb-6 italic leading-tight tracking-tighter">Start your own legacy in the archive today.</p>
+        <button className="px-8 py-3 bg-white text-blue-600 font-black rounded-2xl text-xs uppercase tracking-widest hover:bg-blue-50 transition-all shadow-xl active:scale-95">
+          Begin Writing
+        </button>
       </div>
 
-      {/* Social Links */}
-      <div className="bg-white p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100">
-        <h3 className="text-lg font-black text-slate-900 mb-4 italic">Follow Us</h3>
-        <div className="flex gap-3">
-          {['fb', 'tw', 'ig', 'li'].map((social) => (
-            <button key={social} className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all shadow-sm">
-              <span className="text-xs font-black uppercase">{social}</span>
+      {/* Connection Links */}
+      <div className="bg-white p-8 rounded-[40px] shadow-2xl shadow-slate-200/50 border border-slate-100">
+        <h3 className="text-xs font-black text-slate-400 mb-6 uppercase tracking-[0.4em] italic">Connections</h3>
+        <div className="grid grid-cols-2 gap-4">
+          {['Twitter', 'Discord', 'Github', 'LinkedIn'].map((social) => (
+            <button key={social} className="px-4 py-3 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-slate-900 hover:text-white transition-all text-[10px] font-black uppercase tracking-widest border border-slate-100">
+              {social}
             </button>
           ))}
         </div>
