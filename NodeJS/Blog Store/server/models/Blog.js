@@ -6,7 +6,8 @@ const blogSchema = new mongoose.Schema({
   category: { type: String, required: true, index: true },
   coverImage: { type: String, default: '' },
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] 
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  tags: [{ type: String }]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Blog', blogSchema);
