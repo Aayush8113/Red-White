@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neo-Cinema | My Vault</title>
+    <link rel="stylesheet" href="/style.css">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = savedTheme || systemTheme;
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+<body class="dashboard-body has-scroll">
+
+<nav class="neo-navbar">
+    <div class="nav-left">
+        <div class="nav-brand">
+            <a href="/dashboard">NEO<span>CINEMA</span></a>
+        </div>
+        <div class="nav-links-main">
+            <a href="/dashboard" class="nav-link">Hub</a>
+            <a href="/watchlist" class="nav-link active">Vault</a>
+            <a href="/bookings" class="nav-link">Tickets</a>
+        </div>
+    </div>
+
+    <div class="nav-right">
+        <button class="nav-tool-btn" id="themeToggle" title="Toggle Theme">🌓</button>
+        <% if (user.role === 'admin') { %>
+            <a href="/admin" class="nav-tool-btn admin-btn" title="Admin Override">⚡</a>
+        <% } %>
+        <a href="/settings" class="nav-tool-btn" title="Settings">⚙️</a>
+        
+        <div class="nav-user-profile">
+            <div class="avatar-circle" title="<%= user.fullName %>">
+                <%= user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) %>
+            </div>
+            <form action="/logout" method="POST" style="display:inline;">
+                <button type="submit" class="nav-logout-icon" title="Logout Session">⏻</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="vault-page">
+    <header class="vault-header-unique">
+        <div class="vault-hero-badge">CURATED BY <%= user.fullName.toUpperCase() %></div>
+        <h1>Cinematic <span class="highlight-cyan">Vault</span></h1>
+        <p>Your private collection of high-intensity masterpieces.</p>
+    </header>
+
+    <% if (watchlistMovies.length === 0) { %>
+    <div class="empty-vault-status">
+        <div class="vault-icon-empty">★</div>
+        <h2>Your Vault is Empty</h2>
+        <p>Discover and save cinematic assets from the main hub to curate your professional workspace here.</p>
+        <a href="/dashboard" class="btn-explore">Explore Studio</a>
+    </div>
+    <% } else { %>
+    <div class="vault-grid-premium">
+        <% watchlistMovies.forEach(function(movie) { %>
+        <article class="vault-card">
+            <div class="vault-poster-wrap">
+                <img src="<%= movie.posterUrl %>" alt="<%= movie.title %>" loading="lazy">
+                <div class="vault-badge"><%= movie.rating %> ★</div>
+                <div class="vault-poster-overlay"></div>
+            </div>
+            <div class="vault-info">
+                <span class="vault-genre"><%= movie.genre %></span>
+                <h3 class="vault-title"><%= movie.title %></h3>
+                <p class="vault-desc"><%= movie.description.substring(0, 100) %>...</p>
+                <div class="vault-actions">
+                    <a href="/movies/<%= movie._id %>" class="btn-vault-view">Open File</a>
+                    <form action="/watchlist/toggle/<%= movie._id %>" method="POST" style="display:contents;">
+                        <button type="submit" class="btn-vault-remove" title="Remove from Vault">✕</button>
+                    </form>
+                </div>
+            </div>
+        </article>
+        <% }); %>
+    </div>
+    <% } %>
+</div>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+<script>
+    document.addEventListener('mousemove', e => {
+        const g = document.getElementById('cursorGlow');
+        g.style.left = e.clientX + 'px';
+        g.style.top = e.clientY + 'px';
+    });
+
+    // ── Theme Engine ──
+    (function() {
+        const themeBtn = document.getElementById('themeToggle');
+        if (themeBtn) {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            themeBtn.textContent = currentTheme === 'light' ? '🌙' : '🌓';
+
+            themeBtn.addEventListener('click', async () => {
+                const oldTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = oldTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeBtn.textContent = newTheme === 'light' ? '🌙' : '🌓';
+
+                try {
+                    await fetch('/toggle-theme', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ theme: newTheme })
+                    });
+                } catch (e) {
+                    console.error('Theme sync failed:', e);
+                }
+            });
+        }
+    })();
+</script>
+</body>
+</html>

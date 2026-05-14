@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neo-Cinema | Admin</title>
+    <link rel="stylesheet" href="/style.css">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = savedTheme || systemTheme;
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+<body class="dashboard-body has-scroll">
+
+<nav class="neo-navbar">
+    <div class="nav-left">
+        <div class="nav-brand">
+            <a href="/dashboard">NEO<span>CINEMA</span></a>
+            <span class="admin-badge" style="margin-left:10px; font-size:0.6rem; vertical-align:middle;">ADMIN</span>
+        </div>
+        <div class="nav-links-main">
+            <a href="/dashboard" class="nav-link">Hub</a>
+            <a href="/watchlist" class="nav-link">Vault</a>
+            <a href="/bookings" class="nav-link">Tickets</a>
+        </div>
+    </div>
+
+    <div class="nav-center">
+        <div class="nav-metrics-pill">
+            <div class="metric-item">
+                <span>👥</span>
+                <strong><%= stats.totalUsers %></strong>
+            </div>
+            <div class="metric-item">
+                <span>🎬</span>
+                <strong><%= stats.totalMovies %></strong>
+            </div>
+            <div class="metric-item">
+                <span>💰</span>
+                <strong>₹<%= stats.totalRevenue.toLocaleString() %></strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-right">
+        <button class="nav-tool-btn" id="themeToggle" title="Toggle Theme">🌓</button>
+        <a href="/settings" class="nav-tool-btn" title="Settings">⚙️</a>
+        
+        <div class="nav-user-profile">
+            <div class="avatar-circle" title="<%= user.fullName %>">
+                <%= user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) %>
+            </div>
+            <form action="/logout" method="POST" style="display:inline;">
+                <button type="submit" class="nav-logout-icon" title="Logout Session">⏻</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="admin-page">
+    <!-- Stats Cards -->
+    <div class="admin-stats">
+        <div class="stat-card cyan-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-value"><%= stats.totalUsers %></div>
+            <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card crimson-card">
+            <div class="stat-icon">🎬</div>
+            <div class="stat-value"><%= stats.totalMovies %></div>
+            <div class="stat-label">Total Movies</div>
+        </div>
+        <div class="stat-card green-card">
+            <div class="stat-icon">🎟</div>
+            <div class="stat-value"><%= stats.totalBookings %></div>
+            <div class="stat-label">Active Bookings</div>
+        </div>
+        <div class="stat-card amber-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-value">₹<%= stats.totalRevenue.toLocaleString() %></div>
+            <div class="stat-label">Total Revenue</div>
+        </div>
+        <div class="stat-card cyan-card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-value"><%= stats.totalReviews %></div>
+            <div class="stat-label">Reviews</div>
+        </div>
+    </div>
+
+    <!-- Genre Distribution -->
+    <section class="admin-section">
+        <h3>📊 Genre Distribution</h3>
+        <div class="genre-chart">
+            <% genreDistribution.forEach(function(g) { %>
+            <div class="genre-bar-row">
+                <span class="genre-bar-label"><%= g._id %></span>
+                <div class="genre-bar-track">
+                    <div class="genre-bar-fill" style="width: <%= Math.min((g.count / stats.totalMovies) * 100, 100) %>%"></div>
+                </div>
+                <span class="genre-bar-count"><%= g.count %></span>
+            </div>
+            <% }); %>
+        </div>
+    </section>
+
+    <div class="admin-grid">
+        <!-- Users Table -->
+        <section class="admin-section">
+            <h3>👥 All Users</h3>
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>Name</th><th>Username</th><th>Role</th><th>Joined</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                        <% users.forEach(function(u) { %>
+                        <tr>
+                            <td><%= u.fullName %></td>
+                            <td class="text-dim">@<%= u.username %></td>
+                            <td>
+                                <span class="role-badge <%= u.role === 'admin' ? 'role-admin' : 'role-user' %>"><%= u.role %></span>
+                            </td>
+                            <td class="text-dim"><%= new Date(u.joinedAt).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) %></td>
+                            <td class="admin-actions-cell">
+                                <% if (u._id.toString() !== user._id.toString()) { %>
+                                <form action="/admin/user/<%= u._id %>/role" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn-admin-action" title="Toggle role">🔄</button>
+                                </form>
+                                <form action="/admin/user/<%= u._id %>/delete" method="POST" style="display:inline;" onsubmit="return confirm('Delete user @<%= u.username %>?');">
+                                    <button type="submit" class="btn-admin-danger" title="Delete user">🗑</button>
+                                </form>
+                                <% } else { %>
+                                <span class="text-dim">You</span>
+                                <% } %>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Recent Bookings -->
+        <section class="admin-section">
+            <h3>🎟 Recent Bookings</h3>
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>User</th><th>Movie</th><th>Seats</th><th>Amount</th><th>Date</th></tr>
+                    </thead>
+                    <tbody>
+                        <% recentBookings.forEach(function(b) { %>
+                        <tr>
+                            <td><%= b.user ? b.user.fullName : 'Deleted' %></td>
+                            <td><%= b.movie ? b.movie.title : 'Deleted' %></td>
+                            <td><%= b.seats %></td>
+                            <td class="price-value">₹<%= b.totalPrice %></td>
+                            <td class="text-dim"><%= new Date(b.bookedAt).toLocaleDateString('en-IN', {day:'numeric',month:'short'}) %></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Recent Movies -->
+    <section class="admin-section">
+        <h3>🎬 Recent Movies</h3>
+        <div class="admin-movies-grid">
+            <% recentMovies.forEach(function(m) { %>
+            <div class="admin-movie-card">
+                <img src="<%= m.posterUrl %>" alt="<%= m.title %>">
+                <div class="admin-movie-info">
+                    <h4><%= m.title %></h4>
+                    <span class="text-dim"><%= m.addedBy ? m.addedBy.fullName : 'Unknown' %></span>
+                    <span class="genre-tag" style="font-size:0.65rem;"><%= m.genre %></span>
+                </div>
+                <form action="/admin/movie/<%= m._id %>/delete" method="POST" onsubmit="return confirm('Delete this movie?');">
+                    <button type="submit" class="btn-admin-danger" title="Delete movie">🗑</button>
+                </form>
+            </div>
+            <% }); %>
+        </div>
+    </section>
+</div>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+<script>
+    document.addEventListener('mousemove', e => {
+        const g = document.getElementById('cursorGlow');
+        g.style.left = e.clientX + 'px';
+        g.style.top = e.clientY + 'px';
+    });
+
+    // ── Theme Engine ──
+    (function() {
+        const themeBtn = document.getElementById('themeToggle');
+        if (themeBtn) {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            themeBtn.textContent = currentTheme === 'light' ? '🌙' : '🌓';
+
+            themeBtn.addEventListener('click', async () => {
+                const oldTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = oldTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeBtn.textContent = newTheme === 'light' ? '🌙' : '🌓';
+
+                try {
+                    await fetch('/toggle-theme', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ theme: newTheme })
+                    });
+                } catch (e) {
+                    console.error('Theme sync failed:', e);
+                }
+            });
+        }
+    })();
+
+    // Page transitions removed for performance
+</script>
+</body>
+</html>

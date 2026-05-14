@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neo-Cinema | My Bookings</title>
+    <link rel="stylesheet" href="/style.css">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = savedTheme || systemTheme;
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+<body class="dashboard-body has-scroll">
+
+<% if (locals.success === 'booked') { %>
+<div class="toast" id="toast"><span>🎟</span> Ticket booked successfully!</div>
+<% } else if (locals.success === 'cancelled') { %>
+<div class="toast toast-warn" id="toast"><span>✔</span> Booking cancelled.</div>
+<% } %>
+
+<nav class="neo-navbar">
+    <div class="nav-left">
+        <div class="nav-brand">
+            <a href="/dashboard">NEO<span>CINEMA</span></a>
+        </div>
+        <div class="nav-links-main">
+            <a href="/dashboard" class="nav-link">Hub</a>
+            <a href="/watchlist" class="nav-link">Vault</a>
+            <a href="/bookings" class="nav-link active">Tickets</a>
+        </div>
+    </div>
+
+    <div class="nav-center">
+        <div class="nav-metrics-pill">
+            <div class="metric-item">
+                <span>🎟</span>
+                <strong><%= stats.totalBookings %></strong>
+            </div>
+            <div class="metric-item">
+                <span>💰</span>
+                <strong>₹<%= stats.totalSpent %></strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-right">
+        <button class="nav-tool-btn" id="themeToggle" title="Toggle Theme">🌓</button>
+        <% if (user.role === 'admin') { %>
+            <a href="/admin" class="nav-tool-btn admin-btn" title="Admin Override">⚡</a>
+        <% } %>
+        <a href="/settings" class="nav-tool-btn" title="Settings">⚙️</a>
+        
+        <div class="nav-user-profile">
+            <div class="avatar-circle" title="<%= user.fullName %>">
+                <%= user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) %>
+            </div>
+            <form action="/logout" method="POST" style="display:inline;">
+                <button type="submit" class="nav-logout-icon" title="Logout Session">⏻</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="bookings-page">
+    <div class="bookings-header-unique">
+        <h1>🎟 Your <span class="highlight-cyan">Premiere</span> Pass</h1>
+        <p>Your confirmed cinematic journeys</p>
+    </div>
+
+    <% if (bookings.length === 0) { %>
+    <div class="empty-ticket-vault">
+        <div class="empty-pass-icon">🎫</div>
+        <h2>Your pocket is empty</h2>
+        <p>Book a ticket from the dashboard to see it appear here as a unique premiere pass.</p>
+        <a href="/dashboard" class="btn-book-now">Find a Movie</a>
+    </div>
+    <% } else { %>
+    <div class="ticket-vault-grid">
+        <% bookings.forEach(function(booking) { %>
+        <div class="cinema-ticket <%= booking.status === 'cancelled' ? 'ticket-void' : '' %>">
+            <div class="ticket-poster-side">
+                <% if (booking.movie) { %>
+                <img src="<%= booking.movie.posterUrl %>" alt="<%= booking.movie.title %>">
+                <% } else { %>
+                <div class="poster-missing">🎬</div>
+                <% } %>
+                <div class="ticket-status-overlay">
+                    <%= booking.status === 'confirmed' ? 'CONFIRMED' : 'CANCELLED' %>
+                </div>
+            </div>
+            
+            <div class="ticket-main-side">
+                <div class="ticket-header">
+                    <span class="ticket-label">NEO CINEMA PREMIERE</span>
+                    <h3 class="ticket-movie-title"><%= booking.movie ? booking.movie.title : 'Deleted Movie' %></h3>
+                </div>
+                
+                <div class="ticket-details">
+                    <div class="t-detail">
+                        <label>DATE</label>
+                        <span><%= new Date(booking.showDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) %></span>
+                    </div>
+                    <div class="t-detail">
+                        <label>TIME</label>
+                        <span><%= booking.showTime %></span>
+                    </div>
+                    <div class="t-detail">
+                        <label>SEATS</label>
+                        <span><%= booking.seats %> PASSES</span>
+                    </div>
+                    <div class="t-detail">
+                        <label>PRICE</label>
+                        <span class="price-highlight">₹<%= booking.totalPrice %></span>
+                    </div>
+                </div>
+                
+                <div class="ticket-footer">
+                    <div class="barcode-wrap">
+                        <div class="barcode-mock"></div>
+                        <span class="barcode-num">#NC-<%= booking._id.toString().slice(-8).toUpperCase() %></span>
+                    </div>
+                    <% if (booking.status === 'confirmed') { %>
+                    <button class="btn-ticket-cancel" data-id="<%= booking._id %>"
+                        data-title="<%= booking.movie ? booking.movie.title : 'this movie' %>">
+                        VOID TICKET
+                    </button>
+                    <% } %>
+                </div>
+            </div>
+            
+            <div class="ticket-perforation"></div>
+            
+            <div class="ticket-stub">
+                <div class="stub-content">
+                    <span class="stub-brand">NEO</span>
+                    <span class="stub-code">PASS</span>
+                    <div class="stub-info">
+                        <strong><%= booking.seats %></strong>
+                        <small>SEATS</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+    <% } %>
+</div>
+
+<!-- Cancel Booking Modal -->
+<div id="cancelModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-icon-danger">🎟</div>
+        <h3>Cancel Booking?</h3>
+        <p>Cancel your booking for <strong id="cancelBookingTitle"></strong>? You will receive a full refund.</p>
+        <div class="modal-actions">
+            <button type="button" class="btn-modal-cancel" id="closeCancelModal">Keep Booking</button>
+            <form id="cancelForm" method="POST" style="display:inline;">
+                <button type="submit" class="btn-modal-delete">Yes, Cancel It</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<script>
+    document.addEventListener('mousemove', e => {
+        const g = document.getElementById('cursorGlow');
+        g.style.left = e.clientX + 'px';
+        g.style.top = e.clientY + 'px';
+    });
+
+    const toast = document.getElementById('toast');
+    if (toast) {
+        setTimeout(() => {
+            toast.classList.add('hide');
+            setTimeout(() => toast.remove(), 400);
+        }, 3500);
+    }
+
+    // Cancel booking modal
+    const cancelModal = document.getElementById('cancelModal');
+    const cancelForm = document.getElementById('cancelForm');
+    const cancelTitle = document.getElementById('cancelBookingTitle');
+
+    document.querySelectorAll('.btn-cancel-booking').forEach(btn => {
+        btn.addEventListener('click', () => {
+            cancelTitle.textContent = '"' + btn.dataset.title + '"';
+            cancelForm.action = '/bookings/cancel/' + btn.dataset.id;
+            cancelModal.classList.add('visible');
+        });
+    });
+
+    document.getElementById('closeCancelModal').addEventListener('click', () => cancelModal.classList.remove('visible'));
+    cancelModal.addEventListener('click', e => { if (e.target === cancelModal) cancelModal.classList.remove('visible'); });
+
+    // ── Theme Engine ──
+    (function() {
+        const themeBtn = document.getElementById('themeToggle');
+        if (themeBtn) {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            themeBtn.textContent = currentTheme === 'light' ? '🌙' : '🌓';
+
+            themeBtn.addEventListener('click', async () => {
+                const oldTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = oldTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeBtn.textContent = newTheme === 'light' ? '🌙' : '🌓';
+
+                try {
+                    await fetch('/toggle-theme', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ theme: newTheme })
+                    });
+                } catch (e) {
+                    console.error('Theme sync failed:', e);
+                }
+            });
+        }
+    })();
+
+    // Page transitions removed for performance
+</script>
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neo-Cinema | Settings</title>
+    <link rel="stylesheet" href="/style.css">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = savedTheme || systemTheme;
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+<body class="dashboard-body has-scroll">
+
+<nav class="neo-navbar">
+    <div class="nav-left">
+        <div class="nav-brand">
+            <a href="/dashboard">NEO<span>CINEMA</span></a>
+        </div>
+        <div class="nav-links-main">
+            <a href="/dashboard" class="nav-link">Hub</a>
+            <a href="/watchlist" class="nav-link">Vault</a>
+            <a href="/bookings" class="nav-link">Tickets</a>
+        </div>
+    </div>
+
+    <div class="nav-center">
+        <div class="nav-metrics-pill">
+            <div class="metric-item">
+                <span>🎬</span>
+                <strong><%= stats.total %></strong>
+            </div>
+            <div class="metric-item">
+                <span>⭐</span>
+                <strong><%= stats.avgRating %></strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-right">
+        <button class="nav-tool-btn" id="themeToggle" title="Toggle Theme">🌓</button>
+        <% if (user.role === 'admin') { %>
+            <a href="/admin" class="nav-tool-btn admin-btn" title="Admin Override">⚡</a>
+        <% } %>
+        <a href="/settings" class="nav-tool-btn" title="Settings">⚙️</a>
+        
+        <div class="nav-user-profile">
+            <div class="avatar-circle" title="<%= user.fullName %>">
+                <%= user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) %>
+            </div>
+            <form action="/logout" method="POST" style="display:inline;">
+                <button type="submit" class="nav-logout-icon" title="Logout Session">⏻</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="detail-backdrop" style="background-image: url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2000&auto=format&fit=crop'); opacity: 0.15; filter: blur(60px); position: fixed;"></div>
+
+<div class="settings-container">
+    <header class="settings-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-avatar-area">
+                <div class="hero-avatar-ring">
+                    <div class="hero-avatar-internal" style="position:relative; width:100%; height:100%;">
+                        <div class="settings-avatar-wrapper" style="width:100%; height:100%; border-radius:50%; overflow:hidden; background:#0a0a0f;">
+                            <% if (user.imageUrl) { %>
+                                <img src="<%= user.imageUrl %>" alt="Avatar" id="livePreviewImg" style="width:100%; height:100%; object-fit:cover;">
+                            <% } else { %>
+                                <div class="avatar-initials" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:900; color:var(--cyan-glow); background:rgba(0,240,255,0.05);"><%= user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) %></div>
+                            <% } %>
+                        </div>
+                        <div class="avatar-edit-badge" onclick="document.getElementById('panelProfile').scrollIntoView({behavior:'smooth'})">📷</div>
+                    </div>
+                </div>
+                <div class="hero-user-meta">
+                    <div class="role-badge"><%= user.role.toUpperCase() %></div>
+                    <h1 class="hero-name"><%= user.fullName %></h1>
+                    <p class="hero-handle">@<%= user.username %></p>
+                </div>
+            </div>
+            <div class="hero-quick-stats">
+                <div class="quick-stat">
+                    <span class="qs-val"><%= stats.total %></span>
+                    <span class="qs-lab">PRODUCTIONS</span>
+                </div>
+                <div class="qs-divider"></div>
+                <div class="quick-stat">
+                    <span class="qs-val"><%= user.favoriteGenre || '—' %></span>
+                    <span class="qs-lab">SIGNATURE</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="settings-workspace">
+        <aside class="workspace-sidebar">
+            <nav class="settings-nav">
+                <button class="settings-nav-item active" data-target="panelProfile">
+                    <span class="nav-icon">👤</span> 
+                    <div class="nav-text">
+                        <strong>Studio Profile</strong>
+                        <span>Branding & Bio</span>
+                    </div>
+                </button>
+                <button class="settings-nav-item" data-target="panelPassword">
+                    <span class="nav-icon">🔒</span> 
+                    <div class="nav-text">
+                        <strong>Security</strong>
+                        <span>Credentials</span>
+                    </div>
+                </button>
+                <button class="settings-nav-item" data-target="panelStats">
+                    <span class="nav-icon">📊</span> 
+                    <div class="nav-text">
+                        <strong>Analytics</strong>
+                        <span>Performance</span>
+                    </div>
+                </button>
+                <button class="settings-nav-item danger-tab" data-target="panelDanger">
+                    <span class="nav-icon">⚠️</span> 
+                    <div class="nav-text">
+                        <strong>Studio Exit</strong>
+                        <span>Delete House</span>
+                    </div>
+                </button>
+            </nav>
+        </aside>
+
+        <main class="settings-main-area">
+            <% if (success === 'profile') { %>
+                <div class="settings-alert success" id="settingsAlert">✔ Profile updated successfully.</div>
+            <% } else if (success === 'password') { %>
+                <div class="settings-alert success" id="settingsAlert">✔ Password changed successfully.</div>
+            <% } else if (error === 'mismatch') { %>
+                <div class="settings-alert error" id="settingsAlert">✘ New passwords do not match.</div>
+            <% } else if (error === 'short') { %>
+                <div class="settings-alert error" id="settingsAlert">✘ Password must be at least 6 characters.</div>
+            <% } else if (error === 'wrongpassword') { %>
+                <div class="settings-alert error" id="settingsAlert">✘ Current password is incorrect.</div>
+            <% } %>
+
+            <!-- Profile Panel -->
+            <section class="settings-panel active" id="panelProfile">
+                <div class="panel-header-premium">
+                    <h2>Studio <span class="highlight-cyan">Branding</span></h2>
+                    <p>Customize your cinematic identity.</p>
+                </div>
+                <form action="/settings/profile" method="POST" class="settings-form">
+                    <div class="form-grid-premium">
+                        <div class="form-group">
+                            <label for="fullName">Professional Name</label>
+                            <input type="text" id="fullName" name="fullName" value="<%= user.fullName %>" placeholder="Your production name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="favoriteGenre">Signature Genre</label>
+                            <select id="favoriteGenre" name="favoriteGenre" class="neo-select">
+                                <option value="Action" <%= user.favoriteGenre === 'Action' ? 'selected' : '' %>>Action</option>
+                                <option value="Drama" <%= user.favoriteGenre === 'Drama' ? 'selected' : '' %>>Drama</option>
+                                <option value="Sci-Fi" <%= user.favoriteGenre === 'Sci-Fi' ? 'selected' : '' %>>Sci-Fi</option>
+                                <option value="Thriller" <%= user.favoriteGenre === 'Thriller' ? 'selected' : '' %>>Thriller</option>
+                                <option value="Horror" <%= user.favoriteGenre === 'Horror' ? 'selected' : '' %>>Horror</option>
+                                <option value="Comedy" <%= user.favoriteGenre === 'Comedy' ? 'selected' : '' %>>Comedy</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="bio">Director's Bio</label>
+                            <textarea id="bio" name="bio" rows="3" placeholder="Tell us about your cinematic vision..."><%= user.bio %></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="imageUrl">Avatar Image URL</label>
+                            <input type="url" name="imageUrl" id="imageUrl" value="<%= user.imageUrl %>" placeholder="https://unsplash.com/...">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-studio-save">UPDATE PROFILE</button>
+                </form>
+            </section>
+
+            <!-- Password Panel -->
+            <section class="settings-panel" id="panelPassword">
+                <div class="panel-header-premium">
+                    <h2>Security <span class="highlight-crimson">Vault</span></h2>
+                    <p>Protect your studio assets.</p>
+                </div>
+                <form action="/settings/password" method="POST" class="settings-form">
+                    <div class="form-grid-premium">
+                        <div class="form-group full-width">
+                            <label>Current Passcode</label>
+                            <div class="password-input-wrap" style="position:relative;">
+                                <input type="password" name="currentPassword" id="currentPassword" required style="width:100%;">
+                                <button type="button" class="btn-toggle-eye" id="toggleCurrent" style="position:absolute; right:15px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--text-dim); font-size:1.2rem;">👁</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>New Passcode</label>
+                            <div class="password-input-wrap" style="position:relative;">
+                                <input type="password" name="newPassword" id="newPassword" required style="width:100%;">
+                                <button type="button" class="btn-toggle-eye" id="toggleNew" style="position:absolute; right:15px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--text-dim); font-size:1.2rem;">👁</button>
+                            </div>
+                            <div class="pw-strength-meter">
+                                <div class="pw-bar" style="height:4px; background:rgba(255,255,255,0.05); border-radius:2px; margin-top:8px; overflow:hidden;"><div id="pwFill" style="height:100%; transition:0.3s; width:0%;"></div></div>
+                                <span id="pwLabel" style="font-size:0.65rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-top:4px; display:block;">Security Level</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Passcode</label>
+                            <input type="password" name="confirmPassword" id="confirmPassword" required>
+                            <span id="confirmHint" style="font-size:0.65rem; margin-top:4px; display:block;"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-studio-save">ROTATE KEY</button>
+                </form>
+            </section>
+
+            <!-- Stats Panel -->
+            <section class="settings-panel" id="panelStats">
+                <div class="panel-header-premium">
+                    <h2>Studio <span class="highlight-cyan">Analytics</span></h2>
+                    <p>Performance metrics across your collection.</p>
+                </div>
+                <div class="stats-workspace">
+                    <div class="stat-card-premium">
+                        <div class="stat-header">
+                            <span class="stat-icon-wrap">🎬</span>
+                            <div class="stat-titles">
+                                <h3>Total Vault</h3>
+                                <p>Movies Produced</p>
+                            </div>
+                        </div>
+                        <div class="stat-big-val"><%= stats.total %></div>
+                        <div class="stat-progress-bar"><div class="stat-progress-fill" style="width: <%= Math.min(stats.total * 5, 100) %>%"></div></div>
+                    </div>
+                    <div class="stat-card-premium">
+                        <div class="stat-header">
+                            <span class="stat-icon-wrap">🎭</span>
+                            <div class="stat-titles">
+                                <h3>Top Genre</h3>
+                                <p>Primary Expertise</p>
+                            </div>
+                        </div>
+                        <div class="stat-big-val"><%= stats.topGenre %></div>
+                        <div class="stat-milestone"><%= stats.topGenre %> Specialist</div>
+                    </div>
+                    <div class="stat-card-premium">
+                        <div class="stat-header">
+                            <span class="stat-icon-wrap">⭐</span>
+                            <div class="stat-titles">
+                                <h3>Avg Rating</h3>
+                                <p>Critical Response</p>
+                            </div>
+                        </div>
+                        <div class="stat-big-val"><%= stats.avgRating %></div>
+                        <div class="star-rating-row">
+                            <% for(let i=1; i<=10; i++) { %>
+                                <span class="star <%= i <= stats.avgRating ? 'active' : '' %>" style="font-size:0.9rem;">★</span>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Danger Panel -->
+            <section class="settings-panel" id="panelDanger">
+                <div class="panel-header-premium">
+                    <h2>Studio <span class="highlight-crimson">Exit</span></h2>
+                    <p>Irreversible workspace termination.</p>
+                </div>
+                <div class="danger-card-premium" style="background:rgba(255,0,60,0.05); border:1px solid rgba(255,0,60,0.1); padding:2rem; border-radius:20px; display:flex; gap:1.5rem; align-items:center;">
+                    <div style="font-size:2.5rem; color:var(--crimson-glow);">⚠️</div>
+                    <div>
+                        <h3 style="color:var(--crimson-glow); font-size:1.1rem; margin-bottom:0.3rem;">Delete Account</h3>
+                        <p style="color:var(--text-dim); font-size:0.85rem; margin-bottom:1.2rem;">This removes your profile and all <%= stats.total %> movies permanently.</p>
+                        <button type="button" class="btn-danger-action" id="openDeleteModal" style="background:var(--crimson-glow); color:#fff; border:none; padding:0.8rem 1.5rem; border-radius:10px; cursor:pointer; font-weight:900; font-size:0.75rem;">INITIALIZE DELETE</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3>Are you absolutely sure?</h3>
+        <p>Type <strong>DELETE</strong> below to confirm. This removes your account and all your movies permanently.</p>
+        <input type="text" id="deleteConfirmInput" placeholder="Type DELETE here" autocomplete="off">
+        <div class="modal-actions">
+            <button type="button" class="btn-modal-cancel" id="closeDeleteModal">Cancel</button>
+            <form action="/settings/delete" method="POST" style="display:inline;">
+                <button type="submit" class="btn-modal-delete" id="confirmDeleteBtn" disabled>Yes, Delete Everything</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<script>
+    // ── Theme Engine ──
+    (function() {
+        const themeBtn = document.getElementById('themeToggle');
+        if (themeBtn) {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            themeBtn.textContent = currentTheme === 'light' ? '🌙' : '🌓';
+
+            themeBtn.addEventListener('click', async () => {
+                const oldTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = oldTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeBtn.textContent = newTheme === 'light' ? '🌙' : '🌓';
+
+                try {
+                    await fetch('/toggle-theme', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ theme: newTheme })
+                    });
+                } catch (e) {
+                    console.error('Theme sync failed:', e);
+                }
+            });
+        }
+    })();
+
+    document.addEventListener('mousemove', e => {
+        const g = document.getElementById('cursorGlow');
+        g.style.left = e.clientX + 'px';
+        g.style.top = e.clientY + 'px';
+    });
+
+    const allTabs = document.querySelectorAll('.settings-nav-item');
+    const allPanels = document.querySelectorAll('.settings-panel');
+
+    function switchTab(targetId) {
+        allTabs.forEach(t => t.classList.remove('active'));
+        allPanels.forEach(p => p.classList.remove('active'));
+        const tab = document.querySelector('[data-target="' + targetId + '"]');
+        const panel = document.getElementById(targetId);
+        if (tab) tab.classList.add('active');
+        if (panel) panel.classList.add('active');
+    }
+
+    allTabs.forEach(tab => tab.addEventListener('click', () => switchTab(tab.dataset.target)));
+
+    const params = new URLSearchParams(window.location.search);
+    const sq = params.get('success'), eq = params.get('error');
+    if (sq === 'password' || eq === 'mismatch' || eq === 'short' || eq === 'wrongpassword') {
+        switchTab('panelPassword');
+    }
+
+    function makeToggle(btnId, inpId) {
+        const btn = document.getElementById(btnId);
+        const inp = document.getElementById(inpId);
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+            const isPw = inp.type === 'password';
+            inp.type = isPw ? 'text' : 'password';
+            btn.textContent = isPw ? '🕶' : '👁';
+        });
+    }
+    makeToggle('toggleCurrent', 'currentPassword');
+    makeToggle('toggleNew', 'newPassword');
+
+    const newPw = document.getElementById('newPassword');
+    const pwFill = document.getElementById('pwFill');
+    const pwLabel = document.getElementById('pwLabel');
+    newPw.addEventListener('input', () => {
+        const v = newPw.value;
+        let score = 0;
+        if (v.length >= 6) score++;
+        if (v.length >= 10) score++;
+        if (/[A-Z]/.test(v) && /[0-9]/.test(v)) score++;
+        const cfgs = [
+            { w: '0%', color: '', label: 'Enter a password' },
+            { w: '33%', color: 'var(--crimson-glow)', label: 'Weak' },
+            { w: '66%', color: 'var(--amber-glow)', label: 'Medium' },
+            { w: '100%', color: 'var(--green-glow)', label: 'Strong' }
+        ];
+        const cfg = v.length === 0 ? cfgs[0] : cfgs[Math.min(score + 1, 3)];
+        pwFill.style.width = cfg.w;
+        pwFill.style.background = cfg.color;
+        pwLabel.textContent = cfg.label;
+        pwLabel.style.color = cfg.color || 'var(--text-dim)';
+    });
+
+    const confirmPw = document.getElementById('confirmPassword');
+    const confirmHint = document.getElementById('confirmHint');
+    confirmPw.addEventListener('input', () => {
+        if (!confirmPw.value) { confirmHint.textContent = ''; return; }
+        const match = confirmPw.value === newPw.value;
+        confirmHint.textContent = match ? '✔ Passwords match' : '✘ Passwords do not match';
+        confirmHint.style.color = match ? 'var(--green-glow)' : 'var(--crimson-glow)';
+    });
+
+    // ── Profile Live Preview ──
+    const imgInput = document.getElementById('imageUrl');
+    const liveImg = document.getElementById('livePreviewImg');
+    if (imgInput && liveImg) {
+        imgInput.addEventListener('input', () => {
+            const v = imgInput.value.trim();
+            if (v) liveImg.src = v;
+        });
+    }
+
+    // ── Delete Workspace Logic ──
+    const modal = document.getElementById('deleteModal');
+    const delInput = document.getElementById('deleteConfirmInput');
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    
+    if (document.getElementById('openDeleteModal')) {
+        document.getElementById('openDeleteModal').addEventListener('click', () => modal.classList.add('visible'));
+    }
+    
+    if (document.getElementById('closeDeleteModal')) {
+        document.getElementById('closeDeleteModal').addEventListener('click', () => {
+            modal.classList.remove('visible');
+            delInput.value = '';
+            confirmBtn.disabled = true;
+        });
+    }
+
+    if (modal) {
+        modal.addEventListener('click', e => {
+            if (e.target === modal) {
+                modal.classList.remove('visible');
+                delInput.value = '';
+                confirmBtn.disabled = true;
+            }
+        });
+    }
+
+    if (delInput) {
+        delInput.addEventListener('input', () => {
+            confirmBtn.disabled = delInput.value.trim() !== 'DELETE';
+        });
+    }
+
+    // ── Alert Cleanup ──
+    const alertEl = document.getElementById('settingsAlert');
+    if (alertEl) {
+        setTimeout(() => {
+            alertEl.style.opacity = '0';
+            alertEl.style.transform = 'translateY(-10px)';
+            setTimeout(() => alertEl.remove(), 500);
+        }, 4000);
+    }
+
+
+</script>
+</body>
+</html>

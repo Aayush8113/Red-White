@@ -1,0 +1,374 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neo-Cinema | <%= movie.title %></title>
+    <link rel="stylesheet" href="/style.css">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = savedTheme || systemTheme;
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+<body class="dashboard-body has-scroll">
+
+<nav class="neo-navbar">
+    <div class="nav-left">
+        <div class="nav-brand">
+            <a href="/dashboard">NEO<span>CINEMA</span></a>
+        </div>
+        <div class="nav-links-main">
+            <a href="/dashboard" class="nav-link">Hub</a>
+            <a href="/watchlist" class="nav-link">Vault</a>
+            <a href="/bookings" class="nav-link">Tickets</a>
+        </div>
+    </div>
+
+    <div class="nav-right">
+        <button class="nav-tool-btn" id="themeToggle" title="Toggle Theme">🌓</button>
+        <% if (user.role === 'admin') { %>
+            <a href="/admin" class="nav-tool-btn admin-btn" title="Admin Override">⚡</a>
+        <% } %>
+        <a href="/settings" class="nav-tool-btn" title="Settings">⚙️</a>
+        
+        <div class="nav-user-profile">
+            <div class="avatar-circle" title="<%= user.fullName %>">
+                <%= user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) %>
+            </div>
+            <form action="/logout" method="POST" style="display:inline;">
+                <button type="submit" class="nav-logout-icon" title="Logout Session">⏻</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="detail-backdrop" style="background-image: url('<%= movie.backdropUrl || movie.posterUrl %>');"></div>
+
+<div class="detail-page immersive-detail">
+    <!-- Hero Section -->
+    <div class="detail-hero-immersive">
+        <div class="detail-poster-column">
+            <div class="detail-poster-container">
+                <img src="<%= movie.posterUrl %>" alt="<%= movie.title %>" class="detail-poster-main">
+                <div class="poster-shine"></div>
+                <div class="detail-format-badge"><%= movie.format || '2D' %></div>
+            </div>
+            <div class="detail-quick-stats">
+                <div class="stat-box">
+                    <span class="stat-value"><%= movie.rating %>/10</span>
+                    <span class="stat-label">Critic Score</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-value"><%= movie.ageRating || 'UA' %></span>
+                    <span class="stat-label">Certification</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-content-column">
+            <div class="detail-header-group">
+                <div class="detail-genre-row">
+                    <span class="genre-tag-premium"><%= movie.genre %></span>
+                    <% if (movie.arvrSupport) { %>
+                    <span class="arvr-tag">🕶️ AR/VR Supported</span>
+                    <% } %>
+                    <span class="trending-badge">🔥 Trending #1</span>
+                </div>
+                <h1 class="detail-title-mega"><%= movie.title %></h1>
+                <div class="detail-crew-line">
+                    <span>Directed by <strong class="cyan-text"><%= movie.director %></strong></span>
+                    <span class="dot-separator"></span>
+                    <span>Produced by <strong class="white-text"><%= movie.producer || 'Neo Studios' %></strong></span>
+                </div>
+            </div>
+
+            <!-- Content Intensity HUD -->
+            <div class="intensity-hud">
+                <div class="hud-item">
+                    <label>Violence</label>
+                    <div class="hud-bar"><div class="hud-fill" style="width: <%= (movie.intensity ? movie.intensity.violence : 0) * 10 %>%; background: #ff4b2b;"></div></div>
+                </div>
+                <div class="hud-item">
+                    <label>Profanity</label>
+                    <div class="hud-bar"><div class="hud-fill" style="width: <%= (movie.intensity ? movie.intensity.profanity : 0) * 10 %>%; background: #ffb400;"></div></div>
+                </div>
+                <div class="hud-item">
+                    <label>Drug Use</label>
+                    <div class="hud-bar"><div class="hud-fill" style="width: <%= (movie.intensity ? movie.intensity.drugUse : 0) * 10 %>%; background: #00ff88;"></div></div>
+                </div>
+            </div>
+
+            <p class="detail-description-premium"><%= movie.description %></p>
+
+            <div class="detail-meta-grid">
+                <div class="meta-capsule">
+                    <span class="meta-icon">⏱️</span>
+                    <div class="meta-text">
+                        <label>Runtime</label>
+                        <span><%= movie.runtime || '120' %> MIN</span>
+                    </div>
+                </div>
+                <div class="meta-capsule">
+                    <span class="meta-icon">🌐</span>
+                    <div class="meta-text">
+                        <label>Language</label>
+                        <span><%= movie.language || 'English' %></span>
+                    </div>
+                </div>
+                <div class="meta-capsule">
+                    <span class="meta-icon">📅</span>
+                    <div class="meta-text">
+                        <label>Release Date</label>
+                        <span><%= movie.releaseDate ? new Date(movie.releaseDate).toLocaleDateString() : new Date().getFullYear() %></span>
+                    </div>
+                </div>
+                <div class="meta-capsule">
+                    <span class="meta-icon">🎵</span>
+                    <div class="meta-text">
+                        <label>Music By</label>
+                        <span><%= movie.musicDirector || 'Various Artists' %></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-actions-premium">
+                <button class="btn-book-ticket-mega" id="btnBookDetail">
+                    <span class="btn-icon">🎟</span>
+                    <span class="btn-text">Book Your Seat Now</span>
+                </button>
+                <% if (movie.trailerUrl) { %>
+                <a href="<%= movie.trailerUrl %>" target="_blank" class="btn-trailer-watch">
+                    <span class="btn-icon">🎬</span> Watch Trailer
+                </a>
+                <% } %>
+                <form action="/watchlist/toggle/<%= movie._id %>" method="POST" style="display:contents;">
+                    <button type="submit" class="btn-action-round <%= isInWatchlist ? 'active' : '' %>" title="Watchlist">
+                        <%= isInWatchlist ? '★' : '☆' %>
+                    </button>
+                </form>
+                <button class="btn-action-round" onclick="shareMovie()" title="Share Movie">📤</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Review Section -->
+    <section class="detail-section-premium">
+        <div class="section-header">
+            <h2>💬 Community <span class="highlight-cyan">Talk</span></h2>
+            <span class="review-count-badge"><%= reviews.length %> Reviews</span>
+        </div>
+
+        <div class="reviews-container-split">
+            <div class="review-form-side">
+                <% if (!userReview) { %>
+                <div class="review-card-premium form-card">
+                    <h3>Share Your <span class="highlight-crimson">Opinion</span></h3>
+                    <form action="/movies/<%= movie._id %>/review" method="POST" class="review-form-mini">
+                        <div class="rating-input-group">
+                            <label>Rating</label>
+                            <input type="range" name="rating" min="1" max="10" value="8" step="1" oninput="this.nextElementSibling.value = this.value">
+                            <output>8</output>
+                        </div>
+                        <textarea name="text" placeholder="What did you think of the movie?..." rows="4" required></textarea>
+                        <button type="submit" class="btn-submit-review">Post Review</button>
+                    </form>
+                </div>
+                <% } else { %>
+                <div class="review-card-premium status-card">
+                    <p>You've already reviewed this movie. <br>Your opinion matters!</p>
+                </div>
+                <% } %>
+            </div>
+
+            <div class="reviews-list-side">
+                <% if (reviews.length === 0) { %>
+                <div class="empty-reviews">
+                    <div class="empty-icon">📢</div>
+                    <p>The conversation hasn't started yet. <br>Be the voice of this movie!</p>
+                </div>
+                <% } %>
+                <% reviews.forEach(function(review) { %>
+                <div class="review-card-premium <%= review.user._id.toString() === user._id.toString() ? 'own-review' : '' %>">
+                    <div class="review-user-header">
+                        <div class="user-info-mini">
+                            <div class="avatar-sm">
+                                <%= review.user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) %>
+                            </div>
+                            <div class="user-name-date">
+                                <strong><%= review.user.fullName %></strong>
+                                <span><%= new Date(review.createdAt).toLocaleDateString() %></span>
+                            </div>
+                        </div>
+                        <div class="review-rating-tag"><%= review.rating %> ★</div>
+                    </div>
+                    <p class="review-body"><%= review.text %></p>
+                    <% if (review.user._id.toString() === user._id.toString()) { %>
+                    <form action="/movies/<%= movie._id %>/review/<%= review._id %>/delete" method="POST">
+                        <button type="submit" class="delete-review-link">✕ Remove Review</button>
+                    </form>
+                    <% } %>
+                </div>
+                <% }); %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Movies -->
+    <% if (related.length > 0) { %>
+    <section class="detail-section-premium">
+        <div class="section-header">
+            <h2>🎬 Cinematic <span class="highlight-cyan">Matches</span></h2>
+        </div>
+        <div class="related-grid-premium">
+            <% related.forEach(function(r) { %>
+            <a href="/movies/<%= r._id %>" class="related-card-premium">
+                <div class="related-img-wrap">
+                    <img src="<%= r.posterUrl %>" alt="<%= r.title %>">
+                    <div class="related-overlay-mini">
+                        <span><%= r.rating %> ★</span>
+                    </div>
+                </div>
+                <div class="related-meta-mini">
+                    <h4><%= r.title %></h4>
+                    <span><%= r.genre %></span>
+                </div>
+            </a>
+            <% }); %>
+        </div>
+    </section>
+    <% } %>
+</div>
+
+<!-- Booking Modal -->
+<div id="bookingModal" class="modal-overlay">
+    <div class="modal-box booking-modal-box">
+        <h3>🎟 Book <span class="highlight-cyan">Tickets</span></h3>
+        <div class="booking-movie-info">
+            <img src="<%= movie.posterUrl %>" alt="Poster" class="booking-poster-thumb">
+            <div>
+                <h4><%= movie.title %></h4>
+                <p class="booking-price-hint">₹<span id="bookingPricePerSeat"><%= movie.ticketPrice || 150 %></span> per seat</p>
+            </div>
+        </div>
+        <form action="/bookings/create" method="POST" id="bookingForm" class="booking-form">
+            <input type="hidden" name="movieId" value="<%= movie._id %>">
+            <div class="booking-fields">
+                <div class="booking-field">
+                    <label>Show Date</label>
+                    <input type="date" name="showDate" id="bookingDate" required>
+                </div>
+                <div class="booking-field">
+                    <label>Show Time</label>
+                    <select name="showTime" class="neo-select" required>
+                        <option value="10:00 AM">10:00 AM</option>
+                        <option value="1:30 PM">1:30 PM</option>
+                        <option value="4:00 PM">4:00 PM</option>
+                        <option value="6:30 PM" selected>6:30 PM</option>
+                        <option value="9:30 PM">9:30 PM</option>
+                    </select>
+                </div>
+                <div class="booking-field">
+                    <label>Seats</label>
+                    <input type="number" name="seats" id="bookingSeats" min="1" max="10" value="2" required>
+                </div>
+                <div class="booking-field">
+                    <label>Total Price</label>
+                    <div class="booking-total" id="bookingTotal">₹<%= (movie.ticketPrice || 150) * 2 %></div>
+                </div>
+            </div>
+            <div class="modal-actions" style="margin-top:1.5rem;">
+                <button type="button" class="btn-modal-cancel" id="cancelBooking">Cancel</button>
+                <button type="submit" class="btn-booking-confirm">🎟 Confirm Booking</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="shareToast" class="toast" style="display:none;"><span>📋</span> Link copied to clipboard!</div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<script>
+    document.addEventListener('mousemove', e => {
+        const g = document.getElementById('cursorGlow');
+        g.style.left = e.clientX + 'px';
+        g.style.top = e.clientY + 'px';
+    });
+
+    // ── Theme Engine ──
+    (function() {
+        const themeBtn = document.getElementById('themeToggle');
+        if (themeBtn) {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            themeBtn.textContent = currentTheme === 'light' ? '🌙' : '🌓';
+
+            themeBtn.addEventListener('click', async () => {
+                const oldTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = oldTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeBtn.textContent = newTheme === 'light' ? '🌙' : '🌓';
+
+                try {
+                    await fetch('/toggle-theme', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ theme: newTheme })
+                    });
+                } catch (e) {
+                    console.error('Theme sync failed:', e);
+                }
+            });
+        }
+    })();
+
+    // Booking Modal Logic
+    const bookingModal = document.getElementById('bookingModal');
+    const bookingPricePerSeat = <%= movie.ticketPrice || 150 %>;
+    const bookingSeats = document.getElementById('bookingSeats');
+    const bookingTotal = document.getElementById('bookingTotal');
+
+    document.getElementById('btnBookDetail').addEventListener('click', () => {
+        bookingModal.classList.add('visible');
+    });
+
+    document.getElementById('cancelBooking').addEventListener('click', () => {
+        bookingModal.classList.remove('visible');
+    });
+
+    bookingSeats.addEventListener('input', () => {
+        const total = bookingPricePerSeat * bookingSeats.value;
+        bookingTotal.textContent = '₹' + total;
+    });
+
+    function shareMovie() {
+        const url = window.location.href;
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(() => {
+                const t = document.getElementById('shareToast');
+                t.style.display = 'flex';
+                setTimeout(() => { t.style.display = 'none'; }, 3000);
+            });
+        } else {
+            const input = document.createElement('input');
+            input.value = url;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            const t = document.getElementById('shareToast');
+            t.style.display = 'flex';
+            setTimeout(() => { t.style.display = 'none'; }, 3000);
+        }
+    }
+
+
+
+    // Page transitions removed for performance
+</script>
+</body>
+</html>

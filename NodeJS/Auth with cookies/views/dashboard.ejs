@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neo-Cinema | Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = savedTheme || systemTheme;
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+<body class="dashboard-body has-scroll">
+
+<% if (locals.showToast) { %>
+<div class="toast" id="toast"><span>✔</span> Movie added to your collection!</div>
+<% } %>
+
+<nav class="neo-navbar">
+    <div class="nav-left">
+        <div class="nav-brand">
+            <a href="/dashboard">NEO<span>CINEMA</span></a>
+        </div>
+        <div class="nav-links-main">
+            <a href="/dashboard" class="nav-link active">Hub</a>
+            <a href="/watchlist" class="nav-link">Vault</a>
+            <a href="/bookings" class="nav-link">Tickets</a>
+        </div>
+    </div>
+
+    <div class="nav-center">
+        <div class="nav-metrics-pill">
+            <div class="metric-item">
+                <span>🎬</span>
+                <strong><%= stats.total %></strong>
+            </div>
+            <div class="metric-item">
+                <span>⭐</span>
+                <strong><%= stats.avgRating %></strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-right">
+        <button class="nav-tool-btn" id="themeToggle" title="Toggle Theme">🌓</button>
+        <% if (user.role === 'admin') { %>
+            <a href="/admin" class="nav-tool-btn admin-btn" title="Admin Override">⚡</a>
+        <% } %>
+        <a href="/settings" class="nav-tool-btn" title="Settings">⚙️</a>
+        
+        <div class="nav-user-profile">
+            <div class="avatar-circle" title="<%= user.fullName %>">
+                <%= user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) %>
+            </div>
+            <form action="/logout" method="POST" style="display:inline;">
+                <button type="submit" class="nav-logout-icon" title="Logout Session">⏻</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="dashboard-container">
+    <section class="insertion-console cinematic-command-center fade-in-up">
+        <div class="console-header-unique">
+            <div class="header-icon-wrap">
+                <span class="hud-scanner"></span>
+                🚀
+            </div>
+            <div class="header-text">
+                <div class="system-status-row">
+                    <span class="status-dot-glow"></span>
+                    <span class="status-text-mini">SYSTEM ONLINE</span>
+                </div>
+                <h3>Studio <span class="highlight-cyan">Control</span></h3>
+                <p>Register new cinematic entry...</p>
+            </div>
+            <div class="status-beam"></div>
+        </div>
+        <form action="/movies/add" method="POST" class="console-form" id="addMovieForm" enctype="multipart/form-data">
+            <!-- Tactical Zone: Identity -->
+            <div class="form-section-header">
+                <span class="section-tag">STEP 01</span>
+                <h3>Production <span class="highlight-cyan">Details</span></h3>
+            </div>
+            <div class="command-grid">
+                <div class="field-wrap wide">
+                    <label><span class="label-icon">🎬</span> Movie Title</label>
+                    <input type="text" name="title" placeholder="e.g. Inception: The Awakening" required>
+                </div>
+                <div class="field-wrap">
+                    <label><span class="label-icon">👤</span> Director</label>
+                    <input type="text" name="director" placeholder="Commanding Officer..." required>
+                </div>
+                <div class="field-wrap">
+                    <label><span class="label-icon">⭐</span> Lead Actor</label>
+                    <input type="text" name="leadActor" placeholder="Lead Asset..." required>
+                </div>
+            </div>
+
+            <!-- Tactical Zone: Logistics -->
+            <div class="form-section-header">
+                <span class="section-tag">STEP 02</span>
+                <h3>Release <span class="highlight-crimson">Metrics</span></h3>
+            </div>
+            <div class="command-grid">
+                <div class="field-wrap">
+                    <label><span class="label-icon">📅</span> Release Date</label>
+                    <input type="date" name="releaseDate" required>
+                </div>
+                <div class="field-wrap">
+                    <label><span class="label-icon">⏱️</span> Runtime (Min)</label>
+                    <input type="number" name="runtime" placeholder="e.g. 148" required>
+                </div>
+                <div class="field-wrap">
+                    <label><span class="label-icon">🌐</span> Language</label>
+                    <input type="text" name="language" placeholder="English, Hindi, etc." value="English">
+                </div>
+                <div class="field-wrap">
+                    <label><span class="label-icon">💰</span> Ticket Price (₹)</label>
+                    <input type="number" name="ticketPrice" placeholder="250" min="50" required>
+                </div>
+                <div class="field-wrap">
+                    <label><span class="label-icon">🔥</span> Critical Rating</label>
+                    <input type="number" name="rating" placeholder="1.0 - 10.0" min="1" max="10" step="0.1" required>
+                </div>
+                <div class="field-wrap">
+                    <label><span class="label-icon">🎭</span> Genre</label>
+                    <select name="genre" class="neo-select-premium" required>
+                        <option value="Sci-Fi">Sci-Fi</option>
+                        <option value="Action">Action</option>
+                        <option value="Thriller">Thriller</option>
+                        <option value="Drama">Drama</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Comedy">Comedy</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tactical Zone: Deep Intel -->
+            <div class="form-section-header">
+                <span class="section-tag">STEP 03</span>
+                <h3>Creative <span class="highlight-amber">Team</span></h3>
+            </div>
+            <div class="command-grid">
+                <div class="field-wrap">
+                    <label><span class="label-icon">💼</span> Producer</label>
+                    <input type="text" name="producer" placeholder="Executive Producer...">
+                </div>
+                <div class="field-wrap">
+                    <label><span class="label-icon">🎵</span> Music Director</label>
+                    <input type="text" name="musicDirector" placeholder="Composer...">
+                </div>
+                <div class="field-wrap wide">
+                    <label><span class="label-icon">📝</span> Mission Brief (Storyline)</label>
+                    <div class="storyline-wrap">
+                        <textarea name="description" id="movieDesc" placeholder="Describe the cinematic experience..." rows="5" required></textarea>
+                        <button type="button" class="btn-ai-generate" onclick="generateAISummary()">
+                            <span class="ai-icon">🤖</span> AI Summarize
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tactical Zone: Visual Assets -->
+            <div class="form-section-header">
+                <span class="section-tag">STEP 04</span>
+                <h3>Gallery <span class="highlight-cyan">Assets</span></h3>
+            </div>
+            <div class="command-grid">
+                <div class="field-wrap wide file-upload-zone">
+                    <label><span class="label-icon">🖼</span> Primary Poster</label>
+                    <div class="upload-options">
+                        <div class="upload-box-premium">
+                            <input type="file" name="posterFile" accept="image/*" class="file-input-hidden" id="posterFileInput">
+                            <div class="upload-facade">
+                                <span class="upload-icon">📁</span>
+                                <span class="upload-text">Upload Poster</span>
+                            </div>
+                        </div>
+                        <div class="divider-glow">OR</div>
+                        <div class="url-input-wrap">
+                            <input type="url" name="posterUrl" placeholder="Paste Poster URL" id="posterUrlInput" class="url-input-premium">
+                        </div>
+                    </div>
+                </div>
+                <div class="field-wrap">
+                    <label><span class="label-icon">🎨</span> Backdrop Image URL</label>
+                    <input type="url" name="backdropUrl" placeholder="Wide image URL for immersive UI">
+                </div>
+                <div class="field-wrap">
+                    <label><span class="label-icon">🔗</span> YouTube Trailer URL</label>
+                    <input type="url" name="trailerUrl" placeholder="https://youtube.com/watch?v=...">
+                </div>
+                <div class="field-wrap">
+                    <label><span class="label-icon">🎥</span> Short Teaser URL</label>
+                    <input type="url" name="teaserUrl" placeholder="Shorts/TikTok preview URL">
+                </div>
+            </div>
+
+            <!-- Tactical Zone: Experience -->
+            <div class="form-section-header">
+                <span class="section-tag">STEP 05</span>
+                <h3>Rating & <span class="highlight-crimson">Experience</span></h3>
+            </div>
+            <div class="command-grid">
+                <div class="field-wrap">
+                    <label><span class="label-icon">🔞</span> Age Rating</label>
+                    <select name="ageRating" class="neo-select-premium">
+                        <option value="U">U (Universal)</option>
+                        <option value="UA">UA (Parental Guidance)</option>
+                        <option value="A">A (Adults Only)</option>
+                        <option value="PG-13">PG-13</option>
+                        <option value="R">R (Restricted)</option>
+                    </select>
+                </div>
+                <div class="field-wrap">
+                    <label><span class="label-icon">📺</span> Experience Format</label>
+                    <select name="format" class="neo-select-premium">
+                        <option value="2D">Standard 2D</option>
+                        <option value="3D">Digital 3D</option>
+                        <option value="IMAX">IMAX Experience</option>
+                        <option value="4DX">4DX Motion</option>
+                    </select>
+                </div>
+                <div class="field-wrap wide">
+                    <label style="margin-bottom: 1.2rem; display: block;"><span class="label-icon">⚖️</span> Content Intensity HUD</label>
+                    <div class="intensity-sliders-staggered" style="display: flex; flex-direction: column; gap: 1rem; background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
+                        <!-- Violence -->
+                        <div class="slider-box violence" style="margin-bottom: 0;">
+                            <div class="slider-header">
+                                <span class="slider-category">Violence Content</span>
+                                <div class="slider-level-display">
+                                    <span class="slider-level" id="val-lvl-violence">NONE</span>
+                                    <span class="slider-value-mini" id="val-num-violence">0/10</span>
+                                </div>
+                            </div>
+                            <input type="range" name="intensity_violence" min="0" max="10" value="0" oninput="updateIntensityUI(this, 'val-lvl-violence', 'val-num-violence')" style="width: 100%;">
+                        </div>
+                        
+                        <!-- Profanity -->
+                        <div class="slider-box profanity" style="margin-bottom: 0;">
+                            <div class="slider-header">
+                                <span class="slider-category">Language / Profanity</span>
+                                <div class="slider-level-display">
+                                    <span class="slider-level" id="val-lvl-profanity">NONE</span>
+                                    <span class="slider-value-mini" id="val-num-profanity">0/10</span>
+                                </div>
+                            </div>
+                            <input type="range" name="intensity_profanity" min="0" max="10" value="0" oninput="updateIntensityUI(this, 'val-lvl-profanity', 'val-num-profanity')" style="width: 100%;">
+                        </div>
+                        
+                        <!-- Drug Use -->
+                        <div class="slider-box drugUse" style="margin-bottom: 0;">
+                            <div class="slider-header">
+                                <span class="slider-category">Drug / Substance Use</span>
+                                <div class="slider-level-display">
+                                    <span class="slider-level" id="val-lvl-drugUse">NONE</span>
+                                    <span class="slider-value-mini" id="val-num-drugUse">0/10</span>
+                                </div>
+                            </div>
+                            <input type="range" name="intensity_drugUse" min="0" max="10" value="0" oninput="updateIntensityUI(this, 'val-lvl-drugUse', 'val-num-drugUse')" style="width: 100%;">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="field-wrap">
+                    <label class="checkbox-container">
+                        <input type="checkbox" name="arvrSupport">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">🕶️ AR/VR Support Tag</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="command-submit-btn">
+                <span class="btn-glow"></span>
+                <span class="btn-text">PUBLISH MOVIE 🎬</span>
+            </button>
+        </form>
+
+    </section>
+
+    <section class="vault-display">
+        <div class="vault-top">
+            <h2 class="vault-title">Your Movies</h2>
+            <div class="vault-search">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search by title, director, actor...">
+            </div>
+        </div>
+
+        <!-- Advanced Filter Bar -->
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label>Director</label>
+                <select id="filterDirector" class="filter-select">
+                    <option value="all">All Directors</option>
+                    <% directors.forEach(function(d) { %>
+                    <option value="<%= d %>"><%= d %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Rating</label>
+                <select id="filterRating" class="filter-select">
+                    <option value="all">All Ratings</option>
+                    <option value="8+">8+ ★</option>
+                    <option value="6-8">6–8 ★</option>
+                    <option value="4-6">4–6 ★</option>
+                    <option value="0-4">Below 4 ★</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Sort By</label>
+                <select id="sortBy" class="filter-select">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="rating-high">Rating ↑</option>
+                    <option value="rating-low">Rating ↓</option>
+                    <option value="a-z">A → Z</option>
+                    <option value="z-a">Z → A</option>
+                </select>
+            </div>
+            <button class="filter-reset" id="resetFilters" title="Reset all filters">✕ Reset</button>
+        </div>
+
+        <div class="genre-tabs">
+            <button class="genre-tab active" data-genre="all">All</button>
+            <button class="genre-tab" data-genre="Sci-Fi">Sci-Fi</button>
+            <button class="genre-tab" data-genre="Action">Action</button>
+            <button class="genre-tab" data-genre="Thriller">Thriller</button>
+            <button class="genre-tab" data-genre="Drama">Drama</button>
+            <button class="genre-tab" data-genre="Horror">Horror</button>
+            <button class="genre-tab" data-genre="Comedy">Comedy</button>
+            <button class="genre-tab" data-genre="Romance">Romance</button>
+        </div>
+
+        <% if (movies.length === 0) { %>
+        <div class="empty-vault">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="40" cy="40" r="36" stroke="#00f0ff" stroke-width="2" opacity="0.4"/>
+                <circle cx="40" cy="40" r="10" stroke="#00f0ff" stroke-width="2" opacity="0.4"/>
+                <circle cx="40" cy="20" r="6" stroke="#00f0ff" stroke-width="1.5" opacity="0.4"/>
+                <circle cx="40" cy="60" r="6" stroke="#00f0ff" stroke-width="1.5" opacity="0.4"/>
+                <circle cx="20" cy="40" r="6" stroke="#00f0ff" stroke-width="1.5" opacity="0.4"/>
+                <circle cx="60" cy="40" r="6" stroke="#00f0ff" stroke-width="1.5" opacity="0.4"/>
+            </svg>
+            <p>No movies yet.<br>Add your first one using the form on the left.</p>
+        </div>
+        <% } else { %>
+        <div class="neo-grid" id="movieGrid">
+            <% movies.forEach(function(movie) { %>
+            <div class="neo-card"
+                data-genre="<%= movie.genre %>"
+                data-title="<%= movie.title.toLowerCase() %>"
+                data-director="<%= movie.director.toLowerCase() %>"
+                data-actor="<%= movie.leadActor.toLowerCase() %>"
+                data-rating="<%= movie.rating %>">
+                <div class="card-image-wrapper">
+                    <img src="<%= movie.posterUrl %>" alt="<%= movie.title %>" loading="lazy">
+                    
+                    <div class="card-badges-left">
+                        <span class="badge-premium badge-genre"><%= movie.genre %></span>
+                        <div class="badge-premium badge-rating <%= movie.rating >= 8 ? 'rating-high' : movie.rating >= 5 ? 'rating-mid' : 'rating-low' %>">
+                            <%= movie.rating %> ★
+                        </div>
+                    </div>
+
+                    <div class="card-badges-right">
+                        <span class="badge-premium badge-age"><%= movie.ageRating || 'UA' %></span>
+                        <span class="badge-premium badge-format"><%= movie.format || '2D' %></span>
+                    </div>
+
+                    <div class="card-admin-actions">
+                        <button class="btn-admin-small btn-card-edit"
+                            data-id="<%= movie._id %>"
+                            data-title="<%= movie.title %>"
+                            data-director="<%= movie.director %>"
+                            data-actor="<%= movie.leadActor %>"
+                            data-description="<%= movie.description %>"
+                            data-genre="<%= movie.genre %>"
+                            data-rating="<%= movie.rating %>"
+                            data-price="<%= movie.ticketPrice || 150 %>"
+                            data-poster="<%= movie.posterUrl %>"
+                            data-backdrop="<%= movie.backdropUrl %>"
+                            data-trailer="<%= movie.trailerUrl %>"
+                            data-age="<%= movie.ageRating %>"
+                            data-format="<%= movie.format %>"
+                            data-violence="<%= movie.intensity ? movie.intensity.violence : 0 %>"
+                            data-profanity="<%= movie.intensity ? movie.intensity.profanity : 0 %>"
+                            data-druguse="<%= movie.intensity ? movie.intensity.drugUse : 0 %>"
+                            title="Edit Asset">✏</button>
+                        <button class="btn-admin-small btn-admin-del btn-card-delete"
+                            data-id="<%= movie._id %>"
+                            data-title="<%= movie.title %>"
+                            title="Decommission Asset">🗑</button>
+                    </div>
+                </div>
+
+                <div class="card-info">
+                    <h4><a href="/movies/<%= movie._id %>"><%= movie.title %></a></h4>
+                    <div class="card-tags-row">
+                        <span class="price-tag">₹<%= movie.ticketPrice || 150 %></span>
+                    </div>
+                    <div class="card-crew-mini">
+                        <span><span class="crew-icon">🎬</span> <%= movie.director %></span>
+                        <span><span class="crew-icon">⭐</span> <%= movie.leadActor %></span>
+                    </div>
+                    
+                    <div class="card-actions-bar">
+                        <button class="act-btn-main act-book-premium btn-card-book"
+                            data-id="<%= movie._id %>"
+                            data-title="<%= movie.title %>"
+                            data-poster="<%= movie.posterUrl %>"
+                            data-price="<%= movie.ticketPrice || 150 %>">
+                            🎟 Book Tickets
+                        </button>
+                        <a href="/movies/<%= movie._id %>" class="act-btn-main">👁 View</a>
+                        <form action="/watchlist/toggle/<%= movie._id %>" method="POST" style="display:contents;">
+                            <button type="submit" class="act-btn-main">
+                                <%= watchlist.some(id => id.toString() === movie._id.toString()) ? '★ Saved' : '☆ Save' %>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+        <div id="noResultsMessage" class="no-results-container hidden">
+            <div class="no-results-icon">🎬</div>
+            <h2>No Productions Found</h2>
+            <p>Your current filter didn't match any cinematic assets. Try broadening your search or resetting filters.</p>
+            <button onclick="document.getElementById('resetFilters').click()" class="btn-reset-light">Reset Filters</button>
+        </div>
+        <% } %>
+
+        <!-- Pagination -->
+        <% if (pagination.totalPages > 1) { %>
+        <div class="pagination">
+            <% if (pagination.page > 1) { %>
+            <a href="/dashboard?page=<%= pagination.page - 1 %>" class="page-btn">← Prev</a>
+            <% } %>
+            <% for (let p = 1; p <= pagination.totalPages; p++) { %>
+            <a href="/dashboard?page=<%= p %>" class="page-btn <%= p === pagination.page ? 'page-active' : '' %>"><%= p %></a>
+            <% } %>
+            <% if (pagination.page < pagination.totalPages) { %>
+            <a href="/dashboard?page=<%= pagination.page + 1 %>" class="page-btn">Next →</a>
+            <% } %>
+        </div>
+        <% } %>
+
+        <!-- Recommendations -->
+        <% if (recommendations && recommendations.length > 0) { %>
+        <div class="recommendations-discovery">
+            <div class="discovery-header">
+                <h3>🎯 Cinematic <span class="highlight-cyan">Matches</span></h3>
+                <p>Curated specifically for your taste</p>
+            </div>
+            <div class="discovery-grid">
+                <% recommendations.forEach(function(r) { %>
+                <a href="/movies/<%= r._id %>" class="discovery-card">
+                    <div class="discovery-poster-wrap">
+                        <img src="<%= r.posterUrl %>" alt="<%= r.title %>">
+                        <div class="discovery-rating"><%= r.rating %> ★</div>
+                        <div class="discovery-overlay">
+                            <span class="view-label">DISCOVER</span>
+                        </div>
+                    </div>
+                    <div class="discovery-meta">
+                        <h4><%= r.title %></h4>
+                        <span class="discovery-genre"><%= r.genre %></span>
+                    </div>
+                </a>
+                <% }); %>
+            </div>
+        </div>
+        <% } %>
+    </section>
+</div>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<script>
+    // ── Theme Engine ──
+    (function() {
+        const themeBtn = document.getElementById('themeToggle');
+        if (themeBtn) {
+            // Initial icon setup
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            themeBtn.textContent = currentTheme === 'light' ? '🌙' : '🌓';
+
+            themeBtn.addEventListener('click', async () => {
+                const oldTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = oldTheme === 'dark' ? 'light' : 'dark';
+                
+                // 1. Immediate UI update
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeBtn.textContent = newTheme === 'light' ? '🌙' : '🌓';
+
+                // 2. Sync with server
+                try {
+                    const res = await fetch('/toggle-theme', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ theme: newTheme })
+                    });
+                    const data = await res.json();
+                    // Ensure local state matches server just in case
+                    if (data.theme !== newTheme) {
+                        document.documentElement.setAttribute('data-theme', data.theme);
+                        localStorage.setItem('theme', data.theme);
+                        themeBtn.textContent = data.theme === 'light' ? '🌙' : '🌓';
+                    }
+                } catch (e) {
+                    console.error('Theme sync failed:', e);
+                }
+            });
+        }
+    })();
+
+    document.addEventListener('mousemove', e => {
+        const g = document.getElementById('cursorGlow');
+        g.style.left = e.clientX + 'px';
+        g.style.top = e.clientY + 'px';
+    });
+
+    const toast = document.getElementById('toast');
+    if (toast) {
+        setTimeout(() => {
+            toast.classList.add('hide');
+            setTimeout(() => toast.remove(), 400);
+        }, 3500);
+    }
+
+    // ── File Upload Preview ──
+    const posterFileInput = document.getElementById('posterFileInput');
+    const posterPreview = document.getElementById('posterPreview');
+    const posterUrlInput = document.getElementById('posterUrlInput');
+
+    if (posterFileInput) {
+        posterFileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    posterPreview.innerHTML = '<img src="' + e.target.result + '" alt="Preview">';
+                    posterPreview.classList.add('has-preview');
+                    posterUrlInput.value = '';
+                    posterUrlInput.removeAttribute('required');
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    }
+
+    // ── Advanced Filters + Sort ──
+    const tabs = document.querySelectorAll('.genre-tab');
+    const cards = document.querySelectorAll('.neo-card');
+    const grid = document.getElementById('movieGrid');
+    let activeGenre = 'all';
+    let searchTerm = '';
+
+    function getFilterValues() {
+        return {
+            director: document.getElementById('filterDirector').value,
+            rating: document.getElementById('filterRating').value,
+            sort: document.getElementById('sortBy').value
+        };
+    }
+
+    function matchRating(rating, filter) {
+        const r = parseFloat(rating);
+        if (filter === 'all') return true;
+        if (filter === '8+') return r >= 8;
+        if (filter === '6-8') return r >= 6 && r < 8;
+        if (filter === '4-6') return r >= 4 && r < 6;
+        if (filter === '0-4') return r < 4;
+        return true;
+    }
+    async function generateAISummary() {
+        const title = document.querySelector('input[name="title"]').value;
+        const genre = document.querySelector('select[name="genre"]').value;
+        const descArea = document.getElementById('movieDesc');
+        
+        if (!title) {
+            alert('Please enter a movie title first for the AI to analyze.');
+            return;
+        }
+
+        const btn = document.querySelector('.btn-ai-generate');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="ai-icon">🌀</span> Generating...';
+        btn.disabled = true;
+
+        // Simulate AI latency
+        await new Promise(r => setTimeout(r, 1500));
+
+        const summaries = [
+            `In a world where ${title} challenges the boundaries of ${genre}, a lone hero must navigate a labyrinth of mystery. The stakes have never been higher in this cinematic masterpiece.`,
+            `The definitive ${genre} experience of 2026. ${title} delivers a pulse-pounding narrative that explores the deep psychological layers of its lead assets.`,
+            `Technological evolution meets raw emotion. ${title} is a visceral journey through the heart of ${genre}, redefineing what we know about cinematic storytelling.`
+        ];
+
+        descArea.value = summaries[Math.floor(Math.random() * summaries.length)];
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        
+        // Success glow effect
+        descArea.style.borderColor = 'var(--cyan-glow)';
+        setTimeout(() => descArea.style.borderColor = '', 2000);
+    }
+
+    window.generateAISummary = generateAISummary; // Make it global
+
+    function filterAndSort() {
+        const filters = getFilterValues();
+        const cardsArr = Array.from(cards);
+
+        cardsArr.forEach(card => {
+            const genreMatch = activeGenre === 'all' || card.dataset.genre === activeGenre;
+            const searchMatch = !searchTerm ||
+                card.dataset.title.includes(searchTerm) ||
+                card.dataset.director.includes(searchTerm) ||
+                card.dataset.actor.includes(searchTerm);
+            const directorMatch = filters.director === 'all' || card.dataset.director === filters.director.toLowerCase();
+            const ratingMatch = matchRating(card.dataset.rating, filters.rating);
+            card.classList.toggle('hidden', !(genreMatch && searchMatch && directorMatch && ratingMatch));
+        });
+
+        // Sort visible cards
+        if (grid) {
+            const visible = cardsArr.filter(c => !c.classList.contains('hidden'));
+            
+            const noResults = document.getElementById('noResultsMessage');
+            if (noResults) {
+                noResults.classList.toggle('hidden', visible.length > 0);
+            }
+
+            visible.sort((a, b) => {
+                switch (filters.sort) {
+                    case 'oldest': return 1; // reverse of default
+                    case 'rating-high': return parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating);
+                    case 'rating-low': return parseFloat(a.dataset.rating) - parseFloat(b.dataset.rating);
+                    case 'a-z': return a.dataset.title.localeCompare(b.dataset.title);
+                    case 'z-a': return b.dataset.title.localeCompare(a.dataset.title);
+                    default: return 0;
+                }
+            });
+            visible.forEach(c => grid.appendChild(c));
+        }
+    }
+
+    // ── Intensity Sliders Tactical Feedback ──
+    function getIntensityLevel(val) {
+        if (val == 0) return 'NONE';
+        if (val <= 3) return 'LOW';
+        if (val <= 6) return 'MODERATE';
+        if (val <= 8) return 'HIGH';
+        return 'EXTREME';
+    }
+
+    function updateIntensityUI(input, lvlId, numId) {
+        const value = input.value;
+        if (lvlId) document.getElementById(lvlId).textContent = getIntensityLevel(value);
+        if (numId) document.getElementById(numId).textContent = value + '/10';
+        updateIntensityFeedback(input);
+    }
+
+    function updateIntensityFeedback(input) {
+        const value = parseInt(input.value);
+        const parent = input.closest('.slider-box');
+        if (!parent) return;
+
+        let color = '#a0a0b8';
+        let glow = 'transparent';
+        
+        if (parent.classList.contains('violence')) {
+            color = value > 7 ? '#ff003c' : value > 3 ? '#ff4b2b' : '#a0a0b8';
+            glow = `rgba(255, 0, 60, ${value / 12})`;
+        } else if (parent.classList.contains('profanity')) {
+            color = value > 7 ? '#ffaa00' : value > 3 ? '#ffb400' : '#a0a0b8';
+            glow = `rgba(255, 170, 0, ${value / 12})`;
+        } else if (parent.classList.contains('drugUse')) {
+            color = value > 7 ? '#00ff88' : value > 3 ? '#00c853' : '#a0a0b8';
+            glow = `rgba(0, 255, 136, ${value / 12})`;
+        }
+        
+        if (value > 0) {
+            parent.classList.add('has-value');
+            parent.style.boxShadow = `0 15px 35px ${glow}`;
+            parent.style.borderColor = glow.replace(/0\.\d+\)$/, '0.4)');
+            parent.style.background = 'rgba(255, 255, 255, 0.05)';
+        } else {
+            parent.classList.remove('has-value');
+            parent.style.boxShadow = 'none';
+            parent.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+            parent.style.background = 'rgba(255, 255, 255, 0.02)';
+        }
+        
+        const lvlSpan = parent.querySelector('.slider-level');
+        if (lvlSpan) {
+            lvlSpan.style.color = value > 0 ? color : '#fff';
+            lvlSpan.style.textShadow = value > 7 ? `0 0 10px ${color}` : 'none';
+        }
+    }
+
+    document.querySelectorAll('.intensity-sliders-staggered input').forEach(input => {
+        updateIntensityFeedback(input);
+        input.addEventListener('input', () => updateIntensityFeedback(input));
+    });
+
+    window.updateIntensityUI = updateIntensityUI; // Make it global
+
+
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            searchTerm = searchInput.value.toLowerCase().trim();
+            filterAndSort();
+        });
+    }
+
+    document.getElementById('filterDirector').addEventListener('change', filterAndSort);
+    document.getElementById('filterRating').addEventListener('change', filterAndSort);
+    document.getElementById('sortBy').addEventListener('change', filterAndSort);
+
+    document.getElementById('resetFilters').addEventListener('click', () => {
+        document.getElementById('filterDirector').value = 'all';
+        document.getElementById('filterRating').value = 'all';
+        document.getElementById('sortBy').value = 'newest';
+        searchInput.value = '';
+        searchTerm = '';
+        tabs.forEach(t => t.classList.remove('active'));
+        document.querySelector('[data-genre="all"]').classList.add('active');
+        activeGenre = 'all';
+        filterAndSort();
+    });
+
+    // ── Delete Modal ──
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteForm = document.getElementById('deleteForm');
+    const deleteMovieTitle = document.getElementById('deleteMovieTitle');
+
+    document.querySelectorAll('.btn-card-delete').forEach(btn => {
+        btn.addEventListener('click', () => {
+            deleteMovieTitle.textContent = '"' + btn.dataset.title + '"';
+            deleteForm.action = '/movies/delete/' + btn.dataset.id;
+            deleteModal.classList.add('visible');
+        });
+    });
+
+    document.getElementById('cancelDelete').addEventListener('click', () => deleteModal.classList.remove('visible'));
+    deleteModal.addEventListener('click', e => { if (e.target === deleteModal) deleteModal.classList.remove('visible'); });
+
+    // ── Edit Modal ──
+    const editModal = document.getElementById('editModal');
+    const editForm = document.getElementById('editForm');
+    const editPosterPreview = document.getElementById('editPosterPreview');
+
+    document.querySelectorAll('.btn-card-edit').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.getElementById('editTitle').value = btn.dataset.title;
+            document.getElementById('editDirector').value = btn.dataset.director;
+            document.getElementById('editActor').value = btn.dataset.actor;
+            document.getElementById('editRating').value = btn.dataset.rating;
+            document.getElementById('editPrice').value = btn.dataset.price;
+            document.getElementById('editDescription').value = btn.dataset.description;
+            document.getElementById('editPoster').value = btn.dataset.poster;
+            document.getElementById('editBackdrop').value = btn.dataset.backdrop || '';
+            document.getElementById('editTrailer').value = btn.dataset.trailer || '';
+            document.getElementById('editAgeRating').value = btn.dataset.age || 'UA';
+            document.getElementById('editFormat').value = btn.dataset.format || '2D';
+            
+            // Intensity Sliders
+            const v = btn.dataset.violence || 0;
+            const p = btn.dataset.profanity || 0;
+            const d = btn.dataset.druguse || 0;
+            
+            document.getElementById('editIntensityViolence').value = v;
+            document.getElementById('editIntensityProfanity').value = p;
+            document.getElementById('editIntensityDrugUse').value = d;
+            
+            document.getElementById('edit-lvl-violence').textContent = getIntensityLevel(v);
+            document.getElementById('edit-lvl-profanity').textContent = getIntensityLevel(p);
+            document.getElementById('edit-lvl-drugUse').textContent = getIntensityLevel(d);
+
+            document.getElementById('edit-val-violence').textContent = v + '/10';
+            document.getElementById('edit-val-profanity').textContent = p + '/10';
+            document.getElementById('edit-val-drugUse').textContent = d + '/10';
+
+            
+            // Trigger feedback
+            updateIntensityFeedback(document.getElementById('editIntensityViolence'));
+            updateIntensityFeedback(document.getElementById('editIntensityProfanity'));
+            updateIntensityFeedback(document.getElementById('editIntensityDrugUse'));
+
+            editPosterPreview.src = btn.dataset.poster;
+
+            const genreSelect = document.getElementById('editGenre');
+            for (let opt of genreSelect.options) {
+                opt.selected = opt.value === btn.dataset.genre;
+            }
+
+            editForm.action = '/movies/update/' + btn.dataset.id;
+            editModal.classList.add('visible');
+        });
+    });
+
+    document.getElementById('cancelEdit').addEventListener('click', () => editModal.classList.remove('visible'));
+    editModal.addEventListener('click', e => { if (e.target === editModal) editModal.classList.remove('visible'); });
+
+    document.getElementById('editPoster').addEventListener('input', function() {
+        editPosterPreview.src = this.value;
+    });
+
+    // ── Booking Modal ──
+    const bookingModal = document.getElementById('bookingModal');
+    const bookingSeats = document.getElementById('bookingSeats');
+    const bookingTotal = document.getElementById('bookingTotal');
+    const bookingDate = document.getElementById('bookingDate');
+
+    // Set min date to today
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    if (bookingDate) bookingDate.min = yyyy + '-' + mm + '-' + dd;
+    if (bookingDate) bookingDate.value = yyyy + '-' + mm + '-' + dd;
+
+    let currentTicketPrice = 150;
+
+    document.querySelectorAll('.btn-card-book').forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentTicketPrice = parseInt(btn.dataset.price) || 150;
+            document.getElementById('bookingMovieId').value = btn.dataset.id;
+            document.getElementById('bookingMovieTitle').textContent = btn.dataset.title;
+            document.getElementById('bookingPoster').src = btn.dataset.poster;
+            document.getElementById('bookingPricePerSeat').textContent = currentTicketPrice;
+            bookingSeats.value = 2;
+            bookingTotal.textContent = '₹' + (2 * currentTicketPrice);
+            bookingModal.classList.add('visible');
+        });
+    });
+
+    if (bookingSeats) {
+        bookingSeats.addEventListener('input', () => {
+            const s = parseInt(bookingSeats.value) || 0;
+            bookingTotal.textContent = '₹' + (s * currentTicketPrice);
+        });
+    }
+
+    document.getElementById('cancelBooking').addEventListener('click', () => bookingModal.classList.remove('visible'));
+    bookingModal.addEventListener('click', e => { if (e.target === bookingModal) bookingModal.classList.remove('visible'); });
+
+
+
+    // ── Prevent touchpad swipe interference ──
+    document.body.style.overscrollBehaviorX = 'none';
+    document.documentElement.style.overscrollBehaviorX = 'none';
+</script>
+<!-- Delete Modal -->
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-icon-danger">🗑</div>
+        <h3>Delete Movie?</h3>
+        <p>You are about to delete <strong id="deleteMovieTitle"></strong>. This cannot be undone.</p>
+        <div class="modal-actions">
+            <button type="button" class="btn-modal-cancel" id="cancelDelete">Keep It</button>
+            <form id="deleteForm" method="POST" style="display:inline;">
+                <button type="submit" class="btn-modal-delete">Yes, Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div id="editModal" class="modal-overlay">
+    <div class="modal-box edit-modal-box">
+        <h3>✏ Edit Movie</h3>
+        <form id="editForm" method="POST" class="edit-form" enctype="multipart/form-data">
+            <div class="edit-grid">
+                <div class="edit-field">
+                    <label>Title</label>
+                    <input type="text" id="editTitle" name="title" required>
+                </div>
+                <div class="edit-field">
+                    <label>Director</label>
+                    <input type="text" id="editDirector" name="director" required>
+                </div>
+                <div class="edit-field">
+                    <label>Lead Actor</label>
+                    <input type="text" id="editActor" name="leadActor" required>
+                </div>
+                <div class="edit-field">
+                    <label>Rating (1–10)</label>
+                    <input type="number" id="editRating" name="rating" min="1" max="10" step="0.1" required>
+                </div>
+                <div class="edit-field">
+                    <label>Ticket Price (₹)</label>
+                    <input type="number" id="editPrice" name="ticketPrice" min="1" required>
+                </div>
+                <div class="edit-field">
+                    <label>Age Rating</label>
+                    <select id="editAgeRating" name="ageRating" class="neo-select">
+                        <option value="U">U</option>
+                        <option value="UA">UA</option>
+                        <option value="A">A</option>
+                        <option value="PG-13">PG-13</option>
+                        <option value="R">R</option>
+                    </select>
+                </div>
+                <div class="edit-field">
+                    <label>Format</label>
+                    <select id="editFormat" name="format" class="neo-select">
+                        <option value="2D">2D</option>
+                        <option value="3D">3D</option>
+                        <option value="IMAX">IMAX</option>
+                        <option value="4DX">4DX</option>
+                    </select>
+                </div>
+                <div class="edit-field edit-full">
+                    <label>Genre</label>
+                    <select id="editGenre" name="genre" class="neo-select">
+                        <option value="Sci-Fi">Sci-Fi</option>
+                        <option value="Action">Action</option>
+                        <option value="Thriller">Thriller</option>
+                        <option value="Drama">Drama</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Comedy">Comedy</option>
+                    </select>
+                </div>
+                <div class="edit-field edit-full">
+                    <label>Backdrop URL</label>
+                    <input type="url" id="editBackdrop" name="backdropUrl" placeholder="Immersive background...">
+                </div>
+                <div class="edit-field edit-full">
+                    <label>Trailer URL</label>
+                    <input type="url" id="editTrailer" name="trailerUrl" placeholder="YouTube URL...">
+                </div>
+                <div class="edit-field edit-full">
+                    <label>Or New Poster URL</label>
+                    <div class="edit-poster-row">
+                        <input type="url" id="editPoster" name="posterUrl">
+                        <div class="edit-poster-preview">
+                            <img id="editPosterPreview" src="" alt="Preview">
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-field edit-full">
+                    <label>Content Intensity Meter</label>
+                    <div class="intensity-sliders-staggered">
+                        <div class="slider-box violence">
+                            <div class="slider-header">
+                                <span class="slider-category">Violence Content</span>
+                                <div class="slider-level-display">
+                                    <span class="slider-level" id="edit-lvl-violence">NONE</span>
+                                    <span class="slider-value-mini" id="edit-val-violence">0/10</span>
+                                </div>
+                            </div>
+                            <input type="range" id="editIntensityViolence" name="intensity_violence" min="0" max="10" value="0" oninput="updateIntensityUI(this, 'edit-lvl-violence', 'edit-val-violence')">
+                        </div>
+                        <div class="slider-box profanity">
+                            <div class="slider-header">
+                                <span class="slider-category">Language / Profanity</span>
+                                <div class="slider-level-display">
+                                    <span class="slider-level" id="edit-lvl-profanity">NONE</span>
+                                    <span class="slider-value-mini" id="edit-val-profanity">0/10</span>
+                                </div>
+                            </div>
+                            <input type="range" id="editIntensityProfanity" name="intensity_profanity" min="0" max="10" value="0" oninput="updateIntensityUI(this, 'edit-lvl-profanity', 'edit-val-profanity')">
+                        </div>
+                        <div class="slider-box drugUse">
+                            <div class="slider-header">
+                                <span class="slider-category">Drug / Substance Use</span>
+                                <div class="slider-level-display">
+                                    <span class="slider-level" id="edit-lvl-drugUse">NONE</span>
+                                    <span class="slider-value-mini" id="edit-val-drugUse">0/10</span>
+                                </div>
+                            </div>
+                            <input type="range" id="editIntensityDrugUse" name="intensity_drugUse" min="0" max="10" value="0" oninput="updateIntensityUI(this, 'edit-lvl-drugUse', 'edit-val-drugUse')">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="edit-field edit-full">
+                    <label>Description</label>
+                    <textarea id="editDescription" name="description" rows="3" required></textarea>
+                </div>
+            </div>
+            <div class="modal-actions" style="margin-top:1.5rem;">
+                <button type="button" class="btn-modal-cancel" id="cancelEdit">Cancel</button>
+                <button type="submit" class="btn-modal-save">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Booking Modal -->
+<div id="bookingModal" class="modal-overlay">
+    <div class="modal-box booking-modal-box">
+        <h3>🎟 Book <span class="highlight-cyan">Tickets</span></h3>
+        <div class="booking-movie-info">
+            <img id="bookingPoster" src="" alt="Poster" class="booking-poster-thumb">
+            <div>
+                <h4 id="bookingMovieTitle"></h4>
+                <p class="booking-price-hint">₹<span id="bookingPricePerSeat">150</span> per seat</p>
+            </div>
+        </div>
+        <form action="/bookings/create" method="POST" id="bookingForm" class="booking-form">
+            <input type="hidden" name="movieId" id="bookingMovieId">
+            <div class="booking-fields">
+                <div class="booking-field">
+                    <label>Show Date</label>
+                    <input type="date" name="showDate" id="bookingDate" required>
+                </div>
+                <div class="booking-field">
+                    <label>Show Time</label>
+                    <select name="showTime" class="neo-select" required>
+                        <option value="10:00 AM">10:00 AM</option>
+                        <option value="1:30 PM">1:30 PM</option>
+                        <option value="4:00 PM">4:00 PM</option>
+                        <option value="6:30 PM" selected>6:30 PM</option>
+                        <option value="9:30 PM">9:30 PM</option>
+                    </select>
+                </div>
+                <div class="booking-field">
+                    <label>Seats</label>
+                    <input type="number" name="seats" id="bookingSeats" min="1" max="10" value="2" required>
+                </div>
+                <div class="booking-field">
+                    <label>Total Price</label>
+                    <div class="booking-total" id="bookingTotal">₹300</div>
+                </div>
+            </div>
+            <div class="modal-actions" style="margin-top:1.5rem;">
+                <button type="button" class="btn-modal-cancel" id="cancelBooking">Cancel</button>
+                <button type="submit" class="btn-booking-confirm">🎟 Confirm Booking</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
