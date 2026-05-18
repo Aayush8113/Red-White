@@ -8,6 +8,8 @@ import BlogDetail from './pages/BlogDetail';
 import Dashboard from './pages/Dashboard'; 
 import EditBlog from './pages/EditBlog';     
 import AdminDashboard from './pages/AdminDashboard'; 
+import CreatorDashboard from './pages/CreatorDashboard';
+import RedirectHandler from './pages/RedirectHandler';
 import Profile from './pages/Profile'; 
 import Notifications from './pages/Notifications';
 import ForgotPassword from './pages/ForgotPassword';
@@ -34,8 +36,10 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} /> 
           <Route path="/edit/:id" element={<EditBlog />} />
           <Route path="/admin" element={<AdminDashboard />} /> 
+          <Route path="/creator" element={<CreatorDashboard />} />
           <Route path="/profile" element={<Profile />} /> 
           <Route path="/notifications" element={<Notifications />} />
+          <Route path="*" element={<RedirectHandler />} />
         </Routes>
       </div>
       <Footer />
@@ -43,4 +47,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;

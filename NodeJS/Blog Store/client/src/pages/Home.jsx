@@ -158,10 +158,11 @@ const Home = () => {
                     <div className="relative overflow-hidden h-80">
                       {blog.coverImage ? (
                         <img 
-                          src={`http://localhost:5000/uploads/${blog.coverImage}`} 
+                          src={blog.coverImage.startsWith('http') ? blog.coverImage : `http://localhost:5000/uploads/${blog.coverImage}`} 
                           alt={blog.title}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 grayscale-[0.2] group-hover:grayscale-0"
                         />
+
                       ) : (
                         <div className="w-full h-full bg-slate-900 flex items-center justify-center relative overflow-hidden">
                           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>

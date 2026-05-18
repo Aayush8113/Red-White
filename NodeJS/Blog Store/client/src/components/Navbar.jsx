@@ -74,6 +74,20 @@ const Navbar = () => {
                 Archive
               </Link>
             )}
+            {user && (user.role === 'Creator' || user.role === 'Administrator') && (
+              <Link to="/creator" className={`text-[10px] font-black uppercase tracking-[0.3em] transition-all ${
+                isActive('/creator') ? 'text-indigo-400' : 'text-slate-400 hover:text-white'
+              }`}>
+                Creator
+              </Link>
+            )}
+            {user && user.role === 'Administrator' && (
+              <Link to="/admin" className={`text-[10px] font-black uppercase tracking-[0.3em] transition-all ${
+                isActive('/admin') ? 'text-rose-400' : 'text-slate-400 hover:text-white'
+              }`}>
+                Admin
+              </Link>
+            )}
             {user && (
               <Link to="/create" className={`text-[10px] font-black uppercase tracking-[0.3em] transition-all px-4 py-2 bg-blue-600/10 rounded-full border border-blue-500/20 ${
                 isActive('/create') ? 'text-blue-400' : 'text-slate-400 hover:text-white'
@@ -81,6 +95,7 @@ const Navbar = () => {
                 + New
               </Link>
             )}
+
           </div>
 
           {/* User Section */}
