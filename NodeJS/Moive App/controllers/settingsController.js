@@ -3,28 +3,40 @@ const Movie = require('../models/Movie');
 
 exports.getSettings = async (req, res) => {
     try {
-        const movies = await Movie.find({ addedBy: req.user._id });
-        let avgRating = 0;
-        let topGenre = 'None';
+        let stats = { total: 0, avgRating: 0, topGenre: 'None' };
 
-        if (movies.length > 0) {
-            const totalRating = movies.reduce((sum, m) => sum + m.rating, 0);
-            avgRating = (totalRating / movies.length).toFixed(1);
+        if (req.user.role === 'admin') {
+            // Director Stats: Based on movies they've added
+            const movies = await Movie.find({ addedBy: req.user._id });
+            if (movies.length > 0) {
+                const totalRating = movies.reduce((sum, m) => sum + m.rating, 0);
+                stats.total = movies.length;
+                stats.avgRating = (totalRating / movies.length).toFixed(1);
 
-            const genreCounts = {};
-            movies.forEach(m => {
-                genreCounts[m.genre] = (genreCounts[m.genre] || 0) + 1;
-            });
-            topGenre = Object.entries(genreCounts).sort((a, b) => b[1] - a[1])[0][0];
+                const genreCounts = {};
+                movies.forEach(m => {
+                    genreCounts[m.genre] = (genreCounts[m.genre] || 0) + 1;
+                });
+                stats.topGenre = Object.entries(genreCounts).sort((a, b) => b[1] - a[1])[0][0];
+            }
+        } else {
+            // User Stats: Based on their watchlist and history
+            const watchlistCount = req.user.watchlist ? req.user.watchlist.length : 0;
+            const historyCount = req.user.watchHistory ? req.user.watchHistory.length : 0;
+            
+            stats.total = historyCount; // Total movies watched
+            stats.avgRating = (watchlistCount > 0) ? (watchlistCount * 0.5).toFixed(1) : '0.0'; // Pseudo-metric for engagement
+            stats.topGenre = req.user.favoriteGenre || 'Discovery';
         }
 
         res.render('settings', {
             user: req.user,
-            stats: { total: movies.length, avgRating, topGenre },
+            stats,
             success: req.query.success || null,
             error: req.query.error || null,
         });
     } catch (err) {
+        console.error('Settings Error:', err);
         res.status(500).send('Failed to load settings.');
     }
 };

@@ -138,11 +138,6 @@
                     <span class="btn-icon">🎟</span>
                     <span class="btn-text">Book Your Seat Now</span>
                 </button>
-                <% if (movie.trailerUrl) { %>
-                <a href="<%= movie.trailerUrl %>" target="_blank" class="btn-trailer-watch">
-                    <span class="btn-icon">🎬</span> Watch Trailer
-                </a>
-                <% } %>
                 <form action="/watchlist/toggle/<%= movie._id %>" method="POST" style="display:contents;">
                     <button type="submit" class="btn-action-round <%= isInWatchlist ? 'active' : '' %>" title="Watchlist">
                         <%= isInWatchlist ? '★' : '☆' %>
@@ -150,8 +145,80 @@
                 </form>
                 <button class="btn-action-round" onclick="shareMovie()" title="Share Movie">📤</button>
             </div>
+
+            <!-- Where to Watch -->
+            <div class="where-to-watch glass-panel">
+                <h4>📺 Where to Watch</h4>
+                <div class="streaming-row">
+                    <% if (movie.streamingPlatforms && movie.streamingPlatforms.length > 0) { %>
+                        <% movie.streamingPlatforms.forEach(p => { %>
+                            <a href="<%= p.url %>" target="_blank" class="streaming-pill">
+                                <img src="<%= p.logo || 'https://cdn-icons-png.flaticon.com/512/732/732228.png' %>" alt="<%= p.name %>">
+                                <span><%= p.name %></span>
+                            </a>
+                        <% }) %>
+                    <% } else { %>
+                        <div class="streaming-pill">
+                            <img src="https://cdn-icons-png.flaticon.com/512/732/732228.png" alt="Netflix">
+                            <span>Netflix</span>
+                        </div>
+                        <div class="streaming-pill">
+                            <img src="https://cdn-icons-png.flaticon.com/512/5977/5977590.png" alt="Prime">
+                            <span>Prime Video</span>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Media Section -->
+    <section class="detail-section-premium media-section">
+        <div class="section-header">
+            <h2>🎬 Trailers & <span class="highlight-cyan">Teasers</span></h2>
+        </div>
+        <div class="media-grid">
+            <% if (movie.trailerUrl) { %>
+                <div class="video-container">
+                    <iframe src="<%= movie.trailerUrl.replace('watch?v=', 'embed/') %>" frameborder="0" allowfullscreen></iframe>
+                    <span>Official Trailer</span>
+                </div>
+            <% } %>
+            <div class="cast-crew-display">
+                <h4>Starring</h4>
+                <div class="cast-row">
+                    <% if (movie.cast && movie.cast.length > 0) { %>
+                        <% movie.cast.forEach(actor => { %>
+                            <div class="cast-item">
+                                <div class="cast-avatar"><%= actor[0] %></div>
+                                <span><%= actor %></span>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <div class="cast-item">
+                            <div class="cast-avatar"><%= movie.leadActor[0] %></div>
+                            <span><%= movie.leadActor %></span>
+                        </div>
+                        <div class="cast-item">
+                            <div class="cast-avatar">C</div>
+                            <span>Chris Evans</span>
+                        </div>
+                    <% } %>
+                </div>
+                <h4 style="margin-top: 1.5rem;">Behind the Scenes</h4>
+                <div class="crew-grid">
+                    <div class="crew-item">
+                        <label>Director</label>
+                        <span><%= movie.director %></span>
+                    </div>
+                    <div class="crew-item">
+                        <label>Cinematography</label>
+                        <span><%= movie.crew ? movie.crew.cinematographer : 'Roger Deakins' %></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
 
 
@@ -258,6 +325,14 @@
             <input type="hidden" name="movieId" value="<%= movie._id %>">
             <div class="booking-fields">
                 <div class="booking-field">
+                    <label>Theater</label>
+                    <select name="theater" class="neo-select">
+                        <option value="Neo Multiplex">Neo Multiplex</option>
+                        <option value="IMAX Central">IMAX Central</option>
+                        <option value="Starlight Cinema">Starlight Cinema</option>
+                    </select>
+                </div>
+                <div class="booking-field">
                     <label>Show Date</label>
                     <input type="date" name="showDate" id="bookingDate" required>
                 </div>
@@ -273,7 +348,14 @@
                 </div>
                 <div class="booking-field">
                     <label>Seats</label>
-                    <input type="number" name="seats" id="bookingSeats" min="1" max="10" value="2" required>
+                    <input type="number" name="seatCount" id="bookingSeats" min="1" max="10" value="2" required>
+                </div>
+                <div class="booking-field wide">
+                    <label class="checkbox-container">
+                        <input type="checkbox" name="isStudent" id="studentCheck" value="true">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">🎓 Student Special (10% Off)</span>
+                    </label>
                 </div>
                 <div class="booking-field">
                     <label>Total Price</label>
@@ -285,6 +367,7 @@
                 <button type="submit" class="btn-booking-confirm">🎟 Confirm Booking</button>
             </div>
         </form>
+
     </div>
 </div>
 
@@ -329,7 +412,7 @@
     // Booking Modal Logic
     const bookingModal = document.getElementById('bookingModal');
     const bookingPricePerSeat = <%= movie.ticketPrice || 150 %>;
-    const bookingSeats = document.getElementById('bookingSeats');
+    const studentCheck = document.getElementById('studentCheck');
     const bookingTotal = document.getElementById('bookingTotal');
 
     document.getElementById('btnBookDetail').addEventListener('click', () => {
@@ -340,10 +423,17 @@
         bookingModal.classList.remove('visible');
     });
 
-    bookingSeats.addEventListener('input', () => {
-        const total = bookingPricePerSeat * bookingSeats.value;
-        bookingTotal.textContent = '₹' + total;
-    });
+    function calculateTotal() {
+        let total = bookingPricePerSeat * bookingSeats.value;
+        if (studentCheck.checked) {
+            total = total * 0.9;
+        }
+        bookingTotal.textContent = '₹' + Math.round(total);
+    }
+
+    bookingSeats.addEventListener('input', calculateTotal);
+    studentCheck.addEventListener('change', calculateTotal);
+
 
     function shareMovie() {
         const url = window.location.href;

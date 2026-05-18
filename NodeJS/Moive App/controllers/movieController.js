@@ -6,55 +6,95 @@ const MOVIES_PER_PAGE = 12;
 exports.getDashboard = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
-        const totalMovies = await Movie.countDocuments({ addedBy: req.user._id });
-        const totalPages = Math.ceil(totalMovies / MOVIES_PER_PAGE) || 1;
         const skip = (page - 1) * MOVIES_PER_PAGE;
+        
+        // Filtering
+        const { genre, director, rating, search, platform, language, year } = req.query;
+        let query = {};
 
-        const movies = await Movie.find({ addedBy: req.user._id })
+        // Role-based visibility
+        if (req.user.role !== 'admin') {
+            // Regular users see all confirmed movies
+            // In a real app, we might have an 'isPublished' flag
+        } else {
+            // Admins (Directors) see their own added movies or all
+            // For this app, let's show all movies but allow management for admins
+        }
+
+        if (genre && genre !== 'all') query.genre = genre;
+        if (director && director !== 'all') query.director = new RegExp(director, 'i');
+        if (language) query.language = new RegExp(language, 'i');
+        if (year) {
+            const start = new Date(`${year}-01-01`);
+            const end = new Date(`${year}-12-31`);
+            query.releaseDate = { $gte: start, $lte: end };
+        }
+        if (search) {
+            query.$or = [
+                { title: new RegExp(search, 'i') },
+                { director: new RegExp(search, 'i') },
+                { leadActor: new RegExp(search, 'i') }
+            ];
+        }
+        if (rating && rating !== 'all') {
+            if (rating === '8+') query.rating = { $gte: 8 };
+            else if (rating === '6-8') query.rating = { $gte: 6, $lt: 8 };
+            else if (rating === '4-6') query.rating = { $gte: 4, $lt: 6 };
+            else if (rating === '0-4') query.rating = { $lt: 4 };
+        }
+        if (platform) {
+            query['streamingPlatforms.name'] = new RegExp(platform, 'i');
+        }
+
+        const totalMovies = await Movie.countDocuments(query);
+        const totalPages = Math.ceil(totalMovies / MOVIES_PER_PAGE) || 1;
+
+        const movies = await Movie.find(query)
             .sort({ _id: -1 })
             .skip(skip)
             .limit(MOVIES_PER_PAGE);
 
-        let avgRating = 0;
-        if (totalMovies > 0) {
-            const allMovies = await Movie.find({ addedBy: req.user._id });
-            const totalRating = allMovies.reduce((sum, m) => sum + m.rating, 0);
-            avgRating = (totalRating / totalMovies).toFixed(1);
+        // Calculate Stats (only for admin's own movies if they want personal metrics)
+        let stats = { total: totalMovies, avgRating: 0 };
+        if (req.user.role === 'admin') {
+            const adminMovies = await Movie.find({ addedBy: req.user._id });
+            if (adminMovies.length > 0) {
+                const totalRating = adminMovies.reduce((sum, m) => sum + m.rating, 0);
+                stats.avgRating = (totalRating / adminMovies.length).toFixed(1);
+            }
         }
 
-        const directors = [...new Set((await Movie.find({ addedBy: req.user._id })).map(m => m.director))].sort();
+        const directors = [...new Set((await Movie.find()).map(m => m.director))].sort();
+        const languages = [...new Set((await Movie.find()).map(m => m.language))].sort();
 
-        // Recommendations based on favorite genre
+        // Recommendations based on favorite genre and watch history
         let recommendations = [];
-        if (req.user.favoriteGenre) {
-            recommendations = await Movie.find({
-                genre: req.user.favoriteGenre,
-                addedBy: { $ne: req.user._id }
-            }).limit(4).sort({ rating: -1 });
-        }
-        if (recommendations.length < 4) {
-            const moreRecs = await Movie.find({
-                addedBy: { $ne: req.user._id },
-                _id: { $nin: recommendations.map(r => r._id) }
-            }).limit(4 - recommendations.length).sort({ rating: -1 });
-            recommendations = [...recommendations, ...moreRecs];
-        }
+        const preferredGenre = req.user.favoriteGenre || (movies.length > 0 ? movies[0].genre : 'Action');
+        recommendations = await Movie.find({
+            genre: preferredGenre,
+            _id: { $nin: req.user.watchlist || [] }
+        }).limit(6).sort({ rating: -1 });
 
         const showToast = req.query.added === '1';
+        
         res.render('dashboard', {
+            user: req.user,
             movies,
             directors,
+            languages,
             recommendations,
-            stats: { total: totalMovies, avgRating },
+            stats,
             pagination: { page, totalPages, totalMovies },
             showToast,
-            watchlist: req.user.watchlist || []
+            watchlist: req.user.watchlist || [],
+            query: req.query
         });
     } catch (err) {
         console.error(err);
         res.status(500).send('Dashboard render failed.');
     }
 };
+
 
 exports.getMovieDetail = async (req, res) => {
     try {

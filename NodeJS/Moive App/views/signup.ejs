@@ -32,7 +32,9 @@
                 <div class="step-dot active" id="dot1"></div>
                 <div class="step-dot" id="dot2"></div>
                 <div class="step-dot" id="dot3"></div>
+                <div class="step-dot" id="dot4"></div>
             </div>
+
 
             <h2 class="form-title"><span class="highlight-cyan">Audition</span></h2>
 
@@ -50,6 +52,16 @@
                                 <input type="text" name="fullName" id="fullName" placeholder=" " required
                                     autocomplete="name">
                                 <label for="fullName">Director Name</label>
+                            </div>
+                        </div>
+
+                        <!-- Email with icon -->
+                        <div class="icon-input">
+                            <span class="input-icon">📧</span>
+                            <div class="input-float">
+                                <input type="email" name="email" id="email" placeholder=" " required
+                                    autocomplete="email">
+                                <label for="email">Communication Channel (Email)</label>
                             </div>
                         </div>
 
@@ -88,8 +100,18 @@
                             </div>
                         </div>
 
+                        <!-- Director Key (Optional) -->
+                        <div class="icon-input">
+                            <span class="input-icon">🔑</span>
+                            <div class="input-float">
+                                <input type="password" name="directorKey" id="directorKey" placeholder=" ">
+                                <label for="directorKey">Director Key (Optional)</label>
+                            </div>
+                        </div>
+
                         <button type="submit" class="btn-neo btn-cyan" id="submitBtn" style="width:100%;">Register
                             Account</button>
+
                     </form>
 
                     <p class="auth-switch">Already a member? <a href="/login">Enter Studio</a></p>
@@ -121,8 +143,8 @@
         // Password strength
         const strengthFill = document.getElementById('strengthFill');
         const strengthLabel = document.getElementById('strengthLabel');
-        const dots = [document.getElementById('dot1'), document.getElementById('dot2'), document.getElementById('dot3')];
-        const inputs = [document.getElementById('fullName'), document.getElementById('username'), pwInput];
+        const dots = [document.getElementById('dot1'), document.getElementById('dot2'), document.getElementById('dot3'), document.getElementById('dot4')];
+        const inputs = [document.getElementById('fullName'), document.getElementById('email'), document.getElementById('username'), pwInput];
 
         function updateDots() {
             inputs.forEach((inp, i) => {

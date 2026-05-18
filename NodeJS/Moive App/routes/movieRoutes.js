@@ -6,8 +6,19 @@ const adminController = require('../controllers/adminController');
 const { requireSession } = require('../middleware/authMiddleware');
 const { uploadPoster } = require('../middleware/upload');
 
+const screenitController = require('../controllers/screenitController');
+
 // Dashboard with pagination
 router.get('/dashboard', requireSession, movieController.getDashboard);
+
+// ScreenIT
+router.get('/screenit/browse', requireSession, screenitController.getScreenIT);
+router.get('/screenit/create', requireSession, screenitController.getScreenIT); // Same view handles creation form
+router.post('/screenit/create', requireSession, screenitController.createScreening);
+router.get('/screenit/join/:id', requireSession, screenitController.joinScreening);
+
+// Tickets
+router.get('/ticket/:id', requireSession, bookingController.getTicket);
 
 // Movie CRUD
 router.post('/movies/add', requireSession, uploadPoster.single('posterFile'), movieController.addMovie);

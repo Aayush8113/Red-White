@@ -101,32 +101,67 @@
     <div class="settings-workspace">
         <aside class="workspace-sidebar">
             <nav class="settings-nav">
+                <% if (user.role === 'admin') { %>
+                <!-- Director Sidebar -->
                 <button class="settings-nav-item active" data-target="panelProfile">
-                    <span class="nav-icon">👤</span> 
+                    <span class="nav-icon">🎬</span> 
                     <div class="nav-text">
                         <strong>Studio Profile</strong>
-                        <span>Branding & Bio</span>
+                        <span>Identity & Bio</span>
                     </div>
                 </button>
-                <button class="settings-nav-item" data-target="panelPassword">
-                    <span class="nav-icon">🔒</span> 
+                <button class="settings-nav-item" data-target="panelProduction">
+                    <span class="nav-icon">🛠</span> 
                     <div class="nav-text">
-                        <strong>Security</strong>
-                        <span>Credentials</span>
+                        <strong>Production Rules</strong>
+                        <span>Default Metrics</span>
                     </div>
                 </button>
                 <button class="settings-nav-item" data-target="panelStats">
                     <span class="nav-icon">📊</span> 
                     <div class="nav-text">
-                        <strong>Analytics</strong>
+                        <strong>Studio Analytics</strong>
                         <span>Performance</span>
                     </div>
                 </button>
+                <% } else { %>
+                <!-- User Sidebar -->
+                <button class="settings-nav-item active" data-target="panelProfile">
+                    <span class="nav-icon">👤</span> 
+                    <div class="nav-text">
+                        <strong>My Profile</strong>
+                        <span>Personal Info</span>
+                    </div>
+                </button>
+                <button class="settings-nav-item" data-target="panelRewards">
+                    <span class="nav-icon">🏆</span> 
+                    <div class="nav-text">
+                        <strong>Rewards & Rank</strong>
+                        <span>Points & Perks</span>
+                    </div>
+                </button>
+                <button class="settings-nav-item" data-target="panelParental">
+                    <span class="nav-icon">🔞</span> 
+                    <div class="nav-text">
+                        <strong>Parental Controls</strong>
+                        <span>Safety & PIN</span>
+                    </div>
+                </button>
+                <% } %>
+                
+                <button class="settings-nav-item" data-target="panelPassword">
+                    <span class="nav-icon">🔒</span> 
+                    <div class="nav-text">
+                        <strong>Security Vault</strong>
+                        <span>Credentials</span>
+                    </div>
+                </button>
+                
                 <button class="settings-nav-item danger-tab" data-target="panelDanger">
                     <span class="nav-icon">⚠️</span> 
                     <div class="nav-text">
-                        <strong>Studio Exit</strong>
-                        <span>Delete House</span>
+                        <strong><%= user.role === 'admin' ? 'Studio Exit' : 'Close Account' %></strong>
+                        <span>Irreversible</span>
                     </div>
                 </button>
             </nav>
@@ -148,17 +183,17 @@
             <!-- Profile Panel -->
             <section class="settings-panel active" id="panelProfile">
                 <div class="panel-header-premium">
-                    <h2>Studio <span class="highlight-cyan">Branding</span></h2>
+                    <h2><%= user.role === 'admin' ? 'Studio' : 'Personal' %> <span class="highlight-cyan">Branding</span></h2>
                     <p>Customize your cinematic identity.</p>
                 </div>
                 <form action="/settings/profile" method="POST" class="settings-form">
                     <div class="form-grid-premium">
                         <div class="form-group">
-                            <label for="fullName">Professional Name</label>
-                            <input type="text" id="fullName" name="fullName" value="<%= user.fullName %>" placeholder="Your production name" required>
+                            <label for="fullName"><%= user.role === 'admin' ? 'Director Name / Studio' : 'Full Name' %></label>
+                            <input type="text" id="fullName" name="fullName" value="<%= user.fullName %>" placeholder="Enter name" required>
                         </div>
                         <div class="form-group">
-                            <label for="favoriteGenre">Signature Genre</label>
+                            <label for="favoriteGenre"><%= user.role === 'admin' ? 'Signature Style' : 'Favorite Genre' %></label>
                             <select id="favoriteGenre" name="favoriteGenre" class="neo-select">
                                 <option value="Action" <%= user.favoriteGenre === 'Action' ? 'selected' : '' %>>Action</option>
                                 <option value="Drama" <%= user.favoriteGenre === 'Drama' ? 'selected' : '' %>>Drama</option>
@@ -169,17 +204,132 @@
                             </select>
                         </div>
                         <div class="form-group full-width">
-                            <label for="bio">Director's Bio</label>
-                            <textarea id="bio" name="bio" rows="3" placeholder="Tell us about your cinematic vision..."><%= user.bio %></textarea>
+                            <label for="bio"><%= user.role === 'admin' ? "Director's Bio" : 'About Me' %></label>
+                            <textarea id="bio" name="bio" rows="3" placeholder="<%= user.role === 'admin' ? 'Your cinematic vision...' : 'Tell us about your movie tastes...' %>"><%= user.bio %></textarea>
                         </div>
                         <div class="form-group full-width">
-                            <label for="imageUrl">Avatar Image URL</label>
+                            <label for="imageUrl">Profile Image URL</label>
                             <input type="url" name="imageUrl" id="imageUrl" value="<%= user.imageUrl %>" placeholder="https://unsplash.com/...">
                         </div>
                     </div>
-                    <button type="submit" class="btn-studio-save">UPDATE PROFILE</button>
+                    <button type="submit" class="btn-studio-save">SAVE CHANGES</button>
                 </form>
             </section>
+
+            <% if (user.role === 'admin') { %>
+            <!-- Director Production Panel -->
+            <section class="settings-panel" id="panelProduction">
+                <div class="panel-header-premium">
+                    <h2>Production <span class="highlight-crimson">Defaults</span></h2>
+                    <p>Standard metrics for new cinematic entries.</p>
+                </div>
+                <div class="form-grid-premium">
+                    <div class="form-group">
+                        <label>Base Ticket Price (₹)</label>
+                        <input type="number" value="250" placeholder="250">
+                    </div>
+                    <div class="form-group">
+                        <label>Default Age Rating</label>
+                        <select class="neo-select">
+                            <option value="UA">UA (Parental Guidance)</option>
+                            <option value="U">U (Universal)</option>
+                            <option value="A">A (Adults Only)</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <div class="checkbox-setting-row">
+                            <label class="checkbox-container">
+                                <input type="checkbox" checked>
+                                <span class="checkmark"></span>
+                                <span class="checkbox-label">Auto-Enable AI Summarization</span>
+                            </label>
+                            <p class="setting-desc">Automatically generate mission briefs using Studio AI.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-studio-save">SAVE DEFAULTS</button>
+            </section>
+            <% } else { %>
+            <!-- User Rewards Panel -->
+            <section class="settings-panel" id="panelRewards">
+                <div class="panel-header-premium">
+                    <h2>Member <span class="highlight-cyan">Rewards</span></h2>
+                    <p>Track your loyalty status and redeem perks.</p>
+                </div>
+                <div class="rewards-hub">
+                    <div class="reward-card-main">
+                        <div class="reward-main-header">
+                            <div class="reward-points-wrap">
+                                <span class="points-label">AVAILABLE POINTS</span>
+                                <span class="points-value"><%= user.rewards.points %></span>
+                            </div>
+                            <div class="reward-rank-badge <%= user.rewards.points > 1000 ? 'gold' : user.rewards.points > 500 ? 'silver' : 'bronze' %>">
+                                <%= user.rewards.points > 1000 ? 'GOLD ELITE' : user.rewards.points > 500 ? 'SILVER' : 'BRONZE' %>
+                            </div>
+                        </div>
+                        <div class="rank-progress">
+                            <div class="rank-progress-bar">
+                                <div class="rank-progress-fill" style="width: <%= Math.min((user.rewards.points / 1500) * 100, 100) %>%"></div>
+                            </div>
+                            <span class="rank-next">Next Rank at 500 Points</span>
+                        </div>
+                    </div>
+
+                    <div class="perks-grid">
+                        <div class="perk-item <%= user.rewards.points >= 100 ? '' : 'locked' %>">
+                            <span class="perk-icon">🍿</span>
+                            <div class="perk-info">
+                                <h4>Free Popcorn</h4>
+                                <p>100 Points</p>
+                            </div>
+                            <button class="btn-perk" <%= user.rewards.points >= 100 ? '' : 'disabled' %>>REDEEM</button>
+                        </div>
+                        <div class="perk-item <%= user.rewards.points >= 500 ? '' : 'locked' %>">
+                            <span class="perk-icon">🎟</span>
+                            <div class="perk-info">
+                                <h4>BOGO Ticket</h4>
+                                <p>500 Points</p>
+                            </div>
+                            <button class="btn-perk" <%= user.rewards.points >= 500 ? '' : 'disabled' %>>REDEEM</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- User Parental Panel -->
+            <section class="settings-panel" id="panelParental">
+                <div class="panel-header-premium">
+                    <h2>Parental <span class="highlight-amber">Controls</span></h2>
+                    <p>Restrict access to mature content.</p>
+                </div>
+                <form action="/settings/parental" method="POST" class="settings-form">
+                    <div class="form-grid-premium">
+                        <div class="form-group">
+                            <label>Content PIN</label>
+                            <input type="password" name="parentalPin" value="<%= user.parentalPin || '' %>" placeholder="4-Digit PIN" maxlength="4" pattern="[0-9]{4}">
+                        </div>
+                        <div class="form-group">
+                            <label>Restricted Rating</label>
+                            <select name="restrictAbove" class="neo-select">
+                                <option value="U">Allow All</option>
+                                <option value="UA">Block A (Adult)</option>
+                                <option value="PG-13">Block R (Restricted)</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <div class="checkbox-setting-row">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" <%= user.parentalPin ? 'checked' : '' %>>
+                                    <span class="checkmark"></span>
+                                    <span class="checkbox-label">Enable PIN for 18+ content</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-studio-save">UPDATE SAFETY</button>
+                </form>
+            </section>
+            <% } %>
 
             <!-- Password Panel -->
             <section class="settings-panel" id="panelPassword">

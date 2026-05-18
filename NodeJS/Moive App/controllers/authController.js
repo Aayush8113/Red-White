@@ -13,18 +13,31 @@ exports.getSignup = (req, res) => res.render('signup', { error: null });
 
 exports.postSignup = async (req, res) => {
     try {
-        const { username, password, fullName } = req.body;
-        const existingUser = await User.findOne({ username });
+        const { username, password, fullName, email, directorKey } = req.body;
+        
+        // Check if username or email already exists
+        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+        if (existingUser) {
+            const field = existingUser.username === username ? 'Username' : 'Email';
+            return res.render('signup', { error: `${field} already in use.` });
+        }
 
-        if (existingUser) return res.render('signup', { error: 'Username unavailable.' });
+        // Role assignment logic
+        let role = 'user';
+        if (directorKey && directorKey === process.env.DIRECTOR_SECRET) {
+            role = 'admin';
+        }
 
-        const newUser = await User.create({ username, password, fullName });
+        const newUser = await User.create({ username, password, fullName, email, role });
         res.cookie('auth_session', newUser._id.toString(), cookieOptions);
         res.redirect('/dashboard');
     } catch (err) {
-        res.render('signup', { error: 'Registration failed.' });
+        console.error('Signup Error:', err);
+        res.render('signup', { error: 'Registration failed. Please try again.' });
     }
 };
+
+
 
 exports.postLogin = async (req, res) => {
     try {

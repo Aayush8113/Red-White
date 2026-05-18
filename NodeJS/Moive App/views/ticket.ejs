@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neo-Cinema | Your Ticket</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Work+Sans:wght@300;500;700;900&display=swap');
+
+        :root {
+            --bg-void: #07070a;
+            --cyan-glow: #00f0ff;
+            --crimson-glow: #ff003c;
+            --amber-glow: #ffaa00;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg-void);
+            color: #fff;
+            font-family: 'Work Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .ticket-container {
+            width: 380px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ticket-header {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .ticket-header::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent, var(--bg-void));
+        }
+
+        .ticket-content {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .movie-title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 1.2rem;
+            color: var(--cyan-glow);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .theater-info {
+            font-size: 0.85rem;
+            color: #a0a0b8;
+            margin-bottom: 1.5rem;
+        }
+
+        .ticket-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .info-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+        }
+
+        .info-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .qr-section {
+            padding: 1rem;
+            background: #fff;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-mock {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            mask-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg');
+            mask-size: contain;
+            mask-repeat: no-repeat;
+        }
+
+        .ticket-id {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #666;
+            letter-spacing: 2px;
+        }
+
+        .ticket-footer {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        .badge-student {
+            background: var(--amber-glow);
+            color: #000;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            font-weight: 900;
+            margin-left: 0.5rem;
+        }
+
+        .stub-cut {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-void);
+            border-radius: 50%;
+            top: 200px;
+            z-index: 10;
+        }
+
+        .stub-cut-left { left: -20px; }
+        .stub-cut-right { right: -20px; }
+
+        .dashed-line {
+            position: absolute;
+            top: 220px;
+            left: 30px;
+            right: 30px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.2);
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket-container">
+        <div class="ticket-header" style="background-image: url('<%= booking.movie.posterUrl %>')"></div>
+        
+        <div class="stub-cut stub-cut-left"></div>
+        <div class="stub-cut stub-cut-right"></div>
+        <div class="dashed-line"></div>
+
+        <div class="ticket-content">
+            <h1 class="movie-title">
+                <%= booking.movie.title %>
+                <% if (booking.isStudent) { %>
+                    <span class="badge-student">STUDENT SPECIAL</span>
+                <% } %>
+            </h1>
+            <p class="theater-info"><%= booking.theater.name %> • <%= booking.theater.screen %></p>
+
+            <div class="ticket-grid">
+                <div class="info-item">
+                    <span class="info-label">DATE</span>
+                    <span class="info-value"><%= new Date(booking.showDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) %></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">TIME</span>
+                    <span class="info-value"><%= booking.showTime %></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">SEATS</span>
+                    <span class="info-value"><%= booking.seats.join(', ') %></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">TOTAL</span>
+                    <span class="info-value">₹<%= booking.totalPrice %></span>
+                </div>
+            </div>
+
+            <div class="qr-section">
+                <div class="qr-mock"></div>
+            </div>
+
+            <div class="ticket-id"><%= booking.ticketId %></div>
+        </div>
+
+        <div class="ticket-footer">
+            NEO-CINEMA • PREMIUM VIEWING EXPERIENCE • NON-REFUNDABLE
+        </div>
+    </div>
+</body>
+</html>
