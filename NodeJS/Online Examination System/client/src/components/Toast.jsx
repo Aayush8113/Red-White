@@ -40,7 +40,6 @@ export function Toast({ message, type = "info", onClose, duration = 3000 }) {
         <X className="h-4 w-4" />
       </button>
       
-      {/* Progress Bar */}
       <motion.div 
         initial={{ width: "100%" }}
         animate={{ width: "0%" }}
@@ -51,10 +50,4 @@ export function Toast({ message, type = "info", onClose, duration = 3000 }) {
       />
     </motion.div>
   );
-}
-
-export function useToast() {
-  // In a real production app, we'd use a Context or a store for multiple toasts.
-  // For this implementation, we'll return a simple state hook or just use it locally.
-  // But to keep it simple and clean, I'll provide this local state pattern for the pages.
 }
