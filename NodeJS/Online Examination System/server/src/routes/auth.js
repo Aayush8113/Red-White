@@ -1,4 +1,4 @@
-const express = require("express");
+﻿const express = require("express");
 const { requireAuth } = require("../middleware/auth");
 const {
   register,
@@ -11,14 +11,12 @@ const {
 
 const authRouter = express.Router();
 
-// Public routes
 authRouter.post("/register", register);
 authRouter.post("/login", login);
 authRouter.post("/forgot-password", forgotPassword);
 authRouter.post("/reset-password", resetPassword);
-authRouter.post("/contact", contactAdmin);           // contact admin form
+authRouter.post("/contact", contactAdmin);           
 
-// Protected routes (must be logged in)
 authRouter.post("/change-password", requireAuth, changePassword);
 
 module.exports = { authRouter };

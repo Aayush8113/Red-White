@@ -1,4 +1,4 @@
-const http = require("http");
+﻿const http = require("http");
 
 const { buildApp } = require("./app");
 const { connectDb } = require("./config/db");
@@ -9,7 +9,7 @@ const { verifyMailer } = require("./lib/mailer");
 async function main() {
   await connectDb(env.MONGODB_URI);
 
-  // Verify SMTP on startup — warns if misconfigured, does NOT crash
+  
   await verifyMailer();
 
   const app = buildApp();
