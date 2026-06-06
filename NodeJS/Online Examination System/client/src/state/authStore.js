@@ -18,7 +18,7 @@ export const useAuthStore = create((set) => ({
         body: JSON.stringify({ name, email, password }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Registration failed");
+      if (!res.ok) throw new Error(data.error || data.message || "Registration failed");
       
       const userData = { ...data.user, role: data.user.role.toLowerCase() };
       set({ user: userData, token: data.token, isAuthenticated: true, isLoading: false });
@@ -40,7 +40,7 @@ export const useAuthStore = create((set) => ({
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Login failed");
+      if (!res.ok) throw new Error(data.error || data.message || "Login failed");
       
       const userData = { ...data.user, role: data.user.role.toLowerCase() };
       set({ user: userData, token: data.token, isAuthenticated: true, isLoading: false });
