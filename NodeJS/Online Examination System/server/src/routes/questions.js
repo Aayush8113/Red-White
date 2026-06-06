@@ -11,7 +11,6 @@ const {
 
 const questionsRouter = express.Router();
 
-// Admin-only CRUD
 questionsRouter.use(requireAuth, requireRole("Admin"));
 
 questionsRouter.post("/", createQuestion);
@@ -21,4 +20,3 @@ questionsRouter.patch("/:id", updateQuestion);
 questionsRouter.delete("/:id", deleteQuestion);
 
 module.exports = { questionsRouter };
-
