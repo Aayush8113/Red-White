@@ -143,7 +143,20 @@ export function LoginPage() {
 
         {/* Support Footer */}
         <p className="mt-10 text-center text-[10px] font-bold text-slate-600 uppercase tracking-widest">
-          Forget password? <span className="text-indigo-500 cursor-pointer hover:underline">Contact Administrator</span>
+          Forgot password?{" "}
+          <Link to="/forgot-password" className="text-indigo-500 hover:text-indigo-400 transition-colors hover:underline">
+            Reset it here
+          </Link>
+        </p>
+
+        <p className="mt-3 text-center text-[10px] font-bold text-slate-600 uppercase tracking-widest">
+          Need help?{" "}
+          <a
+            href="mailto:admin@schoolzpro.com"
+            className="text-indigo-500 hover:text-indigo-400 transition-colors hover:underline"
+          >
+            Contact Administrator
+          </a>
         </p>
 
         <p className="mt-4 text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest">
