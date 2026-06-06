@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, User, MessageSquare, Tag, ChevronLeft, Zap, CheckCircle, Loader2, Send } from "lucide-react";
@@ -46,7 +46,7 @@ export function ContactPage() {
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 w-full max-w-lg"
       >
-        {/* Branding */}
+        
         <div className="text-center mb-10">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -63,7 +63,7 @@ export function ContactPage() {
           </p>
         </div>
 
-        {/* Card */}
+        
         <div className="rounded-[40px] border border-white/5 bg-white/[0.02] backdrop-blur-3xl p-10 shadow-[0_40px_80px_rgba(0,0,0,0.5)]">
           <AnimatePresence mode="wait">
             {!sent ? (
@@ -81,7 +81,7 @@ export function ContactPage() {
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
-                  {/* Name */}
+                  
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 pl-4">Your Name</label>
                     <div className="relative group">
@@ -97,7 +97,7 @@ export function ContactPage() {
                     </div>
                   </div>
 
-                  {/* Email */}
+                  
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 pl-4">Your Email</label>
                     <div className="relative group">
@@ -113,7 +113,7 @@ export function ContactPage() {
                     </div>
                   </div>
 
-                  {/* Subject */}
+                  
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 pl-4">Subject</label>
                     <div className="relative group">
@@ -129,7 +129,7 @@ export function ContactPage() {
                     </div>
                   </div>
 
-                  {/* Message */}
+                  
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 pl-4">Message</label>
                     <div className="relative group">
@@ -197,7 +197,7 @@ export function ContactPage() {
           </AnimatePresence>
         </div>
 
-        {/* Back link */}
+        
         <p className="mt-8 text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest">
           <Link to="/login" className="text-indigo-400 hover:text-indigo-300 transition-colors flex items-center justify-center gap-2">
             <ChevronLeft className="h-3 w-3" />

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+﻿import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import gsap from "gsap";
@@ -60,7 +60,7 @@ export function ResultsPage() {
 
   return (
     <div ref={ref} className="mx-auto max-w-5xl space-y-10 pb-10">
-      {/* Header */}
+      
       <section className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
           <Link to="/" className="rounded-full p-2 text-slate-400 hover:bg-white/5 hover:text-white transition-colors">
@@ -83,7 +83,7 @@ export function ResultsPage() {
         </div>
       </section>
 
-      {/* Hero Result Section */}
+      
       <div className="grid gap-6 lg:grid-cols-3">
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
@@ -131,7 +131,7 @@ export function ResultsPage() {
         </motion.div>
       </div>
 
-      {/* Detailed Breakdown */}
+      
       <section className="space-y-6">
         <h3 className="text-xl font-bold text-white">Subject Breakdown</h3>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -160,7 +160,7 @@ export function ResultsPage() {
         </div>
       </section>
 
-      {/* Integrity Score */}
+      
       <section className="rounded-3xl border border-white/5 bg-white/5 p-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-center">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-400">
@@ -187,7 +187,7 @@ export function ResultsPage() {
         </div>
       </section>
 
-      {/* Certificate Section */}
+      
       {percentage >= 50 && (
         <section className="space-y-6 pt-10 border-t border-white/5">
           <div className="text-center">

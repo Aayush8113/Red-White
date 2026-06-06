@@ -1,8 +1,7 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-// Helper to make authenticated API calls
 async function authFetch(path, { token, method = "POST", body } = {}) {
   const res = await fetch(`${API_URL}${path}`, {
     method,
@@ -24,7 +23,7 @@ export const useAuthStore = create((set, get) => ({
   isLoading: false,
   error: null,
 
-  // ── signup ──────────────────────────────────────────────────────────────────
+  
   signup: async (name, email, password) => {
     set({ isLoading: true, error: null });
     try {
@@ -40,7 +39,7 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  // ── login ───────────────────────────────────────────────────────────────────
+  
   login: async (email, password) => {
     set({ isLoading: true, error: null });
     try {
@@ -56,14 +55,14 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  // ── logout ──────────────────────────────────────────────────────────────────
+  
   logout: () => {
     localStorage.removeItem("auth-token");
     localStorage.removeItem("auth-user");
     set({ user: null, isAuthenticated: false, token: null });
   },
 
-  // ── forgotPassword ──────────────────────────────────────────────────────────
+  
   forgotPassword: async (email) => {
     set({ isLoading: true, error: null });
     try {
@@ -76,7 +75,7 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  // ── resetPassword ───────────────────────────────────────────────────────────
+  
   resetPassword: async (token, password) => {
     set({ isLoading: true, error: null });
     try {
@@ -89,7 +88,7 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  // ── changePassword (logged-in) ──────────────────────────────────────────────
+  
   changePassword: async (currentPassword, newPassword) => {
     set({ isLoading: true, error: null });
     try {
@@ -106,7 +105,7 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  // ── contactAdmin ────────────────────────────────────────────────────────────
+  
   contactAdmin: async ({ name, email, subject, message }) => {
     set({ isLoading: true, error: null });
     try {
@@ -119,7 +118,7 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  // ── updateUser (local only) ─────────────────────────────────────────────────
+  
   updateUser: (userData) => set((s) => {
     const newUser = { ...s.user, ...userData };
     localStorage.setItem("auth-user", JSON.stringify(newUser));

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 
 import { apiFetch } from "../lib/api";
 
@@ -26,7 +26,7 @@ export function useExamIntegrity({ attemptId, token, onAutoSubmit } = {}) {
           onAutoSubmit?.();
         }
       } catch {
-        // best-effort; local enforcement still applies below
+        
       }
     };
 

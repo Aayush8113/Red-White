@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import Editor from "@monaco-editor/react";
 import { Play, RotateCcw, Copy, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -52,7 +52,7 @@ export function CodeEditorQuestion({ question, value, onChange }) {
           height="100%"
           defaultLanguage={language}
           theme="vs-dark"
-          value={value || question.initialCode || "// Write your code here..."}
+          value={value || question.initialCode || "
           onChange={onChange}
           options={{
             minimap: { enabled: false },

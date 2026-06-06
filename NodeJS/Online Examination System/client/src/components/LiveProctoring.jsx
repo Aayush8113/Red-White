@@ -8,7 +8,6 @@ export function LiveProctoring() {
   const [faceVerified, setFaceVerified] = useState(false);
   const containerRef = useRef(null);
 
-  // Simulate AI skeleton tracking dots
   useEffect(() => {
     const interval = setInterval(() => {
       const newDots = Array.from({ length: 8 }).map((_, i) => ({
@@ -19,10 +18,8 @@ export function LiveProctoring() {
       setDots(newDots);
     }, 200);
 
-    // Initial face verification simulation
     const faceTimer = setTimeout(() => setFaceVerified(true), 3000);
 
-    // Random behavior alerts
     const alertInterval = setInterval(() => {
       if (Math.random() > 0.8) {
         const types = [
@@ -45,7 +42,6 @@ export function LiveProctoring() {
 
   return (
     <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#080808] shadow-2xl">
-      {/* Header */}
       <div className="flex items-center justify-between bg-white/5 px-3 py-2 border-b border-white/5">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -57,7 +53,6 @@ export function LiveProctoring() {
         </div>
       </div>
 
-      {/* Simulated Feed */}
       <div className="relative aspect-video bg-black/40 p-4" ref={containerRef}>
         {!faceVerified && (
           <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm">
@@ -66,7 +61,6 @@ export function LiveProctoring() {
           </div>
         )}
 
-        {/* Skeleton Overlay */}
         <svg className="absolute inset-0 h-full w-full pointer-events-none z-10">
           {dots.map((dot) => (
             <motion.circle
@@ -81,12 +75,10 @@ export function LiveProctoring() {
           ))}
         </svg>
 
-        {/* User Avatar Placeholder */}
         <div className="flex h-full w-full items-center justify-center opacity-20">
           <User className="h-24 w-24 text-white" />
         </div>
 
-        {/* Real-time Alerts Feed */}
         <div className="absolute top-3 right-3 flex flex-col gap-2 items-end z-20">
           <AnimatePresence>
             {alerts.map((alert, i) => (
@@ -104,7 +96,6 @@ export function LiveProctoring() {
           </AnimatePresence>
         </div>
 
-        {/* Status Badges */}
         <div className="absolute bottom-3 left-3 flex flex-col gap-1.5 z-20">
           <div className="flex items-center gap-1.5 rounded-full bg-black/60 px-2 py-0.5 text-[8px] font-bold text-white border border-white/5">
             <ShieldAlert className={`h-2.5 w-2.5 ${faceVerified ? "text-emerald-400" : "text-slate-500"}`} />
@@ -116,7 +107,6 @@ export function LiveProctoring() {
           </div>
         </div>
 
-        {/* Scan Line Animation */}
         <motion.div 
           animate={{ top: ["0%", "100%", "0%"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "linear" }}

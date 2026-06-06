@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { 
   Users, 
   FileText, 
@@ -61,7 +61,7 @@ export function AdminDashboard() {
         </div>
       </section>
 
-      {/* Stats Grid */}
+      
       <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat, i) => (
           <motion.div
@@ -75,14 +75,14 @@ export function AdminDashboard() {
         ))}
       </section>
 
-      {/* Live Monitor Section */}
+      
       <section>
         <AdminLiveMonitor />
       </section>
 
-      {/* Main Content Grid */}
+      
       <div className="grid gap-10 lg:grid-cols-3">
-        {/* Recent Attempts Table */}
+        
         <section className="lg:col-span-2">
           <div className="mb-6 flex items-center justify-between">
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
@@ -130,7 +130,7 @@ export function AdminDashboard() {
           </div>
         </section>
 
-        {/* System Integrity Feed */}
+        
         <section>
           <h2 className="mb-6 text-xl font-bold text-white">Integrity Alerts</h2>
           <div className="space-y-4">

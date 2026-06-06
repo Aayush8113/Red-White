@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   Play, 
@@ -97,7 +97,7 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-12">
-      {/* Dynamic Header HUD */}
+      
       <section className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
           <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-indigo-500 mb-3">
@@ -119,7 +119,7 @@ export function DashboardPage() {
         </div>
       </section>
 
-      {/* High-End Stats Grid */}
+      
       <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((stat, i) => (
           <HUDStat key={i} {...stat} />
@@ -127,7 +127,7 @@ export function DashboardPage() {
       </section>
 
       <div className="grid gap-12 lg:grid-cols-3">
-        {/* Main Feed */}
+        
         <section className="lg:col-span-2 space-y-8">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-black text-white tracking-tight">Available Exams</h2>
@@ -140,7 +140,7 @@ export function DashboardPage() {
           </div>
         </section>
 
-        {/* Technical Sidebar */}
+        
         <section className="space-y-8">
            <div className="rounded-3xl border border-white/5 bg-white/[0.01] p-8">
               <h3 className="text-sm font-black text-white uppercase tracking-widest mb-8">Recent Activity</h3>

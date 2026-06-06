@@ -47,7 +47,6 @@ export function RadarChartCanvas({ values, max = 10 }) {
         ctx.stroke();
       }
 
-      // Polygon
       ctx.beginPath();
       labels.forEach((label, i) => {
         const a = (Math.PI * 2 * i) / labels.length - Math.PI / 2;
@@ -65,7 +64,6 @@ export function RadarChartCanvas({ values, max = 10 }) {
       ctx.fill();
       ctx.stroke();
 
-      // Labels
       ctx.fillStyle = "rgba(226,232,240,0.9)";
       ctx.font = "12px system-ui, Segoe UI, Roboto, sans-serif";
       labels.forEach((label, i) => {

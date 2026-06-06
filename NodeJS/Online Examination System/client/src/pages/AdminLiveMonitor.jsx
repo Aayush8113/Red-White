@@ -1,10 +1,10 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { Eye, ShieldCheck, AlertCircle, Clock, MapPin } from "lucide-react";
 
 function MonitorCard({ student, exam, duration, violations, location }) {
   return (
     <div className="card relative overflow-hidden">
-      {/* Pulse status */}
+      
       <div className="absolute top-4 right-4 flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[8px] font-bold text-emerald-400 border border-emerald-500/20">
         <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
         LIVE

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { GraduationCap, ShieldCheck, Download, Share2 } from "lucide-react";
 
 export function CertificatePreview({ studentName, score, total, examTitle, date }) {
@@ -9,7 +9,7 @@ export function CertificatePreview({ studentName, score, total, examTitle, date 
       className="relative mx-auto w-full max-w-4xl p-1 bg-gradient-to-br from-indigo-500 via-purple-500 to-indigo-500 rounded-3xl"
     >
       <div className="relative bg-[#030303] rounded-[22px] overflow-hidden p-12 lg:p-20 text-center border border-white/10">
-        {/* Decorative elements */}
+        
         <div className="absolute top-0 left-0 w-40 h-40 bg-indigo-500/5 blur-[80px] rounded-full" />
         <div className="absolute bottom-0 right-0 w-40 h-40 bg-purple-500/5 blur-[80px] rounded-full" />
         

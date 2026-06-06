@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, ChevronLeft, Zap, CheckCircle, Loader2 } from "lucide-react";
@@ -31,7 +31,7 @@ export function ForgotPasswordPage() {
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 w-full max-w-md"
       >
-        {/* Branding */}
+        
         <div className="text-center mb-10">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -48,7 +48,7 @@ export function ForgotPasswordPage() {
           </p>
         </div>
 
-        {/* Card */}
+        
         <div className="rounded-[40px] border border-white/5 bg-white/[0.02] backdrop-blur-3xl p-10 shadow-[0_40px_80px_rgba(0,0,0,0.5)]">
           <AnimatePresence mode="wait">
             {!sent ? (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Mail, ChevronRight, Github, Zap, Shield, Eye, EyeOff } from "lucide-react";
@@ -40,7 +40,6 @@ export function LoginPage() {
     }
   };
 
-
   return (
     <div className={`relative min-h-screen flex items-center justify-center p-6 overflow-hidden`}>
       <InteractiveBackground type="student" />
@@ -50,7 +49,7 @@ export function LoginPage() {
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 w-full max-w-md"
       >
-        {/* Branding HUD */}
+        
         <div className="text-center mb-10">
           <motion.div 
             initial={{ scale: 0.8, opacity: 0 }}
@@ -65,7 +64,7 @@ export function LoginPage() {
           <p className="mt-3 text-[10px] font-black uppercase tracking-[0.4em] text-slate-500">Secure Access Portal</p>
         </div>
 
-        {/* Login Form */}
+        
         <div className="rounded-[40px] border border-white/5 bg-white/[0.02] backdrop-blur-3xl p-10 shadow-[0_40px_80px_rgba(0,0,0,0.5)]">
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
@@ -138,10 +137,9 @@ export function LoginPage() {
             </button>
           </form>
 
-
         </div>
 
-        {/* Support Footer */}
+        
         <p className="mt-10 text-center text-[10px] font-bold text-slate-600 uppercase tracking-widest">
           Forgot password?{" "}
           <Link to="/forgot-password" className="text-indigo-500 hover:text-indigo-400 transition-colors hover:underline">
@@ -164,7 +162,7 @@ export function LoginPage() {
         </p>
       </motion.div>
 
-      {/* Decorative HUD Details */}
+      
       <div className="fixed top-10 right-10 text-indigo-500/20 text-[8px] font-mono pointer-events-none text-right uppercase">
         <p>Protocol: SSL_ENCRYPTED</p>
         <p>Location: 127.0.0.1</p>

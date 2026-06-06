@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+﻿import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -39,7 +39,7 @@ export function TestTakingPage() {
   useLockdown({
     onViolation: (msg) => {
       console.warn("LOCKDOWN VIOLATION:", msg);
-      // Logic to show a warning or pause exam
+      
     }
   });
 
@@ -87,7 +87,7 @@ export function TestTakingPage() {
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-[#030303] text-slate-100">
-      {/* Header */}
+      
       <header className="flex h-16 items-center justify-between border-b border-white/5 bg-[#080808] px-6">
         <div className="flex items-center gap-4">
           <button 
@@ -120,7 +120,7 @@ export function TestTakingPage() {
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Navigation Sidebar (Desktop) */}
+        
         <aside className="hidden w-80 flex-col border-r border-white/5 bg-[#080808] lg:flex">
           <div className="p-4 border-b border-white/5">
             <LiveProctoring />
@@ -162,7 +162,7 @@ export function TestTakingPage() {
           </div>
         </aside>
 
-        {/* Question Area */}
+        
         <main className="relative flex-1 overflow-y-auto p-6 lg:p-12">
           <div className="mx-auto max-w-3xl">
             <AnimatePresence mode="wait">
@@ -261,7 +261,7 @@ export function TestTakingPage() {
         </main>
       </div>
 
-      {/* Footer Controls */}
+      
       <footer className="flex h-20 items-center justify-between border-t border-white/5 bg-[#080808] px-6 lg:px-12">
         <button
           disabled={activeIndex === 0}
@@ -300,7 +300,7 @@ export function TestTakingPage() {
         </button>
       </footer>
 
-      {/* Mobile Nav Overlay */}
+      
       <AnimatePresence>
         {isNavOpen && (
           <>

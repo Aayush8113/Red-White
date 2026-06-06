@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Users, BookOpen, Clock, TrendingUp, Search, Filter, MoreVertical, Plus } from "lucide-react";
 import { useState } from "react";
@@ -21,7 +21,7 @@ export function TeacherDashboard() {
 
   return (
     <div className="space-y-10 pb-20">
-      {/* Header HUD */}
+      
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h1 className="text-3xl font-black text-white tracking-widest uppercase">Teacher <span className="text-indigo-500">Terminal</span></h1>
@@ -39,7 +39,7 @@ export function TeacherDashboard() {
         </div>
       </div>
 
-      {/* Stats Grid */}
+      
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         {[
           { label: "Total Students", value: "125", icon: Users, color: "text-indigo-500", bg: "bg-indigo-500/10" },
@@ -64,7 +64,7 @@ export function TeacherDashboard() {
       </div>
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
-        {/* Batches Selection */}
+        
         <div className="lg:col-span-1 space-y-6">
            <h2 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 pl-2">Active Batches</h2>
            <div className="space-y-4">
@@ -97,7 +97,7 @@ export function TeacherDashboard() {
            </div>
         </div>
 
-        {/* Students List */}
+        
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between px-2">
              <h2 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Student Roster - {activeBatch}</h2>

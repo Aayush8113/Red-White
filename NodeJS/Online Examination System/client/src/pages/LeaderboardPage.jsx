@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { Trophy, Medal, Target, Zap, TrendingUp, Search, Crown, Activity } from "lucide-react";
 
 export function LeaderboardPage() {
@@ -41,9 +41,9 @@ export function LeaderboardPage() {
         </div>
       </section>
 
-      {/* God Mode Podium */}
+      
       <section className="flex flex-col md:flex-row items-end justify-center gap-4 lg:gap-12 pt-20 pb-10">
-        {/* Rank 2 */}
+        
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -59,7 +59,7 @@ export function LeaderboardPage() {
           <div className="mt-8 h-40 w-32 rounded-t-[40px] bg-gradient-to-b from-white/5 to-transparent border-t border-white/10" />
         </motion.div>
 
-        {/* Rank 1 */}
+        
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -83,7 +83,7 @@ export function LeaderboardPage() {
           <div className="mt-8 h-64 w-44 rounded-t-[60px] bg-gradient-to-b from-indigo-500/10 to-transparent border-t border-indigo-500/20" />
         </motion.div>
 
-        {/* Rank 3 */}
+        
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -100,7 +100,7 @@ export function LeaderboardPage() {
         </motion.div>
       </section>
 
-      {/* God Mode Data Table */}
+      
       <section className="overflow-hidden rounded-[40px] border border-white/5 bg-white/[0.01] backdrop-blur-md">
         <table className="w-full text-left text-[10px] uppercase font-black tracking-widest">
           <thead className="bg-white/[0.03] text-slate-500 border-b border-white/5">

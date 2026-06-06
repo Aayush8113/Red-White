@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   User,
@@ -81,7 +81,7 @@ export function SettingsPage() {
     updates: true,
   });
 
-  // Password change state
+  
   const [pwForm, setPwForm] = useState({ current: "", newPw: "", confirm: "" });
   const [pwLoading, setPwLoading] = useState(false);
 
@@ -175,7 +175,7 @@ export function SettingsPage() {
       </section>
 
       <div className="space-y-6">
-        {/* Profile */}
+        
         <SettingSection
           icon={User}
           title="Profile Information"
@@ -203,7 +203,7 @@ export function SettingsPage() {
           </div>
         </SettingSection>
 
-        {/* Change Password */}
+        
         <SettingSection
           icon={Lock}
           title="Change Password"
@@ -244,7 +244,7 @@ export function SettingsPage() {
           </form>
         </SettingSection>
 
-        {/* Appearance */}
+        
         <SettingSection
           icon={Palette}
           title="Appearance & Theme"
@@ -270,7 +270,7 @@ export function SettingsPage() {
           </div>
         </SettingSection>
 
-        {/* Accessibility */}
+        
         <SettingSection
           icon={Eye}
           title="Accessibility Tools"
@@ -301,7 +301,7 @@ export function SettingsPage() {
           </div>
         </SettingSection>
 
-        {/* Notifications */}
+        
         <SettingSection
           icon={Bell}
           title="Notification Control"

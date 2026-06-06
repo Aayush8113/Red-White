@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+﻿import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LayoutDashboard, GraduationCap, Trophy, Settings, LogOut, Menu, X, Bell, ShieldCheck, PlusSquare, Megaphone, Zap, MessageSquare } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -93,7 +93,7 @@ export function AppShell({ children }) {
       <div className="flex min-h-screen bg-transparent selection:bg-indigo-500/30">
         <InteractiveBackground type={user?.role === "admin" ? "admin" : "student"} />
         
-        {/* Sidebar for Desktop */}
+        
         <aside className="fixed inset-y-0 left-0 hidden w-80 flex-col border-r border-white/5 bg-black/[0.2] backdrop-blur-3xl p-8 lg:flex">
           <div className="mb-16 flex items-center gap-4 px-2">
             <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-600 shadow-[0_0_30px_rgba(99,102,241,0.4)] overflow-hidden">
@@ -140,9 +140,9 @@ export function AppShell({ children }) {
           </div>
         </aside>
 
-        {/* Main Content Area */}
+        
         <div className="flex flex-1 flex-col lg:pl-80">
-          {/* Header */}
+          
           <header 
             className={`sticky top-0 z-40 flex h-24 items-center justify-between px-8 transition-all lg:px-12 ${
               scrolled ? "bg-black/40 backdrop-blur-3xl border-b border-white/5" : "bg-transparent"
@@ -222,7 +222,7 @@ export function AppShell({ children }) {
           </main>
         </div>
 
-        {/* Mobile Menu Overlay */}
+        
         <AnimatePresence>
           {isMobileMenuOpen && (
             <>

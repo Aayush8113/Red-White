@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { GraduationCap, Mail, Lock, User, ArrowRight, Loader2, Zap } from "lucide-react";
@@ -27,7 +27,6 @@ export function RegisterPage() {
   const handleRegister = async (e) => {
     e.preventDefault();
     
-    // Basic validation
     if (password !== confirmPassword) {
       setToast({ message: "Passwords do not match", type: "error" });
       return;
@@ -43,7 +42,6 @@ export function RegisterPage() {
       setToast({ message: err.message || "Registration failed", type: "error" });
     }
   };
-
 
   return (
     <div className={`relative min-h-screen flex items-center justify-center p-6 overflow-hidden`}>
@@ -123,9 +121,6 @@ export function RegisterPage() {
                 />
               </div>
             </div>
-
-
-
 
             <button
               type="submit"

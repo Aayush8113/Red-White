@@ -1,4 +1,4 @@
-import { Navigate, useLocation } from "react-router-dom";
+﻿import { Navigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../state/authStore";
 
 export function ProtectedRoute({ children, adminOnly = false, role = null }) {
@@ -19,7 +19,6 @@ export function ProtectedRoute({ children, adminOnly = false, role = null }) {
       return <Navigate to="/" replace />;
     }
   }
-
 
   return children;
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, Lock, Cpu, Globe, Zap, Check, GraduationCap } from "lucide-react";
 
@@ -56,13 +56,13 @@ export function Preloader() {
           }}
           className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-[#010101] overflow-hidden"
         >
-          {/* Refined Ambient Background */}
+          
           <div className="absolute inset-0">
              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,#312e81_0%,transparent_70%)] opacity-20" />
           </div>
 
           <div className="relative z-20 flex flex-col items-center w-full max-w-sm px-8">
-            {/* Elegant Branding */}
+            
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -88,7 +88,7 @@ export function Preloader() {
               </p>
             </motion.div>
 
-            {/* Professional Checklist */}
+            
             <div className="w-full mb-16 space-y-1">
                <SecurityCheck label="Securing Data Connection" active={progress > 20} delay={0.2} />
                <SecurityCheck label="Verifying Digital Identity" active={progress > 50} delay={0.3} />
@@ -96,7 +96,7 @@ export function Preloader() {
                <SecurityCheck label="Optimizing Assessment Environment" active={progress > 95} delay={0.5} />
             </div>
 
-            {/* Minimalist Progress */}
+            
             <div className="w-full">
                <div className="flex justify-between items-center mb-4">
                   <span className="text-[9px] font-black uppercase text-indigo-500 tracking-widest">
@@ -114,7 +114,7 @@ export function Preloader() {
             </div>
           </div>
 
-          {/* Footer Branding */}
+          
           <div className="absolute bottom-12 text-center">
             <p className="text-[8px] font-bold text-slate-700 uppercase tracking-[0.5em]">
               Trusted by 500+ International Institutions

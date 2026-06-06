@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+﻿import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/AppShell.jsx";
 import { PageTransition } from "./components/PageTransition.jsx";
 import { DashboardPage } from "./pages/DashboardPage.jsx";
@@ -29,7 +29,7 @@ export default function App() {
       <AppShell>
         <PageTransition>
           <Routes>
-            {/* Protected routes */}
+            
             <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
             <Route path="/teacher" element={<ProtectedRoute role="teacher"><TeacherDashboard /></ProtectedRoute>} />
@@ -41,16 +41,16 @@ export default function App() {
             <Route path="/exam/:examId" element={<ProtectedRoute><TestTakingPage /></ProtectedRoute>} />
             <Route path="/results/:attemptId" element={<ProtectedRoute><ResultsPage /></ProtectedRoute>} />
 
-            {/* Public-only routes (redirect to home if already logged in) */}
+            
             <Route path="/login" element={isAuthenticated ? <Navigate to={user?.role === "admin" ? "/admin" : "/"} replace /> : <LoginPage />} />
             <Route path="/register" element={isAuthenticated ? <Navigate to="/" replace /> : <RegisterPage />} />
             <Route path="/forgot-password" element={isAuthenticated ? <Navigate to="/" replace /> : <ForgotPasswordPage />} />
             <Route path="/reset-password" element={isAuthenticated ? <Navigate to="/" replace /> : <ResetPasswordPage />} />
 
-            {/* Public routes (accessible logged in or not) */}
+            
             <Route path="/contact" element={<ContactPage />} />
 
-            {/* Fallback */}
+            
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </PageTransition>
