@@ -1,0 +1,29 @@
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+
+const USER_ROLES = ["Admin", "Teacher", "Student"];
+
+const userSchema = new mongoose.Schema(
+  {
+    name: { type: String, trim: true, required: true },
+    email: { type: String, trim: true, lowercase: true, required: true, unique: true, index: true },
+    passwordHash: { type: String, required: true, select: false },
+    role: { type: String, enum: USER_ROLES, default: "Student", index: true },
+    batch: { type: String, trim: true, default: "", index: true },
+  },
+  { timestamps: true },
+);
+
+userSchema.methods.setPassword = async function setPassword(plain) {
+  const salt = await bcrypt.genSalt(12);
+  this.passwordHash = await bcrypt.hash(plain, salt);
+};
+
+userSchema.methods.verifyPassword = async function verifyPassword(plain) {
+  return bcrypt.compare(plain, this.passwordHash);
+};
+
+const User = mongoose.model("User", userSchema);
+
+module.exports = { User, USER_ROLES };
+

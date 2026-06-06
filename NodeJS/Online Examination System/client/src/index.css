@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  
+  body {
+    @apply bg-[#010101] text-slate-300 font-['Inter',sans-serif] selection:bg-indigo-500/30 selection:text-white antialiased overflow-x-hidden transition-colors duration-300;
+    letter-spacing: -0.01em;
+  }
+
+  body.light-theme {
+    @apply bg-slate-50 text-slate-900;
+  }
+
+  body.light-theme .card {
+    @apply bg-white border-slate-200 shadow-xl shadow-slate-200/50;
+  }
+
+  body.light-theme h1, body.light-theme h2, body.light-theme h3, body.light-theme h4, body.light-theme p, body.light-theme span {
+    @apply text-slate-900;
+  }
+
+  body.light-theme .text-slate-500, body.light-theme .text-slate-400 {
+    color: #64748b; /* slate-500 */
+  }
+
+  body.light-theme aside {
+    @apply bg-white border-slate-200;
+  }
+
+  body.light-theme header {
+    @apply bg-white/80 border-slate-200;
+  }
+
+  body.high-contrast {
+    @apply bg-black text-white;
+  }
+
+  body.high-contrast .card {
+    @apply border-2 border-white bg-black;
+  }
+
+  body.high-contrast button {
+    @apply border-2 border-white bg-black text-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-['Outfit',sans-serif] tracking-tight;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-[32px] border border-white/5 bg-white/[0.02] p-8 backdrop-blur-xl transition-all duration-500 hover:border-white/10 hover:bg-white/[0.04];
+  }
+
+  .btn-primary {
+    @apply flex items-center justify-center gap-3 rounded-2xl bg-indigo-600 px-6 py-4 text-sm font-black uppercase tracking-widest text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all hover:bg-indigo-500 hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply flex items-center justify-center gap-3 rounded-2xl border border-white/5 bg-white/5 px-6 py-4 text-sm font-black uppercase tracking-widest text-slate-300 transition-all hover:bg-white/10 hover:text-white;
+  }
+
+  /* God Mode HUD Effects */
+  .hud-glow {
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.1);
+  }
+  
+  .glass-morph {
+    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
+    backdrop-filter: blur(20px);
+  }
+}
+
+/* Custom Professional Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-[#010101];
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
+}
+
+/* Three.js Canvas Fix */
+canvas {
+  display: block;
+}
+
+/* Text Glitch Animation */
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.animate-glitch {
+  animation: glitch 0.2s infinite;
+}
