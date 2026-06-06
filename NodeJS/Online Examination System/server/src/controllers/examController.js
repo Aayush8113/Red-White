@@ -16,7 +16,6 @@ async function listExams(req, res, next) {
     let filter = {};
 
     if (role === "Student") {
-      // Students only see published exams targeted at them, their batch, or public (empty arrays)
       filter = {
         isPublished: true,
         $or: [
@@ -26,10 +25,8 @@ async function listExams(req, res, next) {
         ],
       };
     } else if (role === "Teacher") {
-      // Teachers see exams they created
       filter = { createdBy: _id };
     } else if (role === "Admin") {
-      // Admins see everything
       filter = {};
     }
 
@@ -39,7 +36,6 @@ async function listExams(req, res, next) {
     next(err);
   }
 }
-
 
 async function createExam(req, res, next) {
   try {
@@ -217,4 +213,3 @@ module.exports = {
   saveAnswer,
   submitAttempt,
 };
-
