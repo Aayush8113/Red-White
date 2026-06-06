@@ -36,7 +36,6 @@ function attachSockets(httpServer) {
     socket.on("disconnect", () => {});
   });
 
-  // authoritative ticks (room-scoped) once per second
   setInterval(async () => {
     const now = Date.now();
     const active = await ExamAttempt.find({ status: "in_progress", endsAt: { $gt: new Date() } })
@@ -51,4 +50,3 @@ function attachSockets(httpServer) {
 }
 
 module.exports = { attachSockets };
-
