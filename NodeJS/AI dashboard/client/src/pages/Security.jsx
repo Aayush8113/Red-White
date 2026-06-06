@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { 
   ShieldCheck, ShieldAlert, Key, Users, Terminal, Globe, 
   Trash2, Search, ToggleLeft, ToggleRight, Radio, Laptop, Smartphone, Eye
@@ -16,7 +16,7 @@ export const Security = () => {
   const [logSearch, setLogSearch] = useState('');
   const [logFilter, setLogFilter] = useState('All');
 
-  // Filter logs
+  
   const filteredLogs = auditLogs.filter(log => {
     const matchesSearch = log.details.toLowerCase().includes(logSearch.toLowerCase()) ||
                           log.actor.toLowerCase().includes(logSearch.toLowerCase());
@@ -26,7 +26,7 @@ export const Security = () => {
 
   const uniqueActionTypes = Array.from(new Set(auditLogs.map(l => l.actionType)));
 
-  // RBAC Preset application helper
+  
   const applyPreset = async (presetName) => {
     toast.loading(`Applying ${presetName} permission profile...`);
     
@@ -47,7 +47,7 @@ export const Security = () => {
         Viewer: { read: true, write: true, delete: false, system: false, export: false },
         Guest: { read: true, write: true, delete: false, system: false, export: false },
       };
-    } else { // Compliance Standard
+    } else { 
       targetConfig = {
         Admin: { read: true, write: true, delete: true, system: true, export: true },
         Editor: { read: true, write: true, delete: false, system: false, export: true },
@@ -56,7 +56,7 @@ export const Security = () => {
       };
     }
 
-    // Iterate over all roles and update each permission
+    
     for (const role of Object.keys(targetConfig)) {
       for (const key of permissionKeys) {
         const val = targetConfig[role][key];
@@ -71,7 +71,7 @@ export const Security = () => {
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       
-      {/* Introduction */}
+      {}
       <div className="dark:bg-slate-900/40 bg-white p-5 rounded-2xl border border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-sm">
         <div>
           <h1 className="text-xl font-bold text-slate-800 dark:text-white">Security & Governance Matrix</h1>
@@ -84,10 +84,10 @@ export const Security = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* COLUMN 1 & 2: RBAC Matrix and Audit Logs */}
+        {}
         <div className="lg:col-span-2 space-y-8">
           
-          {/* A. RBAC Permissions Matrix */}
+          {}
           <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 p-6 rounded-3xl shadow-md">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-100 dark:border-white/5 pb-4 mb-4 gap-3">
               <div>
@@ -99,7 +99,7 @@ export const Security = () => {
               </div>
             </div>
 
-            {/* Live RBAC presets triggers */}
+            {}
             <div className="mb-6">
               <span className="text-[10px] text-slate-500 font-bold block mb-2 uppercase">LOAD PERMISSION PRESETS (CLICK TO APPLY):</span>
               <div className="flex flex-wrap gap-2">
@@ -165,7 +165,7 @@ export const Security = () => {
             </div>
           </div>
 
-          {/* B. Black Box Immutable Audit Logs */}
+          {}
           <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 p-6 rounded-3xl shadow-md flex flex-col justify-between h-[450px]">
             <div>
               <div className="flex justify-between items-start mb-4">
@@ -181,7 +181,7 @@ export const Security = () => {
                 </span>
               </div>
 
-              {/* Log filter controls */}
+              {}
               <div className="flex gap-2 mb-4">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-2.5 text-slate-500 w-3.5 h-3.5" />
@@ -204,7 +204,7 @@ export const Security = () => {
               </div>
             </div>
 
-            {/* Audit log entries */}
+            {}
             <div className="flex-1 overflow-y-auto space-y-2 custom-scrollbar pr-1">
               {filteredLogs.map((log) => (
                 <div key={log.id} className="dark:bg-slate-950/50 bg-slate-50 border border-slate-200 dark:border-white/2 p-3 rounded-xl flex flex-col sm:flex-row justify-between sm:items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-950 transition-colors">
@@ -238,10 +238,10 @@ export const Security = () => {
 
         </div>
 
-        {/* COLUMN 3: Session Guard & Sign-in Shield */}
+        {}
         <div className="space-y-8">
           
-          {/* C. Sign-In Shield Policy */}
+          {}
           <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 p-6 rounded-3xl shadow-md">
             <h3 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-widest flex items-center gap-2 mb-4">
               <ShieldAlert size={16} className="text-amber-500" />
@@ -250,7 +250,7 @@ export const Security = () => {
             <p className="text-xs text-slate-500 mb-6 font-medium">Configure network security authentication guards.</p>
 
             <div className="space-y-4">
-              {/* MFA Toggle */}
+              {}
               <div className="flex items-center justify-between p-3.5 dark:bg-slate-950/40 bg-slate-50 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm">
                 <div>
                   <h4 className="text-xs font-bold text-slate-800 dark:text-white">Multi-Factor MFA Enforce</h4>
@@ -268,7 +268,7 @@ export const Security = () => {
                 </button>
               </div>
 
-              {/* SSO Toggle */}
+              {}
               <div className="flex items-center justify-between p-3.5 dark:bg-slate-950/40 bg-slate-50 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm">
                 <div>
                   <h4 className="text-xs font-bold text-slate-800 dark:text-white">Single Sign-On SSO Gateway</h4>
@@ -288,7 +288,7 @@ export const Security = () => {
             </div>
           </div>
 
-          {/* D. Session Guard tracking */}
+          {}
           <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 p-6 rounded-3xl shadow-md">
             <h3 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-widest flex items-center gap-2 mb-4">
               <Laptop size={16} className="text-indigo-500 dark:text-indigo-400" />

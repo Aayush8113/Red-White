@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import gsap from 'gsap';
 
 export const useGsapScroll = (scrollRef) => {
@@ -10,12 +10,12 @@ export const useGsapScroll = (scrollRef) => {
     let isScrolling = false;
 
     const handleWheel = (e) => {
-      // Avoid intercepting inside small scrollable nodes (like logs or charts)
+      
       if (e.target.closest('.custom-scrollbar')) return;
 
       e.preventDefault();
       
-      const delta = e.deltaY * 0.8; // fine-tune scrolling sensitivity
+      const delta = e.deltaY * 0.8; 
       targetScrollTop = Math.max(0, Math.min(element.scrollHeight - element.clientHeight, targetScrollTop + delta));
       
       if (!isScrolling) {

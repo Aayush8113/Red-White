@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+﻿import { useState, useRef, useEffect } from "react";
 import { X, Send, Bot, Sparkles, User } from "lucide-react";
 import { useStore } from "../store/uiStore";
 import { cn } from "../lib/utils";
@@ -20,7 +20,7 @@ export const AISidebar = () => {
     setInput("");
     setIsTyping(true);
 
-    // Simulated AI Logic
+    
     setTimeout(() => {
       let reply = "I can help with that.";
       const lower = userMsg.toLowerCase();

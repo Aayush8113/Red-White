@@ -4,10 +4,10 @@ import { useStore } from '../store/uiStore';
 import { toast } from 'sonner';
 
 export const AIPlayground = () => {
-  const { getClients } = useStore();
-  const clients = getClients();
+  const { productionClients, sandboxClients, environment } = useStore();
+  const clients = environment === 'production' ? productionClients : sandboxClients;
 
-  // 1. AI Copilot state
+  
   const [query, setQuery] = useState('');
   const [chatLog, setChatLog] = useState([
     { role: 'assistant', msg: "I'm connected to your live MERN database. Ask me queries like 'Find active clients' or 'Get clients with revenue > 50000'." }
@@ -16,13 +16,13 @@ export const AIPlayground = () => {
   const [copilotResults, setCopilotResults] = useState([]);
   const [generatedQueryText, setGeneratedQueryText] = useState('');
 
-  // 2. Smart Scaffold state
-  const [scaffoldType, setScaffoldType] = useState('grid'); // 'table' | 'grid' | 'list'
+  
+  const [scaffoldType, setScaffoldType] = useState('grid'); 
   const [scaffoldColumns, setScaffoldColumns] = useState(['name', 'status', 'amount']);
   const [scaffoldFilter, setScaffoldFilter] = useState('All');
   const [hasScaffolded, setHasScaffolded] = useState(false);
 
-  // Copilot Query parsing engine
+  
   const triggerDirectQuery = (queryText) => {
     setQuery(queryText);
     setChatLog(prev => [...prev, { role: 'user', msg: queryText }]);
@@ -47,7 +47,7 @@ export const AIPlayground = () => {
         sql = "db.clients.find({ status: 'Cancelled' })";
         assistantMsg = `Found ${filtered.length} cancelled accounts.`;
       } else if (lower.includes('>') || lower.includes('greater') || lower.includes('over') || lower.includes('more')) {
-        // extract amount
+        
         const match = lower.match(/\d+/g);
         const amountLimit = match ? parseInt(match[0]) * (lower.includes('k') ? 1000 : 1) : 50000;
         filtered = clients.filter(c => c.amount > amountLimit);
@@ -72,7 +72,7 @@ export const AIPlayground = () => {
     triggerDirectQuery(query);
   };
 
-  // Smart Scaffold compilation handler
+  
   const handleCompileScaffold = () => {
     setHasScaffolded(true);
     toast.success(`Scaffolded ${scaffoldType} view layout successfully!`);
@@ -90,7 +90,7 @@ export const AIPlayground = () => {
     }
   };
 
-  // Scaffold data selector
+  
   const scaffoldedData = clients.filter(c => {
     if (scaffoldFilter === 'All') return true;
     return c.status === scaffoldFilter;
@@ -99,10 +99,10 @@ export const AIPlayground = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-in fade-in duration-500">
       
-      {/* SECTION A: AI COPILOT */}
+      {}
       <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 rounded-3xl p-6 flex flex-col justify-between h-[650px] shadow-2xl">
         <div className="flex-1 flex flex-col justify-between overflow-hidden">
-          {/* Header */}
+          {}
           <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/5 pb-4 mb-4">
             <div>
               <h3 className="text-slate-800 dark:text-white font-bold text-base flex items-center gap-1.5">
@@ -114,7 +114,7 @@ export const AIPlayground = () => {
             <span className="bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-indigo-600/20">DB COPILOT v2</span>
           </div>
 
-          {/* Quick Query Templates */}
+          {}
           <div className="mb-4">
             <span className="text-[10px] text-slate-500 font-bold block mb-1.5">LIVE COPILOT TEMPLATES (CLICK TO RUN):</span>
             <div className="flex flex-wrap gap-2">
@@ -135,7 +135,7 @@ export const AIPlayground = () => {
             </div>
           </div>
 
-          {/* Chat Interface logs container */}
+          {}
           <div className="flex-1 overflow-y-auto space-y-4 p-2 custom-scrollbar">
             {chatLog.map((log, idx) => (
               <div key={idx} className={`flex gap-3 max-w-[85%] ${log.role === 'user' ? 'ml-auto flex-row-reverse' : ''}`}>
@@ -159,7 +159,7 @@ export const AIPlayground = () => {
           </div>
         </div>
 
-        {/* Live Aggregation code and matching results preview */}
+        {}
         {generatedQueryText && (
           <div className="mt-4 dark:bg-slate-950 bg-slate-50 border border-slate-200 dark:border-white/5 p-3.5 rounded-2xl">
             <div className="flex justify-between items-center text-[10px] text-slate-550 font-bold mb-2">
@@ -168,7 +168,7 @@ export const AIPlayground = () => {
             </div>
             <pre className="text-[11px] font-mono text-indigo-755 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/20 p-2 rounded-lg border border-indigo-200 dark:border-indigo-900/30 overflow-x-auto">{generatedQueryText}</pre>
             
-            {/* Short results preview */}
+            {}
             <div className="mt-3 text-[10px] text-slate-650 dark:text-slate-400 max-h-24 overflow-y-auto custom-scrollbar">
               <span className="font-bold text-[9px] uppercase tracking-wider block mb-1">DATA RETURNED (LIMIT 3)</span>
               {copilotResults.length === 0 ? (
@@ -185,7 +185,7 @@ export const AIPlayground = () => {
           </div>
         )}
 
-        {/* Input box */}
+        {}
         <form onSubmit={handleQuerySubmit} className="mt-4 flex gap-2 relative">
           <input
             type="text"
@@ -202,10 +202,10 @@ export const AIPlayground = () => {
           </button>
         </form>
       </div>
-      {/* SECTION B: SMART SCAFFOLD */}
+      {}
       <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 rounded-3xl p-6 flex flex-col justify-between h-[650px] shadow-2xl">
         <div className="space-y-6 overflow-y-auto custom-scrollbar pr-1 flex-1">
-          {/* Header */}
+          {}
           <div className="border-b border-slate-200 dark:border-white/5 pb-4">
             <h3 className="text-slate-800 dark:text-white font-bold text-base flex items-center gap-1.5">
               <Database className="text-indigo-500 dark:text-indigo-400" size={18} />
@@ -214,7 +214,7 @@ export const AIPlayground = () => {
             <p className="text-slate-500 text-xs mt-0.5">Instantly compile layout interfaces from schemas.</p>
           </div>
 
-          {/* Quick Scaffold Templates */}
+          {}
           <div>
             <span className="text-[10px] text-slate-500 font-bold block mb-1.5">LIVE SCAFFOLD TEMPLATES (CLICK TO LOAD):</span>
             <div className="flex flex-wrap gap-2">
@@ -241,9 +241,9 @@ export const AIPlayground = () => {
             </div>
           </div>
 
-          {/* Scaffold Configurations */}
+          {}
           <div className="space-y-4">
-            {/* View Type Select */}
+            {}
             <div>
               <label className="text-[10px] text-slate-500 font-bold block mb-2">CHOOSE VIEW SYSTEM</label>
               <div className="grid grid-cols-3 gap-2">
@@ -272,7 +272,7 @@ export const AIPlayground = () => {
               </div>
             </div>
 
-            {/* Columns Multi-select */}
+            {}
             <div>
               <label className="text-[10px] text-slate-500 font-bold block mb-2">ACTIVE COLUMNS TO SCAFFOLD</label>
               <div className="flex flex-wrap gap-2">
@@ -295,7 +295,7 @@ export const AIPlayground = () => {
               </div>
             </div>
 
-            {/* Schema Filter select */}
+            {}
             <div>
               <label className="text-[10px] text-slate-500 font-bold block mb-1.5">SCHEMA CONSTRAINT FILTER</label>
               <select
@@ -310,7 +310,7 @@ export const AIPlayground = () => {
               </select>
             </div>
 
-            {/* Run Button */}
+            {}
             <button
               onClick={handleCompileScaffold}
               className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-lg transition-colors"
@@ -319,14 +319,14 @@ export const AIPlayground = () => {
             </button>
           </div>
 
-          {/* Scaffolded Output Box */}
+          {}
           {hasScaffolded && (
             <div className="dark:bg-slate-950 bg-slate-50 border border-slate-250 dark:border-white/10 p-4 rounded-2xl mt-4 max-h-60 overflow-y-auto custom-scrollbar">
               <div className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-wider mb-3 flex items-center gap-1.5">
                 <Database size={12} /> DYNAMICALLY SCAFFOLDED VIEW (Live Data)
               </div>
               
-              {/* Type: Grid */}
+              {}
               {scaffoldType === 'grid' && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {scaffoldedData.map((d, dIdx) => (
@@ -342,7 +342,7 @@ export const AIPlayground = () => {
                 </div>
               )}
 
-              {/* Type: Table */}
+              {}
               {scaffoldType === 'table' && (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-[10px] text-slate-500 dark:text-slate-400">
@@ -366,7 +366,7 @@ export const AIPlayground = () => {
                 </div>
               )}
 
-              {/* Type: List */}
+              {}
               {scaffoldType === 'list' && (
                 <div className="space-y-1.5">
                   {scaffoldedData.map((d, dIdx) => (

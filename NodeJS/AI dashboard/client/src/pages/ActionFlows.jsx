@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { 
   Play, ShieldCheck, Settings, AlertCircle, ToggleLeft, 
   MessageSquare, Mail, Terminal, Plus, Trash2, ArrowRight 
@@ -9,9 +9,9 @@ import { toast } from 'sonner';
 export const ActionFlows = () => {
   const { actionFlows, toggleFlowActive, runFlowManual, createFlow } = useStore();
   const [activeSimulationId, setActiveSimulationId] = useState(null);
-  const [simulationStep, setSimulationStep] = useState(0); // 0: idle, 1: trigger, 2: condition, 3: action
+  const [simulationStep, setSimulationStep] = useState(0); 
 
-  // Form State
+  
   const [flowName, setFlowName] = useState('');
   const [flowTrigger, setFlowTrigger] = useState('ON_CLIENT_CREATED');
   const [flowCondition, setFlowCondition] = useState('amount > 50000');
@@ -19,13 +19,13 @@ export const ActionFlows = () => {
 
   const handleSimulate = (flowId) => {
     setActiveSimulationId(flowId);
-    setSimulationStep(1); // Trigger
+    setSimulationStep(1); 
 
-    // Visual sequence animation steps
+    
     setTimeout(() => {
-      setSimulationStep(2); // Condition check
+      setSimulationStep(2); 
       setTimeout(() => {
-        setSimulationStep(3); // Dispatch action
+        setSimulationStep(3); 
         setTimeout(() => {
           runFlowManual(flowId);
           setActiveSimulationId(null);
@@ -72,7 +72,7 @@ export const ActionFlows = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       
-      {/* Introduction Banner */}
+      {}
       <div className="dark:bg-slate-900/40 bg-white p-5 rounded-2xl border border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-sm">
         <div>
           <h1 className="text-xl font-bold text-slate-800 dark:text-white">Action Flows Builder</h1>
@@ -83,7 +83,7 @@ export const ActionFlows = () => {
         </span>
       </div>
 
-      {/* Preset workflow templates */}
+      {}
       <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 rounded-3xl p-6 shadow-md">
         <span className="text-[10px] text-slate-500 font-bold block mb-3 uppercase tracking-wider">PRE-CONFIGURED WORKFLOW TEMPLATES (1-CLICK LOAD):</span>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -105,7 +105,7 @@ export const ActionFlows = () => {
         </div>
       </div>
 
-      {/* New Flow Form Creator */}
+      {}
       <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 rounded-3xl p-6 shadow-md">
         <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-1.5 border-b border-slate-100 dark:border-white/5 pb-3">
           <Plus size={16} className="text-indigo-500" /> Create Custom Flow Pipeline
@@ -171,7 +171,7 @@ export const ActionFlows = () => {
         </form>
       </div>
 
-      {/* Visual Canvas Nodes list */}
+      {}
       <div className="space-y-6">
         {actionFlows.map((flow) => {
           const isSimulating = activeSimulationId === flow.id;
@@ -184,12 +184,12 @@ export const ActionFlows = () => {
                   : 'border-slate-200 dark:border-white/5 hover:border-slate-350 dark:hover:border-white/10'
               }`}
             >
-              {/* Background simulator glow */}
+              {}
               {isSimulating && (
                 <div className="absolute inset-0 bg-indigo-500/2 pointer-events-none animate-pulse" />
               )}
 
-              {/* Title row controls */}
+              {}
               <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 dark:border-white/5 relative z-10">
                 <div className="flex items-center gap-3">
                   <div className={`w-2.5 h-2.5 rounded-full ${flow.active ? 'bg-emerald-500 animate-ping' : 'bg-slate-400'}`} />
@@ -197,7 +197,7 @@ export const ActionFlows = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  {/* Toggle active state */}
+                  {}
                   <button
                     onClick={() => {
                       toggleFlowActive(flow.id);
@@ -212,7 +212,7 @@ export const ActionFlows = () => {
                     {flow.active ? "ACTIVE / WATCHING" : "SUSPENDED"}
                   </button>
 
-                  {/* Manual Run */}
+                  {}
                   <button
                     onClick={() => handleSimulate(flow.id)}
                     disabled={isSimulating}
@@ -223,10 +223,10 @@ export const ActionFlows = () => {
                 </div>
               </div>
 
-              {/* VISUAL FLOW CANVAS NODES CHIPS */}
+              {}
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center relative z-10">
                 
-                {/* Node 1: Trigger */}
+                {}
                 <div className={`p-4 dark:bg-slate-950 bg-slate-50 rounded-2xl border text-center relative transition-all duration-300 ${
                   isSimulating && simulationStep === 1 
                     ? 'border-indigo-500 ring-2 ring-indigo-500/20 shadow-md shadow-indigo-950/20' 
@@ -236,12 +236,12 @@ export const ActionFlows = () => {
                   <div className="text-xs font-bold text-slate-700 dark:text-white">{flow.trigger}</div>
                 </div>
 
-                {/* Arrow */}
+                {}
                 <div className="hidden md:flex justify-center text-slate-400 dark:text-slate-600">
                   <ArrowRight size={18} className={isSimulating && simulationStep === 1 ? 'animate-pulse text-indigo-500' : ''} />
                 </div>
 
-                {/* Node 2: Filter */}
+                {}
                 <div className={`p-4 dark:bg-slate-950 bg-slate-50 rounded-2xl border text-center relative transition-all duration-300 ${
                   isSimulating && simulationStep === 2 
                     ? 'border-indigo-500 ring-2 ring-indigo-500/20 shadow-md shadow-indigo-950/20' 
@@ -251,12 +251,12 @@ export const ActionFlows = () => {
                   <div className="text-xs font-bold text-slate-700 dark:text-white">{flow.condition}</div>
                 </div>
 
-                {/* Arrow */}
+                {}
                 <div className="hidden md:flex justify-center text-slate-400 dark:text-slate-600">
                   <ArrowRight size={18} className={isSimulating && simulationStep === 2 ? 'animate-pulse text-indigo-500' : ''} />
                 </div>
 
-                {/* Node 3: Action */}
+                {}
                 <div className={`p-4 dark:bg-slate-950 bg-slate-50 rounded-2xl border text-center relative transition-all duration-300 ${
                   isSimulating && simulationStep === 3 
                     ? 'border-indigo-500 ring-2 ring-indigo-500/20 shadow-md shadow-indigo-950/20' 
@@ -270,7 +270,7 @@ export const ActionFlows = () => {
                 </div>
               </div>
 
-              {/* Local console log records */}
+              {}
               <div className="mt-6">
                 <div className="text-[10px] text-slate-500 font-bold mb-2 flex items-center gap-1.5">
                   <Terminal size={12} /> execution_history.log

@@ -4,7 +4,7 @@ import { Search, Sparkles, Settings, Users, ArrowRight, ShieldAlert, Sliders, To
 import { useStore } from '../store/uiStore';
 
 export const GlobalSearch = () => {
-  const { isSearchOpen, toggleSearch, getClients, toggleMasking, isMaskingEnabled, setMaskingEnabled } = useStore();
+  const { isSearchOpen, toggleSearch, toggleMasking, isMaskingEnabled, setMaskingEnabled, productionClients, sandboxClients, environment } = useStore();
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const navigate = useNavigate();
@@ -34,18 +34,18 @@ export const GlobalSearch = () => {
 
   if (!isSearchOpen) return null;
 
-  const clients = getClients();
+  const clients = environment === 'production' ? productionClients : sandboxClients;
 
-  // Create list of search targets
+  
   const items = [
-    // Pages / Routes
+    
     { id: 'route-dashboard', title: 'Go to Dashboard Overview', category: 'Navigation', icon: Sliders, action: () => navigate('/') },
     { id: 'route-clients', title: 'Go to Client Management', category: 'Navigation', icon: Users, action: () => navigate('/clients') },
     { id: 'route-ai', title: 'Go to AI Playground & Scaffold', category: 'Navigation', icon: Sparkles, action: () => navigate('/ai-studio') },
     { id: 'route-automation', title: 'Go to Action Flows Builder', category: 'Navigation', icon: ShieldAlert, action: () => navigate('/automation') },
     { id: 'route-security', title: 'Go to Matrix Security & RBAC', category: 'Navigation', icon: Settings, action: () => navigate('/security') },
     
-    // Toggles / Quick actions
+    
     { 
       id: 'action-masking', 
       title: `${isMaskingEnabled ? 'Disable' : 'Enable'} PII Data Masking`, 
@@ -54,7 +54,7 @@ export const GlobalSearch = () => {
       action: () => setMaskingEnabled(!isMaskingEnabled) 
     },
     
-    // Clients Data
+    
     ...clients.map(c => ({
       id: `client-${c.id}`,
       title: `${c.name} (${c.email}) - Revenue: $${c.amount.toLocaleString()}`,
@@ -64,7 +64,7 @@ export const GlobalSearch = () => {
     }))
   ];
 
-  // Filter items
+  
   const filtered = items.filter(item => 
     item.title.toLowerCase().includes(query.toLowerCase()) ||
     item.category.toLowerCase().includes(query.toLowerCase())
@@ -92,7 +92,7 @@ export const GlobalSearch = () => {
         className="w-full max-w-2xl bg-slate-900/90 border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[500px]"
         onKeyDown={handleKeyDown}
       >
-        {/* Search Input */}
+        {}
         <div className="flex items-center px-4 py-4 border-b border-white/5">
           <Search className="text-slate-400 mr-3" size={20} />
           <input
@@ -110,7 +110,7 @@ export const GlobalSearch = () => {
           </button>
         </div>
 
-        {/* Results */}
+        {}
         <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
           {filtered.length === 0 ? (
             <div className="py-12 text-center text-slate-500 text-sm">
@@ -146,7 +146,7 @@ export const GlobalSearch = () => {
           )}
         </div>
 
-        {/* Footer */}
+        {}
         <div className="px-4 py-3 bg-slate-950/40 border-t border-white/5 flex justify-between items-center text-[10px] text-slate-500 font-medium">
           <div className="flex gap-3">
             <span>↑↓ to navigate</span>

@@ -9,24 +9,25 @@ import { toast } from 'sonner';
 
 export const Overview = () => {
   const { 
-    widgets, reorderWidgets, removeWidget, addWidget, getClients, 
-    telemetry, fetchTelemetry, environment, isMaskingEnabled, theme
+    widgets, reorderWidgets, removeWidget, addWidget, 
+    telemetry, fetchTelemetry, environment, isMaskingEnabled, theme,
+    productionClients, sandboxClients
   } = useStore();
   const [pulseLogs, setPulseLogs] = useState([]);
 
-  const clients = getClients();
+  const clients = environment === 'production' ? productionClients : sandboxClients;
 
-  // 1. Calculate active telemetry data dynamically from Clients list
+  
   const totalRevenue = clients.reduce((acc, c) => acc + (c.status === 'Active' ? c.amount : 0), 0);
   const activeClientsCount = clients.filter(c => c.status === 'Active').length;
 
-  // Mask function helper
+  
   const maskValue = (val, isCurrency = true) => {
     if (!isMaskingEnabled) return isCurrency ? `$${val.toLocaleString()}` : val;
     return isCurrency ? '$••••••' : '••••••';
   };
 
-  // 2. Poll live telemetry every 3 seconds
+  
   useEffect(() => {
     fetchTelemetry();
     const interval = setInterval(() => {
@@ -35,14 +36,14 @@ export const Overview = () => {
     return () => clearInterval(interval);
   }, [fetchTelemetry]);
 
-  // Update scrolling logs when telemetry ticks
+  
   useEffect(() => {
     if (telemetry.lastEvent) {
       setPulseLogs(prev => [telemetry.lastEvent, ...prev.slice(0, 9)]);
     }
   }, [telemetry.lastEvent]);
 
-  // 3. Move widgets for Flex Board layout reordering
+  
   const moveWidget = (index, direction) => {
     const nextIndex = index + direction;
     if (nextIndex < 0 || nextIndex >= widgets.length) return;
@@ -54,7 +55,7 @@ export const Overview = () => {
     toast.success("Dashboard layout updated");
   };
 
-  // Seed chart data dynamically using database client amounts
+  
   const chartData = [
     { name: 'Mon', val: totalRevenue * 0.7 },
     { name: 'Tue', val: totalRevenue * 0.8 },
@@ -73,7 +74,7 @@ export const Overview = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       
-      {/* Top Controls & Widget Drawer */}
+      {}
       <div className="flex justify-between items-center dark:bg-slate-900/40 bg-white p-4 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm">
         <div>
           <h1 className="text-xl font-bold text-slate-800 dark:text-white">Interactive Flex Board</h1>
@@ -98,7 +99,7 @@ export const Overview = () => {
         </div>
       </div>
 
-      {/* Grid of Custom Draggable/Shiftable widgets */}
+      {}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {widgets.map((widget, idx) => {
           return (
@@ -109,7 +110,7 @@ export const Overview = () => {
               }`}
             >
               
-              {/* Widget Header Controls */}
+              {}
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
                   <ActivitySquare size={14} className="text-indigo-500 dark:text-indigo-400" />
@@ -142,7 +143,7 @@ export const Overview = () => {
                 </div>
               </div>
 
-              {/* Widget Body Content */}
+              {}
               <div className="flex-1">
                 {widget.type === 'stats' && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -174,7 +175,7 @@ export const Overview = () => {
 
                 {widget.type === 'live-pulse' && (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {/* Live Telemetry Progress Rings */}
+                    {}
                     <div className="dark:bg-slate-950/40 bg-slate-50 p-4 rounded-xl border border-slate-200 dark:border-white/5 flex flex-col items-center justify-center shadow-sm">
                       <div className="relative w-16 h-16 flex items-center justify-center">
                         <svg className="w-full h-full transform -rotate-90">
@@ -197,7 +198,7 @@ export const Overview = () => {
                       <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-2">RAM LOAD</span>
                     </div>
 
-                    {/* Console logger */}
+                    {}
                     <div className="md:col-span-3 dark:bg-slate-950 bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-white/5 h-44 overflow-y-auto custom-scrollbar font-mono text-[10px] text-emerald-400 space-y-1">
                       <div className="text-slate-500 border-b border-white/5 pb-1 flex justify-between">
                         <span>LIVE TELEMETRY pulse.log</span>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { 
   Settings as SettingsIcon, Eye, EyeOff, Sun, Moon, 
   Database, UserCheck, ShieldAlert, Sparkles, Ghost 
@@ -26,7 +26,7 @@ export const Settings = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       
-      {/* Introduction */}
+      {}
       <div className="dark:bg-slate-900/40 bg-white p-5 rounded-2xl border border-slate-200 dark:border-white/5 flex justify-between items-center shadow-sm">
         <div>
           <h1 className="text-xl font-bold text-slate-805 dark:text-white">System Settings</h1>
@@ -36,7 +36,7 @@ export const Settings = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        {/* PANEL 1: PII Masking Engine */}
+        {}
         <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 p-6 rounded-3xl shadow-md flex flex-col justify-between">
           <div className="space-y-3">
             <h3 className="text-sm font-bold text-slate-800 dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
@@ -72,7 +72,7 @@ export const Settings = () => {
           </div>
         </div>
 
-        {/* PANEL 2: Ghost Mode (User Impersonation) */}
+        {}
         <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 p-6 rounded-3xl shadow-md flex flex-col justify-between">
           <div className="space-y-3">
             <h3 className="text-sm font-bold text-slate-800 dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
@@ -112,7 +112,7 @@ export const Settings = () => {
           </div>
         </div>
 
-        {/* PANEL 3: Safe Stage Environment */}
+        {}
         <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 p-6 rounded-3xl shadow-md flex flex-col justify-between">
           <div className="space-y-3">
             <h3 className="text-sm font-bold text-slate-800 dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">
@@ -151,7 +151,7 @@ export const Settings = () => {
           </div>
         </div>
 
-        {/* PANEL 4: Color Theme Switcher */}
+        {}
         <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 p-6 rounded-3xl shadow-md flex flex-col justify-between">
           <div className="space-y-3">
             <h3 className="text-sm font-bold text-slate-800 dark:text-slate-400 uppercase tracking-widest flex items-center gap-2">

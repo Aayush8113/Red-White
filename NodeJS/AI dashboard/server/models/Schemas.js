@@ -1,8 +1,7 @@
-import mongoose from 'mongoose';
+﻿import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-// 1. Client Schema
 const ClientSchema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
@@ -11,7 +10,6 @@ const ClientSchema = new Schema({
   date: { type: String, default: () => new Date().toISOString().split('T')[0] }
 });
 
-// 2. Audit Log Schema
 const AuditLogSchema = new Schema({
   actionType: { type: String, required: true },
   actor: { type: String, default: 'SYSTEM' },
@@ -21,7 +19,6 @@ const AuditLogSchema = new Schema({
   location: { type: String, default: 'Local Server' }
 });
 
-// 3. Session Schema
 const SessionSchema = new Schema({
   device: { type: String, required: true },
   browser: { type: String },
@@ -31,7 +28,6 @@ const SessionSchema = new Schema({
   isCurrent: { type: Boolean, default: false }
 });
 
-// 4. Action Flow Schema
 const FlowSchema = new Schema({
   name: { type: String, required: true },
   trigger: { type: String, required: true },
@@ -41,7 +37,6 @@ const FlowSchema = new Schema({
   logs: { type: [String], default: [] }
 });
 
-// 5. Permission / RBAC Schema
 const PermissionSchema = new Schema({
   role: { type: String, required: true, unique: true },
   read: { type: Boolean, default: true },

@@ -8,35 +8,36 @@ import { toast } from "sonner";
 
 export const Clients = () => {
   const { 
-    getClients, addClient, updateClient, deleteClient, executeBulkAction, 
-    hasPermission, isMaskingEnabled, getActiveRole, theme
+    addClient, updateClient, deleteClient, executeBulkAction, 
+    hasPermission, isMaskingEnabled, getActiveRole, theme,
+    productionClients, sandboxClients, environment
   } = useStore();
 
-  const clients = getClients();
+  const clients = environment === 'production' ? productionClients : sandboxClients;
 
-  // Search & Filter state
+  
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   
-  // CRUD Modal State
+  
   const [isCrudModalOpen, setIsCrudModalOpen] = useState(false);
-  const [editingClient, setEditingClient] = useState(null); // null means "creating"
+  const [editingClient, setEditingClient] = useState(null); 
   const [formData, setFormData] = useState({ name: '', email: '', status: 'Active', amount: '' });
 
-  // Bulk Engine state
+  
   const [bulkFilter, setBulkFilter] = useState('all');
   const [bulkAction, setBulkAction] = useState('activate');
   const [isBulkRunning, setIsBulkRunning] = useState(false);
 
-  // Split View state
+  
   const [selectedIds, setSelectedIds] = useState([]);
   const [isSplitViewOpen, setIsSplitViewOpen] = useState(false);
 
-  // Permission Checks
+  
   const canWrite = hasPermission('write');
   const canDelete = hasPermission('delete');
 
-  // PII Masking utility
+  
   const maskEmail = (email) => {
     if (!isMaskingEnabled) return email;
     const [name, domain] = email.split('@');
@@ -54,7 +55,7 @@ export const Clients = () => {
     return '$••••••';
   };
 
-  // CRUD Actions
+  
   const handleOpenCreate = () => {
     if (!canWrite) {
       toast.error(`Access Denied: Role '${getActiveRole()}' lacks write permissions.`);
@@ -113,7 +114,7 @@ export const Clients = () => {
     setSelectedIds(prev => prev.filter(selectedId => selectedId !== id));
   };
 
-  // Bulk Engine Dispatcher
+  
   const handleExecuteBulk = () => {
     if (!canWrite) {
       toast.error(`Access Denied: Role '${getActiveRole()}' lacks write permissions to execute Bulk Engine.`);
@@ -129,7 +130,7 @@ export const Clients = () => {
     }, 1200);
   };
 
-  // Split View selection handler
+  
   const handleSelectRow = (id) => {
     if (selectedIds.includes(id)) {
       setSelectedIds(prev => prev.filter(x => x !== id));
@@ -142,7 +143,7 @@ export const Clients = () => {
     }
   };
 
-  // Filter clients
+  
   const filteredClients = clients.filter(c => {
     const matchesSearch = c.name.toLowerCase().includes(search.toLowerCase()) || 
                           c.email.toLowerCase().includes(search.toLowerCase());
@@ -155,7 +156,7 @@ export const Clients = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       
-      {/* 1. Bulk Engine Management Board */}
+      {}
       <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 p-6 rounded-2xl shadow-sm">
         <h3 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-widest flex items-center gap-2 mb-4">
           <ShieldAlert size={16} className="text-amber-500" />
@@ -198,10 +199,10 @@ export const Clients = () => {
         </div>
       </div>
 
-      {/* 2. Client Grid header */}
+      {}
       <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
         <div className="flex-1 flex gap-2">
-          {/* Search bar */}
+          {}
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3.5 top-3 text-slate-500 w-4 h-4" />
             <input 
@@ -212,7 +213,7 @@ export const Clients = () => {
               className="w-full dark:bg-slate-900 bg-white border border-slate-200 dark:border-white/5 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500 shadow-sm" 
             />
           </div>
-          {/* Status selector filter */}
+          {}
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
@@ -226,7 +227,7 @@ export const Clients = () => {
         </div>
 
         <div className="flex gap-2">
-          {/* Split View activator */}
+          {}
           {selectedIds.length === 2 && (
             <button
               onClick={() => setIsSplitViewOpen(true)}
@@ -236,7 +237,7 @@ export const Clients = () => {
             </button>
           )}
 
-          {/* Add Client Trigger */}
+          {}
           <button 
             onClick={handleOpenCreate}
             className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-indigo-900/10"
@@ -246,7 +247,7 @@ export const Clients = () => {
         </div>
       </div>
 
-      {/* 3. Clients Data Grid Table */}
+      {}
       <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 rounded-2xl overflow-hidden shadow-md">
         <table className="w-full text-left text-xs text-slate-500 dark:text-slate-400">
           <thead className="dark:bg-slate-950/40 bg-slate-50 text-slate-500 dark:text-slate-400 uppercase tracking-widest text-[9px] font-bold border-b border-slate-200 dark:border-white/5">
@@ -265,7 +266,7 @@ export const Clients = () => {
               return (
                 <tr key={c._id || c.id} className={`hover:bg-slate-50 dark:hover:bg-white/2 transition-colors ${isSelected ? 'bg-indigo-600/5 dark:bg-indigo-600/5' : ''}`}>
                   
-                  {/* Select row checkbox */}
+                  {}
                   <td className="px-6 py-4 text-center">
                     <button
                       onClick={() => handleSelectRow(c._id || c.id)}
@@ -279,13 +280,13 @@ export const Clients = () => {
                     </button>
                   </td>
 
-                  {/* Client name / Email details */}
+                  {}
                   <td className="px-6 py-4">
                     <div className="font-bold text-slate-800 dark:text-white text-sm">{maskName(c.name)}</div>
                     <div className="text-slate-500 text-[10px] mt-0.5">{maskEmail(c.email)}</div>
                   </td>
 
-                  {/* Status pills */}
+                  {}
                   <td className="px-6 py-4">
                     <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${
                       c.status === 'Active' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20' :
@@ -294,13 +295,13 @@ export const Clients = () => {
                     }`}>{c.status}</span>
                   </td>
 
-                  {/* Revenue Rate */}
+                  {}
                   <td className="px-6 py-4 text-slate-800 dark:text-white font-semibold">{maskAmount(c.amount)}</td>
 
-                  {/* Log Date */}
+                  {}
                   <td className="px-6 py-4">{c.date}</td>
 
-                  {/* Actions buttons */}
+                  {}
                   <td className="px-6 py-4 text-right">
                     <div className="flex gap-2 justify-end">
                       <button 
@@ -332,7 +333,7 @@ export const Clients = () => {
         )}
       </div>
 
-      {/* 4. CRUD Modals Dialogs */}
+      {}
       {isCrudModalOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-md dark:bg-slate-900 bg-white border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl p-6 relative">
@@ -417,7 +418,7 @@ export const Clients = () => {
         </div>
       )}
 
-      {/* 5. Split View Side-by-Side Comparer Modal */}
+      {}
       {isSplitViewOpen && (
         (() => {
           const compClients = clients.filter(c => selectedIds.includes(c._id || c.id));
@@ -441,7 +442,7 @@ export const Clients = () => {
                 </h3>
 
                 <div className="grid grid-cols-2 gap-6 divide-x divide-slate-100 dark:divide-white/5">
-                  {/* Client 1 Column */}
+                  {}
                   <div className="pr-3 space-y-4">
                     <div className="bg-indigo-600/5 p-4 rounded-2xl border border-indigo-500/10">
                       <div className="text-[10px] text-indigo-500 dark:text-indigo-400 font-bold uppercase tracking-wider mb-1">Entity Reference A</div>
@@ -454,13 +455,13 @@ export const Clients = () => {
                       <CompareRow label="Arr Revenue rate" val={maskAmount(c1.amount)} highlight={c1.amount !== c2.amount} textClass={compareRowColor} />
                       <CompareRow label="System Log Date" val={c1.date} highlight={c1.date !== c2.date} textClass={compareRowColor} />
                       
-                      {/* Mocked Churn Prediction telemetry fields */}
+                      {}
                       <CompareRow label="AI Churn Threat Risk" val={c1.amount > 50000 ? "Low Churn Risk (2.4%)" : "Medium Risk (14.2%)"} color={c1.amount > 50000 ? 'text-emerald-650 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'} highlight textClass={compareRowColor} />
                       <CompareRow label="Index Health Score" val={c1.status === 'Cancelled' ? '0/100' : c1.amount > 80000 ? '98/100' : '82/100'} highlight textClass={compareRowColor} />
                     </div>
                   </div>
 
-                  {/* Client 2 Column */}
+                  {}
                   <div className="pl-6 space-y-4">
                     <div className="bg-amber-500/5 p-4 rounded-2xl border border-amber-500/10">
                       <div className="text-[10px] text-amber-600 dark:text-amber-500 font-bold uppercase tracking-wider mb-1">Entity Reference B</div>
@@ -473,7 +474,7 @@ export const Clients = () => {
                       <CompareRow label="Arr Revenue rate" val={maskAmount(c2.amount)} highlight={c1.amount !== c2.amount} textClass={compareRowColor} />
                       <CompareRow label="System Log Date" val={c2.date} highlight={c1.date !== c2.date} textClass={compareRowColor} />
                       
-                      {/* Mocked Churn Prediction telemetry fields */}
+                      {}
                       <CompareRow label="AI Churn Threat Risk" val={c2.amount > 50000 ? "Low Churn Risk (2.4%)" : "Medium Risk (14.2%)"} color={c2.amount > 50000 ? 'text-emerald-650 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'} highlight textClass={compareRowColor} />
                       <CompareRow label="Index Health Score" val={c2.status === 'Cancelled' ? '0/100' : c2.amount > 80000 ? '98/100' : '82/100'} highlight textClass={compareRowColor} />
                     </div>

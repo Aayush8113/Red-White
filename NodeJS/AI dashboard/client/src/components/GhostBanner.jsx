@@ -1,4 +1,4 @@
-import { useStore } from '../store/uiStore';
+﻿import { useStore } from '../store/uiStore';
 import { EyeOff, X } from 'lucide-react';
 
 export const GhostBanner = () => {

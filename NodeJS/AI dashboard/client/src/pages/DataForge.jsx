@@ -4,8 +4,8 @@ import { useStore } from '../store/uiStore';
 import { toast } from 'sonner';
 
 export const DataForge = () => {
-  const { getClients, importClients, environment } = useStore();
-  const clients = getClients();
+  const { importClients, environment, productionClients, sandboxClients } = useStore();
+  const clients = environment === 'production' ? productionClients : sandboxClients;
 
   const [inputData, setInputData] = useState('');
   const [detectedHeaders, setDetectedHeaders] = useState([]);
@@ -33,7 +33,7 @@ export const DataForge = () => {
     toast.success(`Raw ${key} JSON template loaded! Click 'Analyze Structure' next.`);
   };
 
-  // Analyze parsed JSON array structure
+  
   const handleAnalyze = () => {
     try {
       const data = JSON.parse(inputData);
@@ -46,12 +46,12 @@ export const DataForge = () => {
         return;
       }
 
-      // Collect all keys
+      
       const keys = Array.from(new Set(data.flatMap(obj => Object.keys(obj))));
       setDetectedHeaders(keys);
       setParsedData(data);
 
-      // Auto-match mapper defaults
+      
       const initialMap = { name: '', email: '', status: '', amount: '' };
       keys.forEach((h) => {
         const lower = h.toLowerCase();
@@ -67,7 +67,7 @@ export const DataForge = () => {
     }
   };
 
-  // Import matched columns to database clients
+  
   const handleImport = () => {
     if (!mapping.name || !mapping.email) {
       toast.error("Mapping Required: Name and Email keys must be mapped.");
@@ -96,7 +96,7 @@ export const DataForge = () => {
     setInputData('');
   };
 
-  // Export database collection
+  
   const handleExportData = (format) => {
     let outputContent = "";
     let fileExtension = format;
@@ -106,7 +106,7 @@ export const DataForge = () => {
     if (format === 'json') {
       outputContent = JSON.stringify(clients, null, 2);
     } else {
-      // CSV format
+      
       const headers = ["ID", "Name", "Email", "Status", "Revenue Rate", "Date Logged"];
       const rows = clients.map(c => [
         c._id || c.id,
@@ -135,7 +135,7 @@ export const DataForge = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-in fade-in duration-500">
       
-      {/* LEFT: IMPORT MATRIX */}
+      {}
       <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 rounded-3xl p-6 flex flex-col justify-between h-[650px] shadow-2xl overflow-y-auto custom-scrollbar">
         <div className="space-y-6">
           <div className="flex flex-col border-b border-slate-200 dark:border-white/5 pb-4 gap-3">
@@ -187,7 +187,7 @@ export const DataForge = () => {
             </button>
           </div>
 
-          {/* Schema Mapping Fields */}
+          {}
           {detectedHeaders.length > 0 && (
             <div className="space-y-4 animate-in slide-in-from-bottom duration-300">
               <h4 className="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider">Field Mapping Matrix</h4>
@@ -255,7 +255,7 @@ export const DataForge = () => {
         </div>
       </div>
 
-      {/* RIGHT: EXPORT MATRIX */}
+      {}
       <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 rounded-3xl p-6 flex flex-col justify-between h-[650px] shadow-2xl">
         <div className="space-y-6">
           <div className="border-b border-slate-200 dark:border-white/5 pb-4">
@@ -267,7 +267,7 @@ export const DataForge = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* CSV export */}
+            {}
             <div className="dark:bg-slate-950/40 bg-slate-50 border border-slate-200 dark:border-white/5 p-5 rounded-2xl text-center flex flex-col justify-between h-48 hover:border-indigo-500/20 transition-colors shadow-sm">
               <div className="flex flex-col items-center">
                 <FileSpreadsheet className="text-indigo-500 dark:text-indigo-400 mb-2" size={24} />
@@ -282,7 +282,7 @@ export const DataForge = () => {
               </button>
             </div>
 
-            {/* JSON export */}
+            {}
             <div className="dark:bg-slate-950/40 bg-slate-50 border border-slate-200 dark:border-white/5 p-5 rounded-2xl text-center flex flex-col justify-between h-48 hover:border-indigo-500/20 transition-colors shadow-sm">
               <div className="flex flex-col items-center">
                 <Database className="text-indigo-500 dark:text-indigo-400 mb-2" size={24} />

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store/uiStore';
 import { ShieldCheck, LogIn, Chrome, HelpCircle, KeyRound, Sparkles } from 'lucide-react';
@@ -12,7 +12,7 @@ export const Login = () => {
   const [username, setUsername] = useState('Aayush');
   const [password, setPassword] = useState('••••••••');
   const [role, setRole] = useState('Admin');
-  const [step, setStep] = useState('credentials'); // 'credentials' | 'mfa'
+  const [step, setStep] = useState('credentials'); 
   const [mfaCode, setMfaCode] = useState('');
 
   const handleCredentialsSubmit = (e) => {
@@ -60,13 +60,13 @@ export const Login = () => {
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col justify-center items-center px-4 relative overflow-hidden">
-      {/* Background Orbs */}
+      {}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="w-full max-w-md bg-slate-900/40 backdrop-blur-xl border border-white/5 p-8 rounded-3xl shadow-2xl relative z-10">
         
-        {/* Brand Brand */}
+        {}
         <div className="flex flex-col items-center mb-8">
           <Logo className="w-14 h-14 mb-3" />
           <h1 className="text-2xl font-black tracking-tight text-white flex items-center gap-1.5">
@@ -77,7 +77,7 @@ export const Login = () => {
 
         {step === 'credentials' ? (
           <>
-            {/* Standard Login */}
+            {}
             <form onSubmit={handleCredentialsSubmit} className="space-y-4">
               <div>
                 <label className="text-xs text-slate-400 font-bold block mb-1">USERNAME / EMAIL</label>
@@ -100,7 +100,7 @@ export const Login = () => {
                 />
               </div>
 
-              {/* Role Select Matrix */}
+              {}
               <div>
                 <label className="text-xs text-slate-400 font-bold block mb-1.5">RBAC ROLE SELECTOR</label>
                 <div className="grid grid-cols-3 gap-2">
@@ -142,7 +142,7 @@ export const Login = () => {
               )}
             </form>
 
-            {/* Quick Demo Identities */}
+            {}
             <div className="mt-8 pt-6 border-t border-white/5">
               <span className="text-[10px] text-slate-500 font-bold block mb-3 uppercase tracking-wider">Quick Select Profiles (RBAC Demo)</span>
               <div className="grid grid-cols-3 gap-2">
@@ -171,7 +171,7 @@ export const Login = () => {
             </div>
           </>
         ) : (
-          /* MFA OTP Input form */
+          
           <form onSubmit={handleMfaSubmit} className="space-y-6">
             <div className="text-center">
               <KeyRound size={32} className="mx-auto text-indigo-400 mb-2 animate-bounce" />
@@ -210,7 +210,7 @@ export const Login = () => {
         )}
       </div>
 
-      {/* Security Shield Watermark */}
+      {}
       <div className="mt-8 flex items-center gap-1.5 text-slate-600 text-xs">
         <Sparkles size={14} />
         <span>Secured by AetherShield v5.0 (Sandbox Stage Active)</span>

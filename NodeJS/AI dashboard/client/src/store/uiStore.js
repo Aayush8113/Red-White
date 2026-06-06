@@ -1,13 +1,13 @@
-import { create } from 'zustand';
+﻿import { create } from 'zustand';
 
 export const useStore = create((set, get) => ({
-  // 1. UI Shell State
+  
   isSidebarOpen: true,
   isAiOpen: false,
   isSearchOpen: false,
   isInboxOpen: false,
   theme: localStorage.getItem('aetherforge_theme') || 'dark',
-  environment: 'production', // 'production' | 'sandbox'
+  environment: 'production', 
   isMaskingEnabled: false,
 
   toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
@@ -31,7 +31,7 @@ export const useStore = create((set, get) => ({
     await get().addAuditLog('PII_MASKING_TOGGLE', `PII Data Masking set to ${isMaskingEnabled}`);
   },
 
-  // 2. Authentication State
+  
   user: (() => {
     try {
       const saved = localStorage.getItem('aetherforge_user');
@@ -59,7 +59,7 @@ export const useStore = create((set, get) => ({
         get().syncData();
       }
     } catch (err) {
-      // Offline fallback
+      
       const userObj = { name, role, avatar: name.substring(0, 2).toUpperCase() };
       localStorage.setItem('aetherforge_user', JSON.stringify(userObj));
       set({ user: userObj, isAuthenticated: true });
@@ -110,7 +110,7 @@ export const useStore = create((set, get) => ({
     }
   },
 
-  // 3. User Impersonation (Ghost Mode)
+  
   impersonatedUser: null,
   startImpersonation: (role) => {
     const mockImpersonated = {
@@ -132,7 +132,7 @@ export const useStore = create((set, get) => ({
     return state.user?.role || 'Guest';
   },
 
-  // 4. Matrix Auth (RBAC permissions grid)
+  
   matrixAuth: {
     Admin: { read: true, write: true, delete: true, system: true, export: true },
     Editor: { read: true, write: true, delete: false, system: false, export: true },
@@ -145,7 +145,7 @@ export const useStore = create((set, get) => ({
       const res = await fetch('/api/permissions');
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
-        // Convert backend array [{ role, read, write, ... }] to frontend object map
+        
         const mapped = {};
         data.forEach(item => {
           mapped[item.role] = {
@@ -159,7 +159,7 @@ export const useStore = create((set, get) => ({
         set({ matrixAuth: mapped });
       }
     } catch (err) {
-      // Keep initial local permissions
+      
     }
   },
 
@@ -197,7 +197,7 @@ export const useStore = create((set, get) => ({
     return state.matrixAuth[role]?.[permKey] || false;
   },
 
-  // 5. Data Tables (MERN CRUD integration)
+  
   productionClients: [],
   sandboxClients: [],
 
@@ -219,7 +219,7 @@ export const useStore = create((set, get) => ({
         }
       }
     } catch (err) {
-      // offline default values if empty
+      
       if (env === 'production' && get().productionClients.length === 0) {
         set({ productionClients: [
           { id: 1, name: "TechCorp Inc.", email: "contact@techcorp.com", status: "Active", amount: 125000, date: "2025-12-15" },
@@ -247,7 +247,7 @@ export const useStore = create((set, get) => ({
         get().fetchFlows();
       }
     } catch (err) {
-      // Fallback
+      
       const isProd = env === 'production';
       const newId = Date.now();
       const newClient = { ...client, id: newId, amount: parseFloat(client.amount) || 0, date: new Date().toISOString().split('T')[0] };
@@ -275,7 +275,7 @@ export const useStore = create((set, get) => ({
         get().fetchAuditLogs();
       }
     } catch (err) {
-      // Offline fallback
+      
       const env = get().environment;
       const isProd = env === 'production';
       const clientsList = isProd ? get().productionClients : get().sandboxClients;
@@ -300,7 +300,7 @@ export const useStore = create((set, get) => ({
         get().fetchAuditLogs();
       }
     } catch (err) {
-      // Offline fallback
+      
       const env = get().environment;
       const isProd = env === 'production';
       const clientKey = isProd ? 'productionClients' : 'sandboxClients';
@@ -309,7 +309,7 @@ export const useStore = create((set, get) => ({
     }
   },
 
-  // 6. Bulk Engine (MERN API)
+  
   executeBulkAction: async (filterType, operationType) => {
     const env = get().environment;
     try {
@@ -326,7 +326,7 @@ export const useStore = create((set, get) => ({
         get().fetchAuditLogs();
       }
     } catch (err) {
-      // Offline fallback
+      
       set((state) => {
         const clientKey = env === 'production' ? 'productionClients' : 'sandboxClients';
         let affected = 0;
@@ -349,7 +349,7 @@ export const useStore = create((set, get) => ({
     }
   },
 
-  // 7. Data Forge Import (MERN API)
+  
   importClients: async (parsedClients) => {
     const env = get().environment;
     try {
@@ -366,7 +366,7 @@ export const useStore = create((set, get) => ({
         get().fetchAuditLogs();
       }
     } catch (err) {
-      // Offline fallback
+      
       const withIds = parsedClients.map((c, idx) => ({
         id: Date.now() + idx,
         name: c.name || 'Unnamed Import',
@@ -381,7 +381,7 @@ export const useStore = create((set, get) => ({
     }
   },
 
-  // 8. Immutable Audit Logging (Black Box)
+  
   auditLogs: [],
   
   fetchAuditLogs: async () => {
@@ -392,7 +392,7 @@ export const useStore = create((set, get) => ({
         set({ auditLogs: data });
       }
     } catch (err) {
-      // offline placeholder
+      
     }
   },
 
@@ -404,7 +404,7 @@ export const useStore = create((set, get) => ({
         set({ sessions: data });
       }
     } catch (err) {
-      // offline fallback
+      
       if (get().sessions.length === 0) {
         set({ sessions: [
           { id: 'session-1', device: 'Windows Desktop (Chrome)', ip: '192.168.1.102', location: 'Mumbai, India', isCurrent: true, activeAt: 'Just now' },
@@ -415,11 +415,11 @@ export const useStore = create((set, get) => ({
   },
 
   addAuditLog: async (actionType, details) => {
-    // Standard trigger in store, makes a local-fallback audit log write
+    
     const activeRole = get().getActiveRole();
     const activeActor = get().user ? `${get().user.name} (${activeRole})` : 'SYSTEM';
     
-    // We can also post it directly to the server if needed, or trigger via backend routing actions.
+    
     const newLog = {
       id: `log-${Date.now()}`,
       timestamp: new Date().toISOString(),
@@ -433,7 +433,7 @@ export const useStore = create((set, get) => ({
     set((state) => ({ auditLogs: [newLog, ...state.auditLogs] }));
   },
 
-  // 9. Flex Board Layout
+  
   widgets: [
     { id: 'stats', name: 'Key Telemetry', size: 'lg', type: 'stats' },
     { id: 'revenue', name: 'Revenue Analytics', size: 'lg', type: 'chart' },
@@ -465,7 +465,7 @@ export const useStore = create((set, get) => ({
     return { widgets: [...state.widgets, newWidget] };
   }),
 
-  // 10. Inbox Hub & Alerts
+  
   inboxAlerts: [
     { id: 1, type: 'alert', title: 'High API Latency Detected', description: 'Referral traffic source API latency rose above 450ms.', category: 'Telemetry', read: false, time: '10m ago' },
     { id: 2, type: 'task', title: 'Verify Matrix Auth settings', description: 'Ensure the Guest role cannot perform client exports.', category: 'Security', read: false, time: '1h ago' },
@@ -487,7 +487,7 @@ export const useStore = create((set, get) => ({
     ]
   })),
 
-  // 11. Action Flows state (MERN integration)
+  
   actionFlows: [],
 
   fetchFlows: async () => {
@@ -498,7 +498,7 @@ export const useStore = create((set, get) => ({
         set({ actionFlows: data });
       }
     } catch (err) {
-      // fallback
+      
     }
   },
 
@@ -522,7 +522,7 @@ export const useStore = create((set, get) => ({
       get().fetchFlows();
       get().fetchAuditLogs();
     } catch (err) {
-      // Offline fallback log entry
+      
       const timestamp = new Date().toLocaleTimeString();
       const logEntry = `[${timestamp}] Manual run initiated. Scanning datasets... Match found. Action executed.`;
       set((state) => ({
@@ -557,7 +557,7 @@ export const useStore = create((set, get) => ({
     }
   },
 
-  // 12. Live Pulse Telemetry (MERN integration)
+  
   telemetry: { cpu: 15, ram: 59, requests: 25, lastEvent: 'System idle' },
   
   fetchTelemetry: async () => {
@@ -573,7 +573,7 @@ export const useStore = create((set, get) => ({
         }
       });
     } catch (err) {
-      // offline ticking fallback
+      
       set((state) => {
         const cpu = Math.floor(Math.random() * 20) + 10;
         const ram = Math.floor(Math.random() * 5) + 55;
@@ -583,7 +583,7 @@ export const useStore = create((set, get) => ({
     }
   },
 
-  // Synchronize entire workspace databases
+  
   syncData: () => {
     get().fetchClients();
     get().fetchAuditLogs();

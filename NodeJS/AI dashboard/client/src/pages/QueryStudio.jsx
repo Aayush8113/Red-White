@@ -8,19 +8,19 @@ import { useStore } from '../store/uiStore';
 import { toast } from 'sonner';
 
 export const QueryStudio = () => {
-  const { getClients, theme } = useStore();
-  const clients = getClients();
+  const { theme, productionClients, sandboxClients, environment } = useStore();
+  const clients = environment === 'production' ? productionClients : sandboxClients;
   const isDark = theme !== 'light';
 
-  // Builder configurations
-  const [chartType, setChartType] = useState('bar'); // 'bar' | 'area' | 'line'
-  const [xAxisKey, setXAxisKey] = useState('status'); // 'status' | 'name' | 'date'
-  const [yAxisKey, setYAxisKey] = useState('amount'); // 'amount' (revenue) | 'count' (client count)
+  
+  const [chartType, setChartType] = useState('bar'); 
+  const [xAxisKey, setXAxisKey] = useState('status'); 
+  const [yAxisKey, setYAxisKey] = useState('amount'); 
   
   const [compiledData, setCompiledData] = useState([]);
   const [hasCompiled, setHasCompiled] = useState(false);
 
-  // Dynamic compiler calculations helper
+  
   const triggerDirectCompile = (xKey, yKey, cType) => {
     if (clients.length === 0) {
       toast.error("No database records available to compile.");
@@ -29,7 +29,7 @@ export const QueryStudio = () => {
 
     let result = [];
 
-    // Grouping logic
+    
     if (xKey === 'status') {
       const groups = { Active: 0, Pending: 0, Cancelled: 0 };
       const counts = { Active: 0, Pending: 0, Cancelled: 0 };
@@ -78,7 +78,7 @@ export const QueryStudio = () => {
   const handleExport = () => {
     toast.info("Report compiled. Exporting custom JSON payload metadata...");
     
-    // Trigger download of json data
+    
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(compiledData, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
@@ -91,7 +91,7 @@ export const QueryStudio = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       
-      {/* Introduction */}
+      {}
       <div className="dark:bg-slate-900/40 bg-white p-5 rounded-2xl border border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-sm">
         <div>
           <h1 className="text-xl font-bold text-slate-800 dark:text-white">Query Studio</h1>
@@ -102,7 +102,7 @@ export const QueryStudio = () => {
         </span>
       </div>
 
-      {/* Quick compile chart templates */}
+      {}
       <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 rounded-3xl p-6 shadow-md">
         <span className="text-[10px] text-slate-500 font-bold block mb-3 uppercase tracking-wider">LIVE REPORT TEMPLATES (CLICK TO GENERATE):</span>
         <div className="flex flex-wrap gap-2.5">
@@ -129,7 +129,7 @@ export const QueryStudio = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Report configuration control board */}
+        {}
         <div className="dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 p-6 rounded-2xl flex flex-col justify-between h-fit gap-6 shadow-xl">
           <div className="space-y-4">
             <h3 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-widest flex items-center gap-1.5 border-b border-slate-100 dark:border-white/5 pb-3">
@@ -137,7 +137,7 @@ export const QueryStudio = () => {
               Configure Visualization
             </h3>
 
-            {/* Select X-Axis */}
+            {}
             <div>
               <label className="text-[10px] text-slate-500 font-bold block mb-1">X-AXIS (DIMENSION GROUP)</label>
               <select
@@ -151,7 +151,7 @@ export const QueryStudio = () => {
               </select>
             </div>
 
-            {/* Select Y-Axis */}
+            {}
             <div>
               <label className="text-[10px] text-slate-500 font-bold block mb-1">Y-AXIS (DATA METRIC)</label>
               <select
@@ -164,7 +164,7 @@ export const QueryStudio = () => {
               </select>
             </div>
 
-            {/* Select Chart Type */}
+            {}
             <div>
               <label className="text-[10px] text-slate-500 font-bold block mb-1">CHART RENDERER</label>
               <select
@@ -187,12 +187,12 @@ export const QueryStudio = () => {
           </button>
         </div>
 
-        {/* Chart rendering canvas */}
+        {}
         <div className="lg:col-span-2 dark:bg-slate-900/50 bg-white border border-slate-200 dark:border-white/5 p-6 rounded-2xl flex flex-col justify-between min-h-[400px] shadow-xl">
           {hasCompiled ? (
             <div className="flex-1 flex flex-col justify-between">
               
-              {/* Header metrics */}
+              {}
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-2">
                   <Sparkles size={16} className="text-indigo-550" />
@@ -208,7 +208,7 @@ export const QueryStudio = () => {
                 </button>
               </div>
 
-              {/* Chart */}
+              {}
               <div className="h-[280px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   {chartType === 'bar' ? (

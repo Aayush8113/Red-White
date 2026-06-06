@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+﻿import { NavLink, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, Users, Sparkles, AlertTriangle, 
   BarChart3, Database, ShieldCheck, Settings, LogOut, Code2, Lock
@@ -45,7 +45,7 @@ export const Sidebar = () => {
         ? "dark:bg-slate-900 bg-white dark:border-white/5 border-slate-200" 
         : "dark:bg-slate-900/95 bg-amber-50/95 dark:border-amber-500/20 border-amber-200 shadow-lg shadow-amber-950/10"
     )}>
-      {/* Brand */}
+      {}
       <div className="h-20 flex items-center justify-between px-6 border-b border-slate-200 dark:border-white/5">
         <div className="flex items-center gap-3">
           <Logo className="w-8 h-8" />
@@ -55,7 +55,7 @@ export const Sidebar = () => {
         </div>
       </div>
 
-      {/* Safe Stage Environment Switcher */}
+      {}
       <div className="px-4 py-3 border-b border-slate-200 dark:border-white/5 dark:bg-slate-950/20 bg-slate-50/50">
         <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-2">Safe Stage Env</div>
         <div className="grid grid-cols-2 gap-1.5 p-1 bg-slate-100 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-white/5">
@@ -84,7 +84,7 @@ export const Sidebar = () => {
         </div>
       </div>
 
-      {/* Navigation */}
+      {}
       <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto custom-scrollbar">
         {navItems.map((item) => {
           const allowed = hasPermission(item.perm);
@@ -125,7 +125,7 @@ export const Sidebar = () => {
         })}
       </nav>
 
-      {/* User / Sign Out */}
+      {}
       <div className="p-4 border-t border-slate-200 dark:border-white/5">
         <button 
           onClick={handleSignOut}

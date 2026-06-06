@@ -1,13 +1,11 @@
-import express from 'express';
+﻿import express from 'express';
 import mongoose from 'mongoose';
 import { Client, AuditLog, Session, Flow, Permission } from '../models/Schemas.js';
 
 export const router = express.Router();
 
-// Helper to check MongoDB connection state
 const isDbConnected = () => mongoose.connection.readyState === 1;
 
-// In-Memory Database Fallback
 let inMemoryDb = {
   clients: [
     { id: 1, name: "TechCorp Inc.", email: "contact@techcorp.com", status: "Active", amount: 125000, date: "2025-12-15", env: "production" },
@@ -43,7 +41,6 @@ let inMemoryDb = {
   ]
 };
 
-// Database seeding function
 export const seedDatabase = async () => {
   if (!isDbConnected()) return;
   try {
@@ -80,7 +77,6 @@ export const seedDatabase = async () => {
   }
 };
 
-// Log Audit Action helper
 const logAction = async (actionType, actor, details) => {
   const newLog = {
     actionType,
@@ -102,8 +98,6 @@ const logAction = async (actionType, actor, details) => {
     inMemoryDb.auditLogs.unshift(newLog);
   }
 };
-
-// --- AUTHENTICATION ROUTES ---
 
 router.post('/auth/login', async (req, res) => {
   const { name, role } = req.body;
@@ -137,8 +131,6 @@ router.post('/auth/logout', async (req, res) => {
   await logAction('LOGOUT', name, `User signed out`);
   res.json({ success: true });
 });
-
-// --- CLIENT ENGINE CRUD ROUTES ---
 
 router.get('/clients', async (req, res) => {
   const env = req.query.env || 'production';
@@ -177,7 +169,7 @@ router.post('/clients', async (req, res) => {
     }
   }
 
-  // In-Memory fallback
+  
   const mockId = Date.now();
   const createdMock = { id: mockId, ...newClient };
   if (env === 'production') {
@@ -205,7 +197,7 @@ router.put('/clients/:id', async (req, res) => {
     }
   }
 
-  // In-Memory
+  
   const numId = parseInt(id) || id;
   let client = inMemoryDb.clients.find(c => c.id === numId) || inMemoryDb.sandboxClients.find(c => c.id === numId);
   if (client) {
@@ -238,8 +230,6 @@ router.delete('/clients/:id', async (req, res) => {
   res.json({ success: true });
 });
 
-// --- BULK ENGINE ---
-
 router.post('/clients/bulk', async (req, res) => {
   const env = req.query.env || 'production';
   const { filterType, operationType } = req.body;
@@ -259,7 +249,7 @@ router.post('/clients/bulk', async (req, res) => {
       }
 
       if (operationType === 'bump-revenue') {
-        // Mongoose doesn't have a direct multiplication operation, so we do it via find + save or update Many with pipeline
+        
         const matchClients = await Client.find(filter);
         let affected = 0;
         for (let c of matchClients) {
@@ -279,7 +269,7 @@ router.post('/clients/bulk', async (req, res) => {
     }
   }
 
-  // In-Memory
+  
   const clientKey = env === 'production' ? 'clients' : 'sandboxClients';
   let affected = 0;
   inMemoryDb[clientKey] = inMemoryDb[clientKey].map((c) => {
@@ -300,8 +290,6 @@ router.post('/clients/bulk', async (req, res) => {
   await logAction('BULK_ACTION', actor, `Bulk Engine [${operationType}] on [${filterType}] clients (Affected: ${affected})`);
   res.json({ affected });
 });
-
-// --- DATA FORGE IMPORT ---
 
 router.post('/clients/import', async (req, res) => {
   const env = req.query.env || 'production';
@@ -327,7 +315,7 @@ router.post('/clients/import', async (req, res) => {
     }
   }
 
-  // In Memory
+  
   const withIds = formatted.map((c, idx) => ({ id: Date.now() + idx, ...c }));
   if (env === 'production') {
     inMemoryDb.clients = [...withIds, ...inMemoryDb.clients];
@@ -338,8 +326,6 @@ router.post('/clients/import', async (req, res) => {
   await logAction('DATA_FORGE_IMPORT', actor, `Imported ${formatted.length} clients via Data Forge`);
   res.status(201).json(withIds);
 });
-
-// --- AUDIT LOGS ---
 
 router.get('/audit-logs', async (req, res) => {
   if (isDbConnected()) {
@@ -352,8 +338,6 @@ router.get('/audit-logs', async (req, res) => {
   }
   res.json(inMemoryDb.auditLogs);
 });
-
-// --- SESSIONS ---
 
 router.get('/sessions', async (req, res) => {
   if (isDbConnected()) {
@@ -386,8 +370,6 @@ router.delete('/sessions/:id', async (req, res) => {
   await logAction('SESSION_TERMINATE', actor, `Terminated session on ${sessionObj?.device || id}`);
   res.json({ success: true });
 });
-
-// --- SECURITY RBAC PERMISSIONS ---
 
 router.get('/permissions', async (req, res) => {
   if (isDbConnected()) {
@@ -426,8 +408,6 @@ router.put('/permissions/:role', async (req, res) => {
   res.status(404).json({ error: 'Role not found' });
 });
 
-// --- AUTOMATION ACTION FLOWS ---
-
 router.get('/flows', async (req, res) => {
   if (isDbConnected()) {
     try {
@@ -461,7 +441,7 @@ router.post('/flows', async (req, res) => {
     }
   }
 
-  // In-Memory
+  
   const mockId = `flow-${Date.now()}`;
   const createdMock = { id: mockId, ...newFlow };
   inMemoryDb.flows.push(createdMock);
@@ -520,7 +500,6 @@ router.post('/flows/:id/manual', async (req, res) => {
   res.status(404).json({ error: 'Flow not found' });
 });
 
-// Trigger Flows Automation helper
 const triggerFlows = async (triggerType, clientData) => {
   const activeFlows = isDbConnected() ? await Flow.find({ active: true, trigger: triggerType }) : inMemoryDb.flows.filter(f => f.active && f.trigger === triggerType);
 
@@ -549,13 +528,11 @@ const triggerFlows = async (triggerType, clientData) => {
   });
 };
 
-// --- SYSTEM TELEMETRY (LIVE PULSE) ---
-
 router.get('/telemetry', (req, res) => {
-  // Mock CPU, Ram, Requests per second, Error logs
-  const cpu = Math.floor(Math.random() * 25) + 10; // 10-35%
-  const ram = Math.floor(Math.random() * 10) + 55; // 55-65%
-  const requests = Math.floor(Math.random() * 40) + 15; // 15-55 req/sec
+  
+  const cpu = Math.floor(Math.random() * 25) + 10; 
+  const ram = Math.floor(Math.random() * 10) + 55; 
+  const requests = Math.floor(Math.random() * 40) + 15; 
   
   const eventsPool = [
     'API request GET /api/clients - 200 OK',

@@ -1,4 +1,4 @@
-import express from 'express';
+﻿import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
@@ -15,14 +15,11 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/aether
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Routes
 app.use('/api', apiRouter);
 
-// Health check endpoint
 app.get('/health', (req, res) => {
   res.json({
     status: 'online',
@@ -31,7 +28,6 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/dist')));
   app.get('*', (req, res) => {
@@ -39,11 +35,10 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// Bootstrapping function
 const startServer = async () => {
   console.log('Starting AetherForge Server...');
   try {
-    // Set a timeout so Mongoose doesn't block server startup indefinitely if MongoDB isn't running
+    
     mongoose.set('strictQuery', false);
     await mongoose.connect(MONGODB_URI, {
       serverSelectionTimeoutMS: 3000
