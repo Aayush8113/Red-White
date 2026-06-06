@@ -3,10 +3,6 @@ const { env } = require("../config/env");
 
 let _transporter = null;
 
-/**
- * Build and return the singleton Nodemailer transporter.
- * Uses real SMTP when env vars are set, otherwise falls back to Ethereal.
- */
 async function getTransporter() {
   if (_transporter) return _transporter;
 
@@ -20,12 +16,11 @@ async function getTransporter() {
         pass: env.SMTP_PASS,
       },
       tls: {
-        rejectUnauthorized: false, // allow self-signed certs in dev
+        rejectUnauthorized: false,
       },
     });
-    console.log(`📧  Mailer: using SMTP → ${env.SMTP_HOST}:${env.SMTP_PORT} (${env.SMTP_USER})`);
+    console.log(`📧  Mailer: ${env.SMTP_HOST}:${env.SMTP_PORT} (${env.SMTP_USER})`);
   } else {
-    // Fallback to Ethereal (free fake SMTP for testing)
     const testAccount = await nodemailer.createTestAccount();
     _transporter = nodemailer.createTransport({
       host: "smtp.ethereal.email",
@@ -33,38 +28,29 @@ async function getTransporter() {
       secure: false,
       auth: { user: testAccount.user, pass: testAccount.pass },
     });
-    console.log("📧  Mailer: no SMTP configured – using Ethereal test account.");
-    console.log(`    Login: ${testAccount.user} / ${testAccount.pass}`);
+    console.log(`📧  Mailer: Ethereal test account — ${testAccount.user}`);
     console.log("    View sent emails at: https://ethereal.email/messages");
   }
 
   return _transporter;
 }
 
-/**
- * Call once at startup to verify SMTP credentials are valid.
- * Logs a warning instead of crashing if it fails.
- */
 async function verifyMailer() {
   try {
     const t = await getTransporter();
     await t.verify();
-    console.log("✅  Mailer: SMTP connection verified successfully.");
+    console.log("✅  Mailer: SMTP connection verified.");
   } catch (err) {
-    console.warn("⚠️   Mailer: SMTP verification failed –", err.message);
-    console.warn("    Forgot-password emails will not be delivered until SMTP is fixed.");
+    console.warn("⚠️   Mailer: SMTP verification failed —", err.message);
   }
 }
 
-// ─── Shared HTML wrapper ────────────────────────────────────────────────────
 function htmlWrapper(content) {
-  return `
-  <!DOCTYPE html>
+  return `<!DOCTYPE html>
   <html lang="en">
   <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /></head>
   <body style="margin:0;padding:0;background:#070c18;font-family:'Segoe UI',Arial,sans-serif;">
     <div style="max-width:600px;margin:40px auto;background:#0f1420;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);">
-      <!-- Header -->
       <div style="background:linear-gradient(135deg,#3730a3,#4f46e5);padding:36px 40px;text-align:center;">
         <div style="display:inline-block;background:rgba(255,255,255,0.15);border-radius:16px;padding:12px 20px;margin-bottom:14px;">
           <span style="font-size:28px;">⚡</span>
@@ -76,11 +62,9 @@ function htmlWrapper(content) {
           Secure Examination Platform
         </p>
       </div>
-      <!-- Body -->
       <div style="padding:40px;">
         ${content}
       </div>
-      <!-- Footer -->
       <div style="padding:24px 40px;border-top:1px solid rgba(255,255,255,0.05);text-align:center;">
         <p style="margin:0;color:#475569;font-size:11px;">
           © ${new Date().getFullYear()} SchoolzPro. Do not reply to this email.
@@ -91,7 +75,6 @@ function htmlWrapper(content) {
   </html>`;
 }
 
-// ─── Email: Password Reset ───────────────────────────────────────────────────
 async function sendPasswordResetEmail(to, link) {
   const transporter = await getTransporter();
   const from = env.SMTP_FROM || env.SMTP_USER || `"SchoolzPro" <noreply@schoolzpro.com>`;
@@ -116,7 +99,7 @@ async function sendPasswordResetEmail(to, link) {
     <div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15);border-radius:12px;padding:16px;margin-top:24px;">
       <p style="margin:0;color:#64748b;font-size:11px;">
         ⏳ Link expires in: <strong style="color:#818cf8;">1 hour</strong><br/>
-        If the button doesn't work, copy and paste this link into your browser:<br/>
+        If the button does not work, copy and paste this link into your browser:<br/>
         <span style="color:#6366f1;word-break:break-all;">${link}</span>
       </p>
     </div>
@@ -127,17 +110,16 @@ async function sendPasswordResetEmail(to, link) {
     to,
     subject: "🔐 SchoolzPro – Reset Your Password",
     html,
-    text: `Reset your SchoolzPro password:\n\n${link}\n\nThis link expires in 1 hour.\n\nIf you did not request this, ignore this email.`,
+    text: `Reset your SchoolzPro password:\n\n${link}\n\nThis link expires in 1 hour.`,
   });
 
   if (!env.SMTP_HOST) {
-    console.log("📧  Password reset preview URL:", nodemailer.getTestMessageUrl(info));
+    console.log("📧  Password reset preview:", nodemailer.getTestMessageUrl(info));
   }
 
   return info;
 }
 
-// ─── Email: Contact Admin ────────────────────────────────────────────────────
 async function sendContactEmail({ adminEmail, senderName, senderEmail, subject, message }) {
   const transporter = await getTransporter();
   const from = env.SMTP_FROM || env.SMTP_USER || `"SchoolzPro" <noreply@schoolzpro.com>`;
@@ -145,7 +127,6 @@ async function sendContactEmail({ adminEmail, senderName, senderEmail, subject, 
   const html = htmlWrapper(`
     <h2 style="margin:0 0 12px;color:#e2e8f0;font-size:22px;font-weight:800;">📬 New Support Message</h2>
     <p style="color:#94a3b8;font-size:13px;margin-bottom:24px;">A user has sent a message through the SchoolzPro contact form.</p>
-    
     <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:20px;margin-bottom:20px;">
       <table style="width:100%;border-collapse:collapse;">
         <tr>
@@ -162,12 +143,10 @@ async function sendContactEmail({ adminEmail, senderName, senderEmail, subject, 
         </tr>
       </table>
     </div>
-
     <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:20px;">
       <p style="margin:0 0 8px;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:1px;">Message</p>
       <p style="margin:0;color:#cbd5e1;font-size:14px;line-height:1.7;white-space:pre-wrap;">${message}</p>
     </div>
-
     <div style="text-align:center;margin-top:28px;">
       <a href="mailto:${senderEmail}?subject=Re: ${subject}"
          style="display:inline-block;background:linear-gradient(135deg,#4338ca,#6366f1);color:#fff;text-decoration:none;
@@ -187,16 +166,16 @@ async function sendContactEmail({ adminEmail, senderName, senderEmail, subject, 
   });
 
   if (!env.SMTP_HOST) {
-    console.log("📧  Contact email preview URL:", nodemailer.getTestMessageUrl(info));
+    console.log("📧  Contact email preview:", nodemailer.getTestMessageUrl(info));
   }
 
   return info;
 }
 
-// ─── Email: Welcome ──────────────────────────────────────────────────────────
 async function sendWelcomeEmail(to, name) {
   const transporter = await getTransporter();
   const from = env.SMTP_FROM || env.SMTP_USER || `"SchoolzPro" <noreply@schoolzpro.com>`;
+  const loginUrl = `${env.CLIENT_ORIGIN.split(",")[0].trim()}/login`;
 
   const html = htmlWrapper(`
     <h2 style="margin:0 0 12px;color:#e2e8f0;font-size:22px;font-weight:800;">Welcome to SchoolzPro! 🎉</h2>
@@ -214,7 +193,7 @@ async function sendWelcomeEmail(to, name) {
       </ul>
     </div>
     <div style="text-align:center;margin-top:28px;">
-      <a href="${env.CLIENT_ORIGIN.split(",")[0].trim()}/login"
+      <a href="${loginUrl}"
          style="display:inline-block;background:linear-gradient(135deg,#4338ca,#6366f1);color:#fff;text-decoration:none;
                 padding:16px 40px;border-radius:12px;font-weight:700;font-size:13px;letter-spacing:2px;text-transform:uppercase;
                 box-shadow:0 8px 24px rgba(99,102,241,0.4);">
@@ -228,11 +207,11 @@ async function sendWelcomeEmail(to, name) {
     to,
     subject: "🎉 Welcome to SchoolzPro!",
     html,
-    text: `Welcome ${name}!\n\nYour SchoolzPro account is ready. Login at: ${env.CLIENT_ORIGIN.split(",")[0].trim()}/login`,
+    text: `Welcome ${name}!\n\nYour SchoolzPro account is ready.\nLogin at: ${loginUrl}`,
   });
 
   if (!env.SMTP_HOST) {
-    console.log("📧  Welcome email preview URL:", nodemailer.getTestMessageUrl(info));
+    console.log("📧  Welcome email preview:", nodemailer.getTestMessageUrl(info));
   }
 
   return info;
