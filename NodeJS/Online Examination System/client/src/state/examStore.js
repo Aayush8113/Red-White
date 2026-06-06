@@ -26,13 +26,13 @@ const allQuestions = [
   { id: "q23", type: "short", prompt: "What is the full form of API?", accepted: ["application programming interface"], category: "Logic", weightage: 1 },
   { id: "q24", type: "boolean", prompt: "A 'Set' in JavaScript allows duplicate values.", correct: false, category: "JS", weightage: 1 },
   { id: "q25", type: "mcq", prompt: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Venus"], correctIndex: 1, category: "Logic", weightage: 1 },
-  { 
-    id: "q26", 
-    type: "code", 
-    prompt: "Implement a function `sum(a, b)` that returns the sum of two numbers.", 
-    initialCode: "function sum(a, b) {\n  // Write your code here\n}",
-    category: "Coding", 
-    weightage: 5 
+  {
+    id: "q26",
+    type: "code",
+    prompt: "Implement a function `sum(a, b)` that returns the sum of two numbers.",
+    initialCode: "function sum(a, b) {\n  \n}",
+    category: "Coding",
+    weightage: 5,
   },
 ];
 
@@ -54,14 +54,12 @@ export const useExamStore = create((set, get) => ({
   answers: {},
 
   bootstrapDemo: () => {
-    // Randomize questions and select a subset of 10 for adaptive/unique testing
     const shuffledPool = shuffle(allQuestions);
     const selectedSubset = shuffledPool.slice(0, 10);
-    
     set({
       examId: "demo",
       attemptId: "demo-attempt-" + Date.now(),
-      endsAtMs: Date.now() + 15 * 60 * 1000, 
+      endsAtMs: Date.now() + 15 * 60 * 1000,
       questions: selectedSubset,
       activeIndex: 0,
       answers: {},
@@ -86,10 +84,9 @@ export const useExamStore = create((set, get) => ({
       if (q.type === "boolean") ok = resp === q.correct;
       if (q.type === "short") {
         const val = String(resp || "").trim().toLowerCase();
-        ok = q.accepted.map(a => a.toLowerCase()).includes(val);
+        ok = q.accepted.map((a) => a.toLowerCase()).includes(val);
       }
       if (q.type === "code") {
-        // Simple heuristic: if they wrote more than 5 chars, give points for demo
         ok = String(resp || "").length > 5;
       }
 
