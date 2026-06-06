@@ -15,21 +15,13 @@ const questionSchema = new mongoose.Schema(
   {
     prompt: { type: String, required: true, trim: true },
     type: { type: String, enum: QUESTION_TYPES, required: true, index: true },
-
-    // mcq
     options: { type: [optionSchema], default: undefined },
-
-    // boolean
     correctBoolean: { type: Boolean, default: undefined },
-
-    // short answer (normalized matching is done at grading time)
     acceptedAnswers: { type: [String], default: undefined },
-
     difficulty: { type: String, enum: DIFFICULTY_LEVELS, default: "medium", index: true },
     tags: { type: [String], default: [], index: true },
     weightage: { type: Number, default: 1, min: 0 },
     explanation: { type: String, default: "" },
-
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
     isActive: { type: Boolean, default: true, index: true },
   },
@@ -73,4 +65,3 @@ questionSchema.pre("validate", function validateByType(next) {
 const Question = mongoose.model("Question", questionSchema);
 
 module.exports = { Question, QUESTION_TYPES, DIFFICULTY_LEVELS };
-
