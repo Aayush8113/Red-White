@@ -43,7 +43,6 @@ async function main() {
 
   startServer(env.PORT);
 
-  // Graceful shutdown mechanisms to prevent orphaned processes
   const gracefulShutdown = () => {
     console.log("\n🛑 Shutting down gracefully...");
     server.close(() => {
@@ -51,7 +50,6 @@ async function main() {
       process.exit(0);
     });
     
-    // Force shutdown after 3 seconds if not closed
     setTimeout(() => {
       console.error("Forcing shutdown...");
       process.exit(1);
@@ -60,7 +58,7 @@ async function main() {
 
   process.on("SIGINT", gracefulShutdown);
   process.on("SIGTERM", gracefulShutdown);
-  process.on("SIGUSR2", gracefulShutdown); // For nodemon
+  process.on("SIGUSR2", gracefulShutdown);
 }
 
 main().catch((err) => {
