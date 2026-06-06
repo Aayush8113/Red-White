@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { LayoutDashboard, GraduationCap, Trophy, Settings, LogOut, Menu, X, Bell, ShieldCheck, PlusSquare, Megaphone, Zap } from "lucide-react";
+import { LayoutDashboard, GraduationCap, Trophy, Settings, LogOut, Menu, X, Bell, ShieldCheck, PlusSquare, Megaphone, Zap, MessageSquare } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SmoothScroll } from "./SmoothScroll.jsx";
@@ -56,6 +56,7 @@ export function AppShell({ children }) {
     { to: "/exams", icon: GraduationCap, label: "My Exams" },
     { to: "/leaderboard", icon: Trophy, label: "Leaderboard" },
     { to: "/settings", icon: Settings, label: "Preferences" },
+    { to: "/contact", icon: MessageSquare, label: "Contact Admin" },
   ];
 
   const adminNavItems = [
@@ -63,6 +64,7 @@ export function AppShell({ children }) {
     { to: "/create-exam", icon: PlusSquare, label: "Schedule Exam" },
     { to: "/admin/students", icon: GraduationCap, label: "Students" },
     { to: "/settings", icon: Settings, label: "Settings" },
+    { to: "/contact", icon: MessageSquare, label: "Contact Form" },
   ];
 
   const teacherNavItems = [
@@ -70,11 +72,12 @@ export function AppShell({ children }) {
     { to: "/create-exam", icon: PlusSquare, label: "Create Exam" },
     { to: "/admin/students", icon: GraduationCap, label: "My Students" },
     { to: "/settings", icon: Settings, label: "Settings" },
+    { to: "/contact", icon: MessageSquare, label: "Contact Admin" },
   ];
 
   const navItems = isAdmin ? adminNavItems : isTeacher ? teacherNavItems : studentNavItems;
 
-  const isAuthPage = pathname === "/login" || pathname === "/register";
+  const isAuthPage = ["/login", "/register", "/forgot-password", "/reset-password", "/contact"].includes(pathname);
   const isExamPage = pathname.startsWith("/exam/");
 
   if (isExamPage) return <main className="min-h-screen bg-[#010101]">{children}</main>;
