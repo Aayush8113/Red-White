@@ -5,7 +5,6 @@ const { httpError } = require("../utils/httpError");
 const { sendPasswordResetEmail, sendContactEmail, sendWelcomeEmail } = require("../lib/mailer");
 const { env } = require("../config/env");
 
-// ─── register ────────────────────────────────────────────────────────────────
 async function register(req, res, next) {
   try {
     const { name, email, password } = req.body || {};
@@ -23,7 +22,6 @@ async function register(req, res, next) {
     await user.setPassword(String(password));
     await user.save();
 
-    // Fire-and-forget welcome email (don't block registration on mail failure)
     sendWelcomeEmail(user.email, user.name).catch((err) =>
       console.warn("Welcome email failed:", err.message)
     );
@@ -38,7 +36,6 @@ async function register(req, res, next) {
   }
 }
 
-// ─── login ───────────────────────────────────────────────────────────────────
 async function login(req, res, next) {
   try {
     const { email, password } = req.body || {};
@@ -60,7 +57,6 @@ async function login(req, res, next) {
   }
 }
 
-// ─── forgotPassword ──────────────────────────────────────────────────────────
 async function forgotPassword(req, res, next) {
   try {
     const { email } = req.body || {};
@@ -68,7 +64,6 @@ async function forgotPassword(req, res, next) {
 
     const user = await User.findOne({ email: String(email).toLowerCase() });
 
-    // Always respond success — never reveal whether email is registered
     if (!user) {
       return res.json({ message: "If that email is registered, a reset link has been sent." });
     }
@@ -76,7 +71,6 @@ async function forgotPassword(req, res, next) {
     const rawToken = user.generateResetToken();
     await user.save();
 
-    // Dynamic link: uses CLIENT_ORIGIN from .env (first entry if multiple)
     const clientBase = env.CLIENT_ORIGIN.split(",")[0].trim();
     const resetLink = `${clientBase}/reset-password?token=${rawToken}`;
 
@@ -88,7 +82,6 @@ async function forgotPassword(req, res, next) {
   }
 }
 
-// ─── resetPassword ───────────────────────────────────────────────────────────
 async function resetPassword(req, res, next) {
   try {
     const { token, password } = req.body || {};
@@ -115,7 +108,6 @@ async function resetPassword(req, res, next) {
   }
 }
 
-// ─── changePassword (logged-in user) ─────────────────────────────────────────
 async function changePassword(req, res, next) {
   try {
     const { currentPassword, newPassword } = req.body || {};
@@ -138,7 +130,6 @@ async function changePassword(req, res, next) {
   }
 }
 
-// ─── contactAdmin ─────────────────────────────────────────────────────────────
 async function contactAdmin(req, res, next) {
   try {
     const { name, email, subject, message } = req.body || {};
