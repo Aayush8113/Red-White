@@ -17,6 +17,8 @@ import {
 import { useAuthStore } from "../state/authStore";
 import { Toast } from "../components/Toast";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export function ExamCreator() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -38,20 +40,18 @@ export function ExamCreator() {
 
   const fetchData = async () => {
     try {
-      const batchRes = await fetch("http://localhost:5000/api/users/batches", {
+      const batchRes = await fetch(`${API_URL}/api/users/batches`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const studentRes = await fetch("http://localhost:5000/api/users/students", {
+      const studentRes = await fetch(`${API_URL}/api/users/students`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
       const batches = await batchRes.json();
       const students = await studentRes.json();
-      
       setAvailableBatches(batches.items || []);
       setAvailableStudents(students.items || []);
     } catch (err) {
-      console.error("Failed to fetch data", err);
+      console.error(err.message);
     }
   };
 
@@ -65,7 +65,7 @@ export function ExamCreator() {
     setIsLoading(true);
     try {
       const startAt = new Date(`${startDate}T${startTime}`);
-      const res = await fetch("http://localhost:5000/api/exams", {
+      const res = await fetch(`${API_URL}/api/exams`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +78,7 @@ export function ExamCreator() {
           durationSeconds: parseInt(duration),
           targetBatches: selectedBatches,
           targetStudents: selectedStudents.map(s => s._id),
-          isPublished: true // Auto-publish for now
+          isPublished: true
         })
       });
 
