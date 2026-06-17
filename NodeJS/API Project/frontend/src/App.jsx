@@ -7,7 +7,6 @@ import Dashboard from './pages/Dashboard';
 import Portfolio from './pages/Portfolio';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import ThreeBackground from './components/ThreeBackground';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 
@@ -47,8 +46,7 @@ const Layout = ({ children }) => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col w-full relative">
-      <ThreeBackground />
+    <div className="min-h-screen flex flex-col w-full relative bg-background">
       <Navbar />
       <main ref={mainRef} className="flex-1 w-full p-4 md:p-8 max-w-7xl mx-auto z-10">
         {children}
