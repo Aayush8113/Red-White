@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  balance: {
+    type: Number,
+    default: 100000.00,
+  },
   // Watchlist embedded or referenced. We will store symbols here.
   watchlist: [{
     symbol: { type: String, required: true },
