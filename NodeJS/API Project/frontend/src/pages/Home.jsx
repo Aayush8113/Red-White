@@ -25,17 +25,17 @@ const Home = () => {
     <div className="space-y-12 py-8">
       {/* Hero Section */}
       <section className="text-center max-w-3xl mx-auto space-y-6">
-        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
-          Master the Markets with <span className="text-primary text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-500">Real-Time Data</span>
+        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight">
+          Master the Markets with <span className="text-primary text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-500 drop-shadow-[0_0_15px_rgba(0,240,255,0.5)]">Real-Time Data</span>
         </h1>
         <p className="text-xl text-gray-400">
           Track stocks and crypto in one place. Add assets to your watchlist and visualize historical data instantly.
         </p>
-        <div className="flex justify-center gap-4 pt-4">
-          <Link to="/register" className="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-full font-medium transition flex items-center gap-2">
+        <div className="flex justify-center gap-6 pt-6">
+          <Link to="/register" className="bg-primary hover:bg-primary-dark text-gray-900 px-8 py-3 rounded-full font-bold transition flex items-center gap-2 shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_30px_rgba(0,240,255,0.6)]">
             Get Started <ArrowRight size={18} />
           </Link>
-          <Link to="/login" className="bg-surface hover:bg-surface-hover text-white px-8 py-3 rounded-full font-medium transition">
+          <Link to="/login" className="bg-surface/50 hover:bg-surface-hover backdrop-blur-md border border-white/10 text-white px-8 py-3 rounded-full font-bold transition">
             Sign In
           </Link>
         </div>
