@@ -137,7 +137,7 @@ const Dashboard = () => {
               {watchlist.map((item) => (
                 <div 
                   key={item.symbol} 
-                  className={`flex justify-between items-center p-3 rounded-xl cursor-pointer transition-all ${selectedAsset?.symbol === item.symbol ? 'bg-primary/20 border-primary shadow-[0_0_15px_rgba(0,240,255,0.2)] border' : 'bg-surface hover:bg-surface-hover border border-white/5'}`}
+                  className={`flex justify-between items-center p-3 rounded-xl cursor-pointer transition-all ${selectedAsset?.symbol === item.symbol ? 'bg-primary/20 border-primary shadow-[0_0_15px_rgba(0,240,255,0.2)] border' : 'bg-surface hover:bg-surface-hover border border-gray-100'}`}
                   onClick={() => { setSearchSymbol(item.symbol); fetchAssetData(item.symbol); }}
                 >
                   <span className="font-bold tracking-wide">{item.symbol}</span>
@@ -162,7 +162,7 @@ const Dashboard = () => {
           <input 
             type="text" 
             placeholder="Search symbol (e.g. AAPL, TSLA, BTC-USD)" 
-            className="w-full bg-surface/80 backdrop-blur-xl border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-primary focus:shadow-[0_0_20px_rgba(0,240,255,0.2)] transition-all text-lg font-medium"
+            className="w-full bg-surface/80 backdrop-blur-xl border border-gray-200 rounded-2xl py-4 pl-12 pr-4 text-gray-900 focus:outline-none focus:border-primary focus:shadow-[0_0_20px_rgba(0,240,255,0.2)] transition-all text-lg font-medium"
             value={searchSymbol}
             onChange={(e) => setSearchSymbol(e.target.value)}
           />
@@ -186,7 +186,7 @@ const Dashboard = () => {
                   <div>
                     <h1 className="text-4xl font-extrabold flex items-center gap-3 tracking-tight">
                       {selectedAsset.symbol}
-                      <span className="text-lg font-normal text-gray-400 bg-white/5 border border-white/10 px-3 py-1 rounded-full">
+                      <span className="text-lg font-normal text-gray-400 bg-white/5 border border-gray-200 px-3 py-1 rounded-full">
                         {selectedAsset.shortName || selectedAsset.longName}
                       </span>
                     </h1>
@@ -201,7 +201,7 @@ const Dashboard = () => {
                   {!isSelectedInWatchlist && (
                     <button 
                       onClick={() => addToWatchlist(selectedAsset.symbol)}
-                      className="bg-surface hover:bg-white/10 border border-white/20 text-white px-5 py-2.5 rounded-xl font-medium transition flex items-center gap-2"
+                      className="bg-surface hover:bg-white/10 border border-white/20 text-gray-900 px-5 py-2.5 rounded-xl font-medium transition flex items-center gap-2"
                     >
                       <Plus size={18} /> Watch
                     </button>
@@ -254,13 +254,13 @@ const Dashboard = () => {
                       min="1"
                       value={tradeQuantity}
                       onChange={(e) => setTradeQuantity(e.target.value)}
-                      className="w-full bg-surface border border-white/10 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-primary transition text-xl font-bold"
+                      className="w-full bg-surface border border-gray-200 rounded-lg py-3 px-4 text-gray-900 focus:outline-none focus:border-primary transition text-xl font-bold"
                     />
                   </div>
                   
-                  <div className="bg-surface/50 p-4 rounded-lg border border-white/5 flex justify-between items-center">
+                  <div className="bg-surface/50 p-4 rounded-lg border border-gray-100 flex justify-between items-center">
                     <span className="text-gray-400">Estimated Cost</span>
-                    <span className="text-2xl font-bold text-white">${Number(tradeTotal).toLocaleString()}</span>
+                    <span className="text-2xl font-bold text-gray-900">${Number(tradeTotal).toLocaleString()}</span>
                   </div>
 
                   <div className="flex justify-between items-center text-sm text-gray-400 px-1">
