@@ -33,8 +33,13 @@ const Dashboard = () => {
     try {
       const res = await axios.get('/api/watchlist');
       setWatchlist(res.data.data);
-      if (res.data.data.length > 0 && !selectedAsset && !searchSymbol) {
-        fetchAssetData(res.data.data[0].symbol);
+      if (!selectedAsset && !searchSymbol) {
+        if (res.data.data.length > 0) {
+          fetchAssetData(res.data.data[0].symbol);
+        } else {
+          // Default to AAPL if completely empty to avoid blank dashboard
+          fetchAssetData('AAPL');
+        }
       }
     } catch (err) {
       console.error(err);
