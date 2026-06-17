@@ -4,7 +4,8 @@ const User = require('../models/User');
 const Portfolio = require('../models/Portfolio');
 const Transaction = require('../models/Transaction');
 const { protect } = require('../middleware/authMiddleware');
-const yahooFinance = require('yahoo-finance2').default;
+const YahooFinance = require('yahoo-finance2').default;
+const yahooFinance = new YahooFinance();
 
 // @route   GET /api/trade/portfolio
 // @desc    Get user's portfolio and balance

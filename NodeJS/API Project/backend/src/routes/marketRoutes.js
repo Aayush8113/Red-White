@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const yahooFinance = require('yahoo-finance2').default;
+const YahooFinance = require('yahoo-finance2').default;
+const yahooFinance = new YahooFinance();
 
 // @route   GET /api/market/quote/:symbol
 // @desc    Get real-time quote for a stock or crypto
