@@ -77,12 +77,12 @@ const Portfolio = () => {
         <div className="card glass p-6 border-primary/30 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
           <h3 className="text-gray-400 font-medium mb-1 relative z-10">Total Net Worth</h3>
-          <p className="text-4xl font-bold text-white relative z-10">${totalNetWorth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+          <p className="text-4xl font-bold text-gray-900 relative z-10">${totalNetWorth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
         </div>
         
         <div className="card glass p-6">
           <h3 className="text-gray-400 font-medium mb-1">Available Cash</h3>
-          <p className="text-3xl font-medium text-white">${(user?.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+          <p className="text-3xl font-medium text-gray-900">${(user?.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
         </div>
 
         <div className="card glass p-6">
@@ -106,7 +106,7 @@ const Portfolio = () => {
           <div className="text-center py-12">
             <Activity className="mx-auto text-gray-500 mb-4" size={48} />
             <p className="text-gray-400 text-lg mb-4">You don't own any assets yet.</p>
-            <Link to="/dashboard" className="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-lg transition font-medium">
+            <Link to="/dashboard" className="bg-primary hover:bg-primary-dark text-gray-900 px-6 py-2 rounded-lg transition font-medium">
               Go to Market Dashboard
             </Link>
           </div>
