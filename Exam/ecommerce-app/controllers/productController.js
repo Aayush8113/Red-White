@@ -4,7 +4,8 @@ const Category = require('../models/Category');
 module.exports.product_list_get = async (req, res) => {
     try {
         const products = await Product.find().populate('category').populate('creator', 'username');
-        res.render('productList', { products });
+        const categories = await Category.find();
+        res.render('productList', { products, categories });
     } catch (err) {
         console.log(err);
         res.status(500).send('Server Error');
