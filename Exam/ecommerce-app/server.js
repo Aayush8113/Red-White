@@ -21,6 +21,7 @@ app.use('/', require('./routes/indexRoutes'));
 app.use('/auth', require('./routes/authRoutes'));
 app.use('/products', require('./routes/productRoutes'));
 app.use('/categories', require('./routes/categoryRoutes'));
+app.use('/orders', require('./routes/orderRoutes'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
