@@ -34,14 +34,18 @@
                 </tr>
             </thead>
             <tbody>
-                <% order.items.forEach(item => { %>
+                <% if (typeof order !== 'undefined' && order.items && Array.isArray(order.items)) { %>
+                    <% order.items.forEach(item => { %>
                 <tr style="border-bottom: 1px solid var(--border-color);">
                     <td style="padding: 1rem 0;"><%= item.title %></td>
                     <td style="padding: 1rem 0;"><%= item.quantity %></td>
                     <td style="padding: 1rem 0; text-align: right;">$<%= item.price.toFixed(2) %></td>
                     <td style="padding: 1rem 0; text-align: right;">$<%= (item.price * item.quantity).toFixed(2) %></td>
                 </tr>
-                <% }) %>
+                    <% }) %>
+                <% } else { %>
+                    <tr><td colspan="4" style="text-align: center; padding: 1rem 0;">No items found in this order.</td></tr>
+                <% } %>
             </tbody>
         </table>
 

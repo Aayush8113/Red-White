@@ -22,9 +22,13 @@
             <div class="input-group">
                 <label>Category</label>
                 <select name="category" required>
-                    <% categories.forEach(cat => { %>
-                        <option value="<%= cat._id %>"><%= cat.name %></option>
-                    <% }) %>
+                    <% if (typeof categories !== 'undefined' && Array.isArray(categories)) { %>
+                        <% categories.forEach(cat => { %>
+                            <option value="<%= cat._id %>"><%= cat.name %></option>
+                        <% }) %>
+                    <% } else { %>
+                        <option value="" disabled>No categories available</option>
+                    <% } %>
                 </select>
             </div>
             <button type="submit" class="btn-primary full-width">Save Product</button>
