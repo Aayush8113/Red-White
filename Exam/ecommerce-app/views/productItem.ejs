@@ -10,7 +10,7 @@
             <p class="creator">Added by: <%= product.creator.username %></p>
             <h3 class="price">$<%= product.price %></h3>
             <p class="description"><%= product.description %></p>
-            <button onclick="addToCart('<%= product._id %>', '<%= product.title.replace(/'/g, \"\\'\") %>', <%= product.price %>, '<%= product.imageUrl %>')" class="btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2rem;">Add to Cart 🛒</button>
+            <button onclick="addToCart('<%= product._id %>', `<%= product.title.replace(/`/g, '') %>`, <%= product.price %>, '<%= product.imageUrl %>')" class="btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2rem;">Add to Cart 🛒</button>
         </div>
     </div>
 </section>
