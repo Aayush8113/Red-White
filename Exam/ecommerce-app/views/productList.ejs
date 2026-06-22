@@ -36,8 +36,10 @@
                     <div class="product-info">
                         <h3><%= product.title %></h3>
                         <p class="category-tag"><%= product.category ? product.category.name : 'Uncategorized' %></p>
-                        <p class="price">$<%= product.price %></p>
-                        <a href="/products/<%= product._id %>" class="btn-primary">View Details</a>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <a href="/products/<%= product._id %>" class="btn-outline" style="flex:1;">View Details</a>
+                            <button onclick="addToCart('<%= product._id %>', '<%= product.title.replace(/'/g, \"\\'\") %>', <%= product.price %>, '<%= product.imageUrl %>')" class="btn-primary" style="flex:1;">Add to Cart</button>
+                        </div>
                     </div>
                 </div>
             <% }) %>
