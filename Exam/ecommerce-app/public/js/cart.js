@@ -3,7 +3,6 @@ let cart = JSON.parse(localStorage.getItem('evostore_cart')) || [];
 function saveCart() {
     localStorage.setItem('evostore_cart', JSON.stringify(cart));
     updateCartBadge();
-    // Re-render cart UI if we are on the cart page
     if (typeof renderCart === 'function') {
         renderCart();
     }

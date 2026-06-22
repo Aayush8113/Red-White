@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Lenis Smooth Scrolling
     const lenis = new Lenis({
         duration: 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -14,10 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     requestAnimationFrame(raf);
 
-    // 2. GSAP Animations
     gsap.registerPlugin(ScrollTrigger);
 
-    // Hero elements
     gsap.from(".gsap-hero", {
         y: 60,
         opacity: 0,
@@ -26,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ease: "back.out(1.7)"
     });
 
-    // Product Cards stagger
     const cards = gsap.utils.toArray('.gsap-card');
     if(cards.length > 0) {
         gsap.from(cards, {
@@ -42,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 3. Theme Toggle Logic
     const toggleBtn = document.getElementById('theme-toggle');
     if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {
@@ -54,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 4. Mobile Menu Toggle
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const navLinks = document.getElementById('nav-links');
     if(mobileMenuBtn && navLinks) {
@@ -64,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 5. Magnetic Buttons (Framer style)
     const magnets = document.querySelectorAll('.btn-primary, .btn-outline, .cat-pill');
     magnets.forEach(btn => {
         btn.addEventListener('mousemove', (e) => {

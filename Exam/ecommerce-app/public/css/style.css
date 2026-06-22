@@ -1,5 +1,4 @@
 :root {
-    /* Ultra-Vibrant Light Theme Variables */
     --bg-main: #f8fafc;
     --bg-card: rgba(255, 255, 255, 0.7);
     --text-main: #0f172a;
@@ -15,7 +14,6 @@
 }
 
 [data-theme="dark"] {
-    /* Cinematic Dark Theme Variables */
     --bg-main: #020617; /* Very deep slate */
     --bg-card: rgba(15, 23, 42, 0.5);
     --text-main: #f8fafc;
@@ -264,7 +262,6 @@ main {
     box-shadow: var(--glass-shadow);
     background-image: var(--glossy-gradient);
     position: relative;
-    /* dynamic color variable from EJS */
     --cat-color: var(--primary);
 }
 
@@ -341,10 +338,10 @@ main {
     gap: 1rem;
     overflow-x: auto;
     padding: 1rem 0 2rem 0;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
 }
 .category-filters::-webkit-scrollbar {
-    display: none; /* Chrome */
+    display: none;
 }
 
 .cat-pill {
@@ -398,7 +395,6 @@ main {
     margin-top: auto;
 }
 
-/* Badge Styles */
 .badge {
     background: var(--primary);
     color: white;
@@ -410,7 +406,6 @@ main {
     box-shadow: var(--glow);
 }
 
-/* Hamburger Menu Styles */
 .hamburger-btn {
     display: none;
     flex-direction: column;
@@ -434,7 +429,6 @@ main {
 .hamburger-btn.active span:nth-child(2) { opacity: 0; }
 .hamburger-btn.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
-/* Responsive Media Queries */
 @media (max-width: 768px) {
     .product-detail-card { grid-template-columns: 1fr; }
     .hero-content h1 { font-size: 3rem; }
@@ -464,7 +458,6 @@ main {
     }
 }
 
-/* Global Print Styles (For Clean PDF Export) */
 @media print {
     body {
         background: white !important;
@@ -491,7 +484,6 @@ main {
         transform: none !important;
     }
     
-    /* Reveal specific receipt content cleanly */
     #receipt-container {
         position: absolute;
         left: 0;

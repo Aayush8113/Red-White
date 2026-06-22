@@ -55,11 +55,9 @@
 
 <script>
 function filterCategory(categoryName, element) {
-    // Update active pill
     document.querySelectorAll('.cat-pill').forEach(pill => pill.classList.remove('active'));
     element.classList.add('active');
 
-    // Filter products
     const products = document.querySelectorAll('.product-card');
     products.forEach(product => {
         const tag = product.querySelector('.category-tag').innerText;
