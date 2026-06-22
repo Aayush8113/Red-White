@@ -1,31 +1,33 @@
 :root {
-    /* Light Theme Variables */
-    --bg-main: #f0fdf4; /* subtle mint light */
-    --bg-card: rgba(255, 255, 255, 0.6);
+    /* Ultra-Vibrant Light Theme Variables */
+    --bg-main: #f8fafc;
+    --bg-card: rgba(255, 255, 255, 0.7);
     --text-main: #0f172a;
-    --text-muted: #475569;
-    --primary: #8b5cf6;
-    --primary-hover: #7c3aed;
-    --danger: #ef4444;
-    --danger-hover: #dc2626;
-    --border-color: rgba(255, 255, 255, 0.4);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-    --glossy-gradient: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0));
+    --text-muted: #64748b;
+    --primary: #6366f1; /* Deep Indigo */
+    --primary-hover: #4f46e5;
+    --danger: #f43f5e;
+    --danger-hover: #e11d48;
+    --border-color: rgba(99, 102, 241, 0.15);
+    --glass-shadow: 0 10px 40px -10px rgba(99, 102, 241, 0.15);
+    --glossy-gradient: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.2) 100%);
+    --glow: 0 0 20px rgba(99, 102, 241, 0.4);
 }
 
 [data-theme="dark"] {
-    /* Dark Theme Variables */
-    --bg-main: #09090b;
-    --bg-card: rgba(24, 24, 27, 0.6);
+    /* Cinematic Dark Theme Variables */
+    --bg-main: #020617; /* Very deep slate */
+    --bg-card: rgba(15, 23, 42, 0.5);
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
-    --primary: #a855f7;
-    --primary-hover: #c084fc;
-    --danger: #f87171;
-    --danger-hover: #fca5a5;
-    --border-color: rgba(255, 255, 255, 0.08);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-    --glossy-gradient: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0));
+    --primary: #818cf8;
+    --primary-hover: #a5b4fc;
+    --danger: #fb7185;
+    --danger-hover: #fda4af;
+    --border-color: rgba(129, 140, 248, 0.15);
+    --glass-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.8);
+    --glossy-gradient: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 100%);
+    --glow: 0 0 25px rgba(129, 140, 248, 0.4);
 }
 
 * {
@@ -107,12 +109,12 @@ a {
 .btn-primary {
     background: var(--primary);
     color: white;
-    box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.39);
+    box-shadow: var(--glow);
 }
 .btn-primary:hover {
     background: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.6);
 }
 
 .btn-danger {
@@ -396,8 +398,107 @@ main {
     margin-top: auto;
 }
 
+/* Badge Styles */
+.badge {
+    background: var(--primary);
+    color: white;
+    border-radius: 20px;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    margin-left: 0.3rem;
+    box-shadow: var(--glow);
+}
+
+/* Hamburger Menu Styles */
+.hamburger-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 101;
+}
+.hamburger-btn span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: var(--text-main);
+    border-radius: 3px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.hamburger-btn.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+.hamburger-btn.active span:nth-child(2) { opacity: 0; }
+.hamburger-btn.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+/* Responsive Media Queries */
 @media (max-width: 768px) {
     .product-detail-card { grid-template-columns: 1fr; }
     .hero-content h1 { font-size: 3rem; }
-    .nav-links { display: none; }
+    
+    .hamburger-btn { display: flex; }
+    
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: var(--bg-card);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border-left: 1px solid var(--border-color);
+        box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+    }
+    .nav-links.active {
+        right: 0;
+    }
+}
+
+/* Global Print Styles (For Clean PDF Export) */
+@media print {
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    .navbar, .theme-toggle, .btn-primary, .btn-danger, .btn-outline, .hero-section {
+        display: none !important;
+    }
+    .auth-card, .form-card, .product-detail-card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        background: white !important;
+        backdrop-filter: none !important;
+    }
+    h1, h2, h3, h4, p, span {
+        color: black !important;
+        text-shadow: none !important;
+        background: none !important;
+        -webkit-text-fill-color: black !important;
+    }
+    * {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+    }
+    
+    /* Reveal specific receipt content cleanly */
+    #receipt-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        max-width: 100% !important;
+        border: none !important;
+        padding: 0 !important;
+    }
 }
