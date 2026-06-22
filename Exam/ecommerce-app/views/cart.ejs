@@ -1,0 +1,67 @@
+<%- include('partials/header') %>
+<section class="dashboard-section" style="max-width: 1000px;">
+    <h2 class="section-title">Your Cart</h2>
+    <div id="cart-container" class="form-card" style="max-width: 1000px;">
+        <div id="cart-items" style="display: flex; flex-direction: column; gap: 1rem;">
+            <!-- Rendered by JS -->
+        </div>
+        <div style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1rem; text-align: right;">
+            <h3>Total: $<span id="cart-total">0.00</span></h3>
+            <button onclick="proceedToCheckout()" class="btn-primary mt-4" style="font-size: 1.1rem; padding: 0.8rem 2rem;">Proceed to Checkout</button>
+        </div>
+    </div>
+</section>
+
+<script>
+function renderCart() {
+    const container = document.getElementById('cart-items');
+    const totalEl = document.getElementById('cart-total');
+    let html = '';
+    let total = 0;
+
+    if (cart.length === 0) {
+        container.innerHTML = '<p>Your cart is empty.</p>';
+        totalEl.innerText = '0.00';
+        return;
+    }
+
+    cart.forEach(item => {
+        total += item.price * item.quantity;
+        html += `
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <img src="${item.imageUrl}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                    <div>
+                        <h4 style="margin-bottom: 0.3rem;">${item.title}</h4>
+                        <p class="price" style="font-size: 1.1rem; margin-bottom: 0;">$${item.price}</p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <input type="number" min="1" value="${item.quantity}" onchange="updateQuantity('${item.productId}', this.value)" style="width: 60px; padding: 0.4rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+                    <button onclick="removeFromCart('${item.productId}')" class="btn-danger" style="padding: 0.4rem 0.8rem;">Remove</button>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+    totalEl.innerText = total.toFixed(2);
+}
+
+function proceedToCheckout() {
+    if (cart.length === 0) {
+        return alert('Your cart is empty!');
+    }
+    
+    // Check if user is logged in using the EJS user variable
+    const isLoggedIn = <%= user ? 'true' : 'false' %>;
+    if (!isLoggedIn) {
+        window.location.href = '/auth/login?redirect=/orders/checkout';
+    } else {
+        window.location.href = '/orders/checkout';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', renderCart);
+</script>
+<%- include('partials/footer') %>

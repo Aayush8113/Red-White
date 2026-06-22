@@ -17,4 +17,8 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/cart', (req, res) => {
+    res.render('cart');
+});
+
 module.exports = router;
