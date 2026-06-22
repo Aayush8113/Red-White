@@ -19,10 +19,10 @@
 
 <section class="products-section">
     <div class="category-filters">
-        <a href="/" class="cat-pill active">All</a>
+        <a href="javascript:void(0)" class="cat-pill active" onclick="filterCategory('All', this)">All</a>
         <% if (typeof categories !== 'undefined' && Array.isArray(categories)) { %>
             <% categories.forEach(cat => { %>
-                <a href="#<%= cat.name %>" class="cat-pill"><%= cat.name %></a>
+                <a href="javascript:void(0)" class="cat-pill" onclick="filterCategory('<%= cat.name %>', this)"><%= cat.name %></a>
             <% }) %>
         <% } %>
     </div>
@@ -52,4 +52,24 @@
         <% } %>
     </div>
 </section>
+
+<script>
+function filterCategory(categoryName, element) {
+    // Update active pill
+    document.querySelectorAll('.cat-pill').forEach(pill => pill.classList.remove('active'));
+    element.classList.add('active');
+
+    // Filter products
+    const products = document.querySelectorAll('.product-card');
+    products.forEach(product => {
+        const tag = product.querySelector('.category-tag').innerText;
+        if (categoryName === 'All' || tag === categoryName) {
+            product.style.display = 'flex';
+            gsap.fromTo(product, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.4 });
+        } else {
+            product.style.display = 'none';
+        }
+    });
+}
+</script>
 <%- include('partials/footer') %>
