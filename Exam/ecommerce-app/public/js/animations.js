@@ -53,4 +53,28 @@ document.addEventListener("DOMContentLoaded", () => {
             toggleBtn.innerHTML = newTheme === 'dark' ? '☀️' : '🌙';
         });
     }
+
+    // 4. Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const navLinks = document.getElementById('nav-links');
+    if(mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+    }
+
+    // 5. Magnetic Buttons (Framer style)
+    const magnets = document.querySelectorAll('.btn-primary, .btn-outline, .cat-pill');
+    magnets.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.3, ease: 'power2.out' });
+        });
+        btn.addEventListener('mouseleave', () => {
+            gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
+        });
+    });
 });

@@ -1,10 +1,17 @@
 <nav class="navbar">
     <div class="nav-container">
         <a href="/" class="brand">EvoStore</a>
-        <button id="theme-toggle" class="theme-toggle">🌙</button>
-        <ul class="nav-links">
+        
+        <div class="nav-controls" style="display: flex; gap: 1rem; align-items: center;">
+            <button id="theme-toggle" class="theme-toggle">🌙</button>
+            <button id="mobile-menu-btn" class="hamburger-btn">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+
+        <ul class="nav-links" id="nav-links">
             <li><a href="/">Home</a></li>
-            <li><a href="/cart">Cart <span id="cart-badge" style="background: var(--primary); color: white; border-radius: 50%; padding: 0.1rem 0.4rem; font-size: 0.8rem; display: none;">0</span></a></li>
+            <li><a href="/cart">Cart <span id="cart-badge" class="badge">0</span></a></li>
             <% if (user) { %>
                 <li><a href="/products/my-products">My Products</a></li>
                 <li><a href="/products/create">Add Product</a></li>
