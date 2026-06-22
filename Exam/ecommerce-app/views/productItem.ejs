@@ -1,17 +1,27 @@
 <%- include('partials/header') %>
-<section class="product-detail-section">
-    <div class="product-detail-card">
-        <div class="product-image">
-            <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+    <section class="product-detail-section">
+        <div class="product-detail-card">
+            <div class="product-image">
+                <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+            </div>
+            <div class="product-details">
+                <h2>
+                    <%= product.title %>
+                </h2>
+                <p class="category-tag">
+                    <%= product.category ? product.category.name : 'Uncategorized' %>
+                </p>
+                <p class="creator">Added by: <%= product.creator.username %>
+                </p>
+                <h3 class="price">$<%= product.price %>
+                </h3>
+                <p class="description">
+                    <%= product.description %>
+                </p>
+                <button
+                    onclick="addToCart('<%= product._id %>', `<%= product.title.replace(/`/g, '') %>`, <%= product.price %>, '<%= product.imageUrl %>')"
+                    class="btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2rem;">Add to Cart 🛒</button>
+            </div>
         </div>
-        <div class="product-details">
-            <h2><%= product.title %></h2>
-            <p class="category-tag"><%= product.category ? product.category.name : 'Uncategorized' %></p>
-            <p class="creator">Added by: <%= product.creator.username %></p>
-            <h3 class="price">$<%= product.price %></h3>
-            <p class="description"><%= product.description %></p>
-            <button onclick="addToCart('<%= product._id %>', `<%= product.title.replace(/`/g, '') %>`, <%= product.price %>, '<%= product.imageUrl %>')" class="btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2rem;">Add to Cart 🛒</button>
-        </div>
-    </div>
-</section>
-<%- include('partials/footer') %>
+    </section>
+    <%- include('partials/footer') %>
