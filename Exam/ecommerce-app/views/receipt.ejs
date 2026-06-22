@@ -1,5 +1,6 @@
 <%- include('partials/header') %>
 <section class="dashboard-section" style="max-width: 800px;">
+    <% if (typeof order !== 'undefined' && order) { %>
     <div class="form-card" style="max-width: 800px;" id="receipt-container">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 2px solid var(--border-color); padding-bottom: 1rem;">
             <h1 class="brand" style="font-size: 2rem;">EvoStore</h1>
@@ -58,6 +59,13 @@
             <p style="margin-top: 1rem; color: var(--text-muted);">Thank you for shopping with EvoStore!</p>
         </div>
     </div>
+    <% } else { %>
+        <div class="form-card" style="text-align: center; padding: 3rem;">
+            <h2>Order Not Found</h2>
+            <p>We couldn't load the receipt for this order.</p>
+            <a href="/" class="btn-primary mt-4" style="display:inline-block;">Return Home</a>
+        </div>
+    <% } %>
 </section>
 
 <style>
