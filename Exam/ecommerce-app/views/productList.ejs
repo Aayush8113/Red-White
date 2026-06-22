@@ -18,6 +18,15 @@
 </section>
 
 <section class="products-section">
+    <div class="category-filters">
+        <a href="/" class="cat-pill active">All</a>
+        <% if (categories && categories.length > 0) { %>
+            <% categories.forEach(cat => { %>
+                <a href="#<%= cat.name %>" class="cat-pill"><%= cat.name %></a>
+            <% }) %>
+        <% } %>
+    </div>
+    
     <h2 class="section-title">Latest Products</h2>
     <div class="product-grid">
         <% if (products && products.length > 0) { %>
