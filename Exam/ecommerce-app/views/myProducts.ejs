@@ -14,13 +14,13 @@
     <h2 class="section-title">My Products</h2>
     <a href="/products/create" class="btn-primary mb-2" style="display:inline-block; margin-bottom: 2rem;">Add New Product</a>
     <div class="product-grid">
-        <% if (typeof products !== 'undefined' && products.length > 0) { %>
+        <% if (typeof products !== 'undefined' && Array.isArray(products) && products.length > 0) { %>
             <% products.forEach(product => { %>
-                <div class="product-card gsap-card" style="--cat-color: <%= getCategoryColor(product.category ? product.category.name : '') %>;">
-                    <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                <div class="product-card gsap-card" style="--cat-color: <%= getCategoryColor(product.category && product.category.name ? product.category.name : '') %>;">
+                    <img src="<%= product.imageUrl || '/default-image.jpg' %>" alt="<%= product.title || 'Product' %>">
                     <div class="product-info">
-                        <h3><%= product.title %></h3>
-                        <p class="price">$<%= product.price %></p>
+                        <h3><%= product.title || 'Untitled Product' %></h3>
+                        <p class="price">$<%= product.price || 0 %></p>
                         <div class="actions">
                             <form action="/products/delete/<%= product._id %>" method="POST">
                                 <button type="submit" class="btn-danger">Delete</button>
