@@ -1,0 +1,33 @@
+<%- include('partials/header') %>
+<section class="dashboard-section">
+    <h2 class="section-title">Manage Categories</h2>
+    <div class="form-card">
+        <h3>Add Category</h3>
+        <form action="/categories/create" method="POST">
+            <div class="input-group">
+                <label>Name</label>
+                <input type="text" name="name" required>
+            </div>
+            <div class="input-group">
+                <label>Description</label>
+                <input type="text" name="description">
+            </div>
+            <button type="submit" class="btn-primary full-width">Add Category</button>
+        </form>
+    </div>
+
+    <div class="category-list">
+        <% categories.forEach(cat => { %>
+            <div class="category-item">
+                <div class="cat-info">
+                    <h4><%= cat.name %></h4>
+                    <p><%= cat.description %></p>
+                </div>
+                <form action="/categories/delete/<%= cat._id %>" method="POST">
+                    <button type="submit" class="btn-danger">Delete</button>
+                </form>
+            </div>
+        <% }) %>
+    </div>
+</section>
+<%- include('partials/footer') %>

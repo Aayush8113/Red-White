@@ -1,0 +1,34 @@
+<%- include('partials/header') %>
+<section class="form-section">
+    <div class="form-card">
+        <h2>Add Product</h2>
+        <form action="/products/create" method="POST">
+            <div class="input-group">
+                <label>Title</label>
+                <input type="text" name="title" required>
+            </div>
+            <div class="input-group">
+                <label>Price</label>
+                <input type="number" name="price" step="0.01" required>
+            </div>
+            <div class="input-group">
+                <label>Description</label>
+                <textarea name="description" required rows="4"></textarea>
+            </div>
+            <div class="input-group">
+                <label>Image URL</label>
+                <input type="text" name="imageUrl" required placeholder="https://images.unsplash.com/...">
+            </div>
+            <div class="input-group">
+                <label>Category</label>
+                <select name="category" required>
+                    <% categories.forEach(cat => { %>
+                        <option value="<%= cat._id %>"><%= cat.name %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <button type="submit" class="btn-primary full-width">Save Product</button>
+        </form>
+    </div>
+</section>
+<%- include('partials/footer') %>

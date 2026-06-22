@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+<section class="product-detail-section">
+    <div class="product-detail-card">
+        <div class="product-image">
+            <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+        </div>
+        <div class="product-details">
+            <h2><%= product.title %></h2>
+            <p class="category-tag"><%= product.category ? product.category.name : 'Uncategorized' %></p>
+            <p class="creator">Added by: <%= product.creator.username %></p>
+            <h3 class="price">$<%= product.price %></h3>
+            <p class="description"><%= product.description %></p>
+            <button class="btn-primary">Add to Cart</button>
+        </div>
+    </div>
+</section>
+<%- include('partials/footer') %>

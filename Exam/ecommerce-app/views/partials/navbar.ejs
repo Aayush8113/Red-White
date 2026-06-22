@@ -1,0 +1,21 @@
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="brand">EvoStore</a>
+        <button id="theme-toggle" class="theme-toggle">🌙</button>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <% if (user) { %>
+                <li><a href="/products/my-products">My Products</a></li>
+                <li><a href="/products/create">Add Product</a></li>
+                <% if (user.role === 'admin') { %>
+                    <li><a href="/categories">Categories</a></li>
+                <% } %>
+                <li class="user-greeting">Hi, <%= user.username %></li>
+                <li><a href="/auth/logout" class="btn-outline">Logout</a></li>
+            <% } else { %>
+                <li><a href="/auth/login">Login</a></li>
+                <li><a href="/auth/register" class="btn-primary">Register</a></li>
+            <% } %>
+        </ul>
+    </div>
+</nav>
