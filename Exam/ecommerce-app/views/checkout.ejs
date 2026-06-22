@@ -1,0 +1,73 @@
+<%- include('partials/header') %>
+<section class="form-section">
+    <div class="form-card">
+        <h2>Checkout</h2>
+        <form id="checkout-form" onsubmit="submitOrder(event)">
+            <h3>Shipping Address</h3>
+            <div class="input-group mt-4">
+                <label>Full Name</label>
+                <input type="text" id="fullName" required>
+            </div>
+            <div class="input-group">
+                <label>Address</label>
+                <input type="text" id="address" required>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <div class="input-group" style="flex: 1;">
+                    <label>City</label>
+                    <input type="text" id="city" required>
+                </div>
+                <div class="input-group" style="flex: 1;">
+                    <label>Zip Code</label>
+                    <input type="text" id="zipCode" required>
+                </div>
+            </div>
+
+            <h3 class="mt-4">Payment Method</h3>
+            <div class="input-group mt-4">
+                <select id="paymentMethod" required>
+                    <option value="COD">Cash on Delivery</option>
+                    <option value="Credit Card">Credit Card</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-primary full-width mt-4" style="font-size: 1.1rem; padding: 1rem;">Place Order</button>
+        </form>
+    </div>
+</section>
+
+<script>
+async function submitOrder(e) {
+    e.preventDefault();
+    if (cart.length === 0) return alert('Your cart is empty.');
+
+    const payload = {
+        fullName: document.getElementById('fullName').value,
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        zipCode: document.getElementById('zipCode').value,
+        paymentMethod: document.getElementById('paymentMethod').value,
+        cartData: JSON.stringify(cart)
+    };
+
+    try {
+        const response = await fetch('/orders/place-order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            clearCart();
+            window.location.href = `/orders/receipt/${data.orderId}`;
+        } else {
+            alert('Failed to place order.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('Error placing order.');
+    }
+}
+</script>
+<%- include('partials/footer') %>
