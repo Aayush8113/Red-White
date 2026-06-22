@@ -11,7 +11,11 @@ const Home = () => {
     const fetchTrending = async () => {
       try {
         const res = await axios.get('/api/market/trending');
-        setTrending(res.data.data.slice(0, 6)); // top 6
+        if (res.data && res.data.data) {
+          setTrending(res.data.data.slice(0, 6)); // top 6
+        } else {
+          console.warn('Trending data format unexpected:', res.data);
+        }
       } catch (error) {
         console.error('Error fetching trending:', error);
       } finally {
