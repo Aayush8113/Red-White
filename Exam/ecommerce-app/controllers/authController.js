@@ -31,10 +31,13 @@ module.exports.register_post = async (req, res) => {
 
 module.exports.login_post = async (req, res) => {
     const { email, password } = req.body;
+    console.log('Login attempt:', email);
     try {
         const user = await User.findOne({ email });
+        console.log('User found:', user ? 'Yes' : 'No');
         if (user) {
             const auth = await user.matchPassword(password);
+            console.log('Password match:', auth);
             if (auth) {
                 const token = createToken(user._id, user.role);
                 res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
@@ -43,6 +46,7 @@ module.exports.login_post = async (req, res) => {
         }
         res.status(400).send('Incorrect email or password');
     } catch (err) {
+        console.error('Login error:', err);
         res.status(400).send('Error logging in');
     }
 };
