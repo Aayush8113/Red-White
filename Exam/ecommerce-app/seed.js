@@ -21,28 +21,33 @@ const seedDB = async () => {
             role: 'admin'
         });
 
-        const category1 = await Category.create({ name: 'Electronics', description: 'Gadgets and devices' });
-        const category2 = await Category.create({ name: 'Fashion', description: 'Clothing and apparel' });
+        console.log('Fetching 100+ dummy products...');
+        const res = await fetch('https://dummyjson.com/products?limit=150');
+        const data = await res.json();
+        
+        // Extract unique categories
+        const categoryNames = [...new Set(data.products.map(p => p.category))];
+        const categoryMap = {};
 
-        await Product.create({
-            title: 'Wireless Headphones',
-            price: 199.99,
-            description: 'High quality noise-canceling wireless headphones.',
-            imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80',
-            category: category1._id,
+        for (let name of categoryNames) {
+            // Capitalize category name
+            const cleanName = name.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            const cat = await Category.create({ name: cleanName, description: `All items related to ${cleanName}` });
+            categoryMap[name] = cat._id;
+        }
+
+        const productsToInsert = data.products.map(p => ({
+            title: p.title,
+            price: p.price,
+            description: p.description.substring(0, 150),
+            imageUrl: p.thumbnail,
+            category: categoryMap[p.category],
             creator: admin._id
-        });
+        }));
 
-        await Product.create({
-            title: 'Minimalist Watch',
-            price: 129.99,
-            description: 'Sleek and minimalist watch for everyday wear.',
-            imageUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
-            category: category2._id,
-            creator: admin._id
-        });
+        await Product.insertMany(productsToInsert);
 
-        console.log('Database seeded successfully!');
+        console.log(`Successfully seeded ${productsToInsert.length} products across ${categoryNames.length} categories!`);
         process.exit();
     } catch (err) {
         console.error(err);
